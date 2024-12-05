@@ -4,6 +4,7 @@ import { buttonVariants } from "./ui/button";
 import NavLink from "./navLink";
 import { auth } from "@/auth";
 import { SignOut } from "./auth/SignOut";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function Navbar() {
   const session = await auth();
@@ -29,7 +30,14 @@ export default async function Navbar() {
               <SignOut />
             </li>
             <li>
-              <Link href={"/profile"}>Profile</Link>
+              <Link href={"/profile"}>
+                <Avatar>
+                  <AvatarImage src={session?.user?.image || ""} alt="avatar" />
+                  <AvatarFallback className="bg-primary text-white">
+                    {session.user.name?.toUpperCase().slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             </li>
           </ul>
         ) : (
