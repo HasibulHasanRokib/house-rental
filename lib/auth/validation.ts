@@ -32,3 +32,18 @@ export const logInSchema = z.object({
 });
 
 export type TLoginSchema = z.infer<typeof logInSchema>;
+
+export const editProfileSchema = z.object({
+  username: z.string().min(1, "Required").max(100).optional(),
+  address: z.string().max(200).optional(),
+  gender: z
+    .enum(["male", "female"], {
+      required_error: "You need to select a type.",
+    })
+    .optional(),
+  phone: z.string().regex(/^\d+$/, "Must be a number").max(11).optional(),
+  image: z.string().optional(),
+  id: z.string(),
+});
+
+export type TEditProfileSchema = z.infer<typeof editProfileSchema>;

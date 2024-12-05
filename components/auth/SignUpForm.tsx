@@ -42,7 +42,7 @@ export default function SignUpForm() {
     setSuccess("");
 
     startTransition(async () => {
-      registerAction(values).then((data) => {
+      await registerAction(values).then((data) => {
         setSuccess(data?.success);
         setError(data.error);
         form.reset();

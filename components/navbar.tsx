@@ -26,14 +26,27 @@ export default async function Navbar() {
 
         {session?.user ? (
           <ul className="flex items-center space-x-3">
-            <li>
-              <SignOut />
-            </li>
+            {session.user.role === "owner" ? (
+              <li>
+                <Link
+                  className={buttonVariants({
+                    variant: "outline",
+                  })}
+                  href={"/add-property"}
+                >
+                  Create listing
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <SignOut />
+              </li>
+            )}
             <li>
               <Link href={"/profile"}>
                 <Avatar>
                   <AvatarImage src={session?.user?.image || ""} alt="avatar" />
-                  <AvatarFallback className="bg-primary text-white">
+                  <AvatarFallback>
                     {session.user.name?.toUpperCase().slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>

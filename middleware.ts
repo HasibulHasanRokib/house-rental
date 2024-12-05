@@ -5,6 +5,8 @@ import {
   apiRoutePrefix,
   authRoutes,
   publicRoutes,
+  protectedRoute,
+  LOGIN_REDIRECT,
 } from "@/lib/auth/routes";
 import { NextResponse } from "next/server";
 
@@ -17,9 +19,14 @@ export default auth((req) => {
   const isApiRoute = nextUrl.pathname.startsWith(apiRoutePrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isProtected = protectedRoute.includes(nextUrl.pathname);
 
   if (isPublicRoute || isApiRoute) {
     return NextResponse.next();
+  }
+
+  if (!isLoggedIn && isProtected) {
+    return NextResponse.redirect(new URL(LOGIN_REDIRECT, nextUrl));
   }
 
   if (isAuthRoute) {

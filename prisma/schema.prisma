@@ -43,22 +43,24 @@ model Property {
   updateAt  DateTime @updatedAt
 }
 
-enum UserRole{
+enum UserRole {
   admin
   tenant
   owner
 }
 
 model User {
-  id String @id @default(uuid())
-  username String
-  email String @unique
-  password String
-  role UserRole @default(tenant)
-  image String?
+  id         String     @id @default(uuid())
+  username   String
+  email      String     @unique
+  password   String
+  role       UserRole   @default(tenant)
+  image      String?
   properties Property[]
+  address    String?
+  gender     String?
+  phoneNo    String?
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
-
 }
