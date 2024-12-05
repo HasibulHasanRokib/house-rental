@@ -1,0 +1,64 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  propertyTitle     String
+  status            String
+  type              String
+  area              Float
+  rooms             Int
+  price             Int
+  bathrooms         Int
+  imagesUrl         String[]
+  address           String
+  city              String
+  state             String
+  details           String
+  buildingAge       Int?
+  bedrooms          Int
+  hasParking        Boolean  @default(false)
+  hasSwimmingPool   Boolean  @default(false)
+  hasLaundryRoom    Boolean  @default(false)
+  hasWoodenCeiling  Boolean  @default(false)
+  hasCentralHeating Boolean  @default(false)
+  hasAlarm          Boolean  @default(false)
+
+  contactName  String
+  contactEmail String
+  contactPhone String
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+enum UserRole{
+  admin
+  tenant
+  owner
+}
+
+model User {
+  id String @id @default(uuid())
+  username String
+  email String @unique
+  password String
+  role UserRole @default(tenant)
+  image String?
+  properties Property[]
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+}
