@@ -15,3 +15,10 @@ export function formatMoney(amount: number) {
 export function relativeData(from: Date) {
   return formatDistanceToNowStrict(from, { addSuffix: true });
 }
+
+export function setSlug(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+}

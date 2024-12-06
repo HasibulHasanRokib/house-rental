@@ -1,16 +1,14 @@
 import MaxWidthWrapper from "@/components/maxWidthWrapper";
 import AddPropertyForm from "@/app/(pages)/(property)/_components/addPropertyForm";
+import { auth } from "@/auth";
+import { notFound } from "next/navigation";
 
-export default function AddProperty() {
+export default async function AddProperty() {
+  const session = await auth();
+  if (session?.user.role !== "owner") return notFound();
   return (
     <>
-      <div className="flex flex-col space-y-3 justify-center items-center py-12">
-        <h3 className="text-4xl font-bold">Submit Property</h3>
-        <p className="text-muted-foreground">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-        </p>
-      </div>
-      <MaxWidthWrapper>
+      <MaxWidthWrapper className="my-8">
         <AddPropertyForm />
       </MaxWidthWrapper>
     </>

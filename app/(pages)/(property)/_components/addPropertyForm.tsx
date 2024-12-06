@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {  propertyStatus, propertyTypes } from "@/lib/types";
+import { propertyStatus, propertyTypes } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -65,7 +65,6 @@ export default function AddPropertyForm() {
       price: "",
       propertyTitle: "",
       rooms: "",
-      state: "",
       status: "",
       type: "",
     },
@@ -87,7 +86,10 @@ export default function AddPropertyForm() {
     setFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop,maxFiles:5 });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    maxFiles: 5,
+  });
 
   const submit = async (values: TAddingPropertySchema) => {
     try {
@@ -105,20 +107,15 @@ export default function AddPropertyForm() {
       const imageUrls = uploadData.map((item) => item.url);
       form.setValue("imagesUrl", imageUrls);
 
+      const updateValues = { ...values, imagesUrl: imageUrls };
 
-      const updateValues = {...values,imagesUrl: imageUrls,}
-
-      startTransition(async()=>{
-        addingProperty(updateValues).then((data)=>{
+      startTransition(async () => {
+        addingProperty(updateValues).then((data) => {
           setFiles([]);
           form.reset();
+          setSuccess(data.success);
+          setError(data.error);
         });
-       
-      })
-
-      console.log("Final Form Values:", {
-        ...values,
-        imagesUrl: imageUrls,
       });
 
       setSuccess("Property added successfully!");
@@ -138,7 +135,7 @@ export default function AddPropertyForm() {
         <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
           {/* Overview */}
           <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">Overview</h2>
+            <h2 className="font-semibold text-2xl">Add property details </h2>
             <FormField
               control={form.control}
               name="propertyTitle"
@@ -233,11 +230,7 @@ export default function AddPropertyForm() {
                       Building Age <span className="text-sm">(optional)</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        {...field}
-                        
-                      />
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -525,19 +518,7 @@ export default function AddPropertyForm() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="state"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>State</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="country"

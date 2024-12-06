@@ -39,7 +39,6 @@ export const AddingPropertySchema = z.object({
   bedrooms: numericRequiredString,
   address: requiredString.max(100),
   city: requiredString.max(100),
-  state: requiredString.max(100),
   country: requiredString.max(100),
   details: requiredString.max(5000),
   buildingAge: numericRequiredString.max(100).optional(),

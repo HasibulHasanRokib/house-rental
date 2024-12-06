@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -21,7 +21,7 @@ model Property {
   imagesUrl         String[]
   address           String
   city              String
-  state             String
+  country           String
   details           String
   buildingAge       Int?
   bedrooms          Int
@@ -36,8 +36,8 @@ model Property {
   contactEmail String
   contactPhone String
 
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  User   User?  @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
