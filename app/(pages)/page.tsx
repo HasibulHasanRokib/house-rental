@@ -6,14 +6,15 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { PiBuildingApartment } from "react-icons/pi";
 import { GiHouse, GiMechanicGarage } from "react-icons/gi";
 import { TbCoinTaka } from "react-icons/tb";
-import { buttonVariants } from "@/components/ui/button";
+
 import db from "@/lib/db";
 import Link from "next/link";
-import { Property } from "@prisma/client";
-import PropertyCard from "@/app/(pages)/(property)/_components/propertyCard";
 
 export default async function Home() {
-  const properties = await db.property.findMany();
+  const cities = await db.property.findMany({
+    select: { city: true },
+    distinct: ["city"],
+  });
 
   return (
     <main className="flex flex-col space-y-20">
@@ -39,24 +40,18 @@ export default async function Home() {
               Featured <span className="text-primary">Properties</span>
             </h3>
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            {properties.map((property: Property) => {
+          <div className="grid grid-cols-2 gap-2">
+            {cities.map(({ city }) => {
               return (
-                <Link href={`/properties/${property.slug}`} key={property.id}>
-                  <PropertyCard property={property} />
+                <Link
+                  href={`/properties?city=${city}`}
+                  key={city}
+                  className="hover:underline hover:text-primary"
+                >
+                  {city}
                 </Link>
               );
             })}
-          </div>
-          <div className="flex justify-center">
-            <Link
-              href={"/properties"}
-              className={buttonVariants({
-                variant: "default",
-              })}
-            >
-              Show more
-            </Link>
           </div>
         </MaxWidthWrapper>
       </section>
