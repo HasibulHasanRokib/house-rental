@@ -21,6 +21,7 @@ import { editProfileSchema, TEditProfileSchema } from "@/lib/auth/validation";
 import { updateProfileAction } from "@/actions/auth/updateProfileAction";
 import FormSuccess from "../successMessage";
 import FormError from "../errorMessage";
+import { useRouter } from "next/navigation";
 
 interface Props {
   user: {
@@ -38,6 +39,7 @@ export default function EditProfileForm({ user }: Props) {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<TEditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
@@ -55,6 +57,7 @@ export default function EditProfileForm({ user }: Props) {
       await updateProfileAction(values).then((data) => {
         setSuccess(data?.success);
         setError(data?.error);
+        router.push("/profile");
       });
     });
   };

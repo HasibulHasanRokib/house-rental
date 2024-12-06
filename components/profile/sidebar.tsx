@@ -1,7 +1,7 @@
 import { auth, signOut } from "@/auth";
 import Image from "next/image";
 import React from "react";
-import DefaultImage from "@/public/images/default.png";
+import DefaultImage from "@/public/images/noavatar.jpg";
 import SidebarLink from "./sidebarLink";
 
 const Sidebar = async () => {

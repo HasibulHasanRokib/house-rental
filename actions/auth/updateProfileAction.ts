@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { editProfileSchema, TEditProfileSchema } from "@/lib/auth/validation";
 import db from "@/lib/db";
+import { redirect } from "next/navigation";
 
 export async function updateProfileAction(values: TEditProfileSchema) {
   try {
@@ -27,6 +28,7 @@ export async function updateProfileAction(values: TEditProfileSchema) {
     });
     return { success: "Update Successful" };
   } catch (error) {
+    console.log(error);
     return { error: "Something went wrong" };
   }
 }

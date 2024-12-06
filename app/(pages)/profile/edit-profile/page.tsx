@@ -26,7 +26,7 @@ const EditProfile = async () => {
           Personal details update
         </p>
       </div>
-      <EditProfileForm user={user} />
+      {/* <EditProfileForm user={user} /> */}
     </div>
   );
 };

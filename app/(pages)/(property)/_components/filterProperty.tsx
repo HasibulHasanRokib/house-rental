@@ -21,7 +21,8 @@ import db from "@/lib/db";
 import { options } from "@/lib/types";
 import { propertyFilterSchema, PropertyFilterValue } from "@/lib/validation";
 import { redirect } from "next/navigation";
-import { Button } from "../../../../components/ui/button";
+import { Button, buttonVariants } from "../../../../components/ui/button";
+import Link from "next/link";
 
 async function filterProperty(formData: FormData) {
   "use server";
@@ -203,9 +204,15 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
               Search property
             </Button>
           </form>
-          <Button variant={"outline"} type="button" className="w-full">
+          <Link
+            href={"/properties"}
+            className={buttonVariants({
+              variant: "outline",
+              className: "w-full",
+            })}
+          >
             Clear filters
-          </Button>
+          </Link>
         </CardContent>
       </Card>
     </aside>
