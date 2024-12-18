@@ -53,14 +53,14 @@ export default async function Properties({ searchParams }: PageProps) {
   };
 
   return (
-    <>
-      <div className="flex h-52 flex-col space-y-3 justify-center items-center">
+    <div className=" space-y-8 my-10 relative">
+      <div className="flex flex-col space-y-3 justify-center items-center">
         <h3 className="text-4xl font-bold">Properties Listing</h3>
         <p className="text-muted-foreground">Find your favorite properties</p>
       </div>
 
       <MaxWidthWrapper>
-        <section className=" grid grid-cols-3 gap-4 ">
+        <section className=" grid grid-cols-3 gap-4 relative">
           <FilterProperty defaultValues={filterValue} />
           <div className="grid col-span-2 space-y-2">
             <div className="flex flex-col space-y-3">
@@ -69,6 +69,6 @@ export default async function Properties({ searchParams }: PageProps) {
           </div>
         </section>
       </MaxWidthWrapper>
-    </>
+    </div>
   );
 }

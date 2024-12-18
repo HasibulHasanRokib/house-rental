@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -10,7 +11,7 @@ export default function ImageSlider({ images }: { images: string[] }) {
   };
 
   return (
-    <div className="space-y-2">
+    <Card className="space-y-2 bg-white p-4">
       <Image
         src={image}
         alt="images"
@@ -33,6 +34,6 @@ export default function ImageSlider({ images }: { images: string[] }) {
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }

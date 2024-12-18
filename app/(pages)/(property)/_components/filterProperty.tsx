@@ -73,7 +73,7 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
     )) as string[];
 
   return (
-    <aside>
+    <aside className="sticky top-0 h-fit w-full">
       <Card>
         <CardHeader className="border-b">
           <CardTitle className="flex items-center gap-2">
