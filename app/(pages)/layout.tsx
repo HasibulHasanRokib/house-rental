@@ -4,9 +4,9 @@ import React, { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
-    <div>
+    <div className="relative min-h-screen flex flex-col">
       <Navbar />
-      {children}
+      <main className="flex-grow">{children}</main>
       <Footer />
     </div>
   );

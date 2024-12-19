@@ -10,7 +10,7 @@ export default async function Navbar() {
   const session = await auth();
 
   return (
-    <nav className=" border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all ">
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all ">
       <MaxWidthWrapper className="flex h-20 items-center justify-between">
         <div>
           <Link href={"/"}>
