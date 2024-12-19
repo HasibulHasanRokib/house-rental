@@ -3,16 +3,18 @@
 import { auth } from "@/auth";
 import { editProfileSchema, TEditProfileSchema } from "@/lib/auth/validation";
 import db from "@/lib/db";
-import { redirect } from "next/navigation";
 
 export async function updateProfileAction(values: TEditProfileSchema) {
   try {
     const validation = editProfileSchema.safeParse(values);
+
     if (!validation.success)
       return { error: "Invalid values! Please check your inputs!" };
 
-    const { id, username, image, phone, address, gender } = validation.data;
+    const { id, username, phone, address, gender, occupation } =
+      validation.data;
     const session = await auth();
+
     if (session?.user.id !== id) return { error: "Unauthorized" };
     await db.user.update({
       where: {
@@ -20,7 +22,7 @@ export async function updateProfileAction(values: TEditProfileSchema) {
       },
       data: {
         username,
-        image,
+        occupation,
         address,
         phoneNo: phone,
         gender,

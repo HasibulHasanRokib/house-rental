@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearchPostgres"]
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -60,6 +60,7 @@ model User {
   address    String?
   gender     String?
   phoneNo    String?
+  occupation String?
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
