@@ -1,13 +1,11 @@
 import SignUpForm from "@/components/auth/SignUpForm";
-import MaxWidthWrapper from "@/components/maxWidthWrapper";
-import React from "react";
 
 export default function SignUp() {
   return (
-    <MaxWidthWrapper>
-      <div className="flex flex-col space-y-8 justify-center items-center py-4 min-h-[80vh]">
+    <div className="flex flex-col items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-5xl">
         <SignUpForm />
       </div>
-    </MaxWidthWrapper>
+    </div>
   );
 }

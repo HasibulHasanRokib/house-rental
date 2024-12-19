@@ -46,7 +46,7 @@ export default async function Home() {
                 <Link
                   href={`/properties?city=${city}`}
                   key={city}
-                  className="hover:underline hover:text-primary"
+                  className="hover:underline underline-offset-4 hover:text-primary"
                 >
                   {city}
                 </Link>
@@ -57,7 +57,7 @@ export default async function Home() {
       </section>
 
       {/* What are you looking for? */}
-      <section>
+      <section className="bg-white py-6">
         <MaxWidthWrapper className="flex flex-col space-y-10">
           <div>
             <h3 className="font-semibold text-3xl ">

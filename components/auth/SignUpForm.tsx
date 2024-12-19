@@ -19,6 +19,9 @@ import FormError from "../errorMessage";
 import FormSuccess from "../successMessage";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
+import { Card, CardContent } from "../ui/card";
+import Image from "next/image";
+import ImageOne from "@/public/images/properties-1.jpg";
 
 export default function SignUpForm() {
   const [error, setError] = useState<string | undefined>();
@@ -51,120 +54,147 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-4">
-      <div>
-        <h2 className="font-bold text-4xl my-10 text-center">
-          Sign Up as an {title ? "Owner" : "Tenant"}
-        </h2>
-      </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="userRole"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="grid grid-cols-2"
-                  >
-                    <FormItem className="border p-4 space-x-2 rounded-md has-[:checked]:bg-slate-50">
-                      <FormControl>
-                        <RadioGroupItem
-                          value="tenant"
-                          onClick={() => setTitle(false)}
-                        />
-                      </FormControl>
-                      <label>I am a tenant, looking for property</label>
-                    </FormItem>
-                    <FormItem className="border p-4 space-x-2 rounded-md has-[:checked]:bg-slate-50">
-                      <FormControl>
-                        <RadioGroupItem
-                          value="owner"
-                          onClick={() => setTitle(true)}
-                        />
-                      </FormControl>
-                      <label>I own a house, available for rent or sale.</label>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-2 gap-2">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Jhon dev" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Jhon dev" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+    <div className="flex flex-col gap-6">
+      <Card className="overflow-hidden">
+        <CardContent className="grid p-0 md:grid-cols-2">
+          <div className="relative hidden bg-gray-500 md:block p-2">
+            <Image
+              src={ImageOne}
+              alt="Image"
+              fill
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale "
             />
           </div>
+          <Form {...form}>
+            <form className="p-6 md:p-8" onSubmit={form.handleSubmit(submit)}>
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col items-center text-center">
+                  <h1 className="text-2xl font-bold">
+                    <span className="text-balance text-gray-700">
+                      Register as an{" "}
+                    </span>
+                    <span className="font-bold text-primary">
+                      {title ? "Owner" : "Tenant"}
+                    </span>
+                  </h1>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="userRole"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormItem className="border p-4 space-x-2 rounded-md has-[:checked]:bg-slate-50">
+                            <FormControl>
+                              <RadioGroupItem
+                                value="tenant"
+                                onClick={() => setTitle(false)}
+                              />
+                            </FormControl>
+                            <label>I am a tenant, looking for property</label>
+                          </FormItem>
+                          <FormItem className="border p-4 space-x-2 rounded-md has-[:checked]:bg-slate-50">
+                            <FormControl>
+                              <RadioGroupItem
+                                value="owner"
+                                onClick={() => setTitle(true)}
+                              />
+                            </FormControl>
+                            <label>
+                              I own a house, available for rent or sale.
+                            </label>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="ex@emaple.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="****" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {error && <FormError message={error} />}
-          {success && <FormSuccess message={success} />}
-          <Button className="rounded-lg py-5 w-full" disabled={isPending}>
-            {isPending ? "Loading..." : "Create my account"}
-          </Button>
-        </form>
-      </Form>
-      <div className="">
-        <h5 className="text-sm">
-          Already have an account.
-          <Link href={"/auth/login"} className="underline font-semibold">
-            Login
-          </Link>
-        </h5>
-      </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>First name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Jhon dev" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Jhon dev" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="ex@emaple.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="****" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full">
+                  {isPending ? "Loading..." : "Login"}
+                </Button>
+                {error && <FormError message={error} />}
+                {success && <FormSuccess message={success} />}
+
+                <div className="text-center text-sm">
+                  Already have an account?{" "}
+                  <Link
+                    href="/auth/login"
+                    className="hover:underline underline-offset-4"
+                  >
+                    Login
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
