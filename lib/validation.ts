@@ -22,36 +22,56 @@ export type PropertyFilterValue = z.infer<typeof propertyFilterSchema>;
 //adding property validation
 
 const requiredString = z.string().min(1, "Required");
-const numericRequiredString = requiredString.regex(/^\d+$/, "Must be a number");
 
 export const AddingPropertySchema = z.object({
   propertyTitle: requiredString.max(100),
-  status: requiredString.refine((data) =>
-    propertyStatus.map((item) => item.value.includes(data))
-  ),
-  type: requiredString.refine((data) =>
-    propertyTypes.map((item) => item.value.includes(data))
-  ),
-  area: numericRequiredString.max(4, "Number can't be longer than 4 digits "),
-  rooms: numericRequiredString,
-  price: numericRequiredString.max(9, "Number can't be longer than 9 digits "),
-  bathrooms: numericRequiredString,
-  bedrooms: numericRequiredString,
+  status: z.enum(["rent", "sell"], {
+    required_error: "You need to select a type.",
+  }),
+  type: z.enum(["houses", "apartment"], {
+    required_error: "You need to select a type.",
+  }),
+  area: z
+    .number()
+    .min(100, "The number must have at least 3 digits")
+    .max(1000, "The number must have at most 5 digits"),
+  rooms: z
+    .number()
+    .min(1, "The number must have at least 1 digit")
+    .max(5, "The number must not exceed 5")
+    .int(),
+  price: z
+    .number()
+    .min(1000, "The number must have at least 4 digits")
+    .max(10000, "The number must have at most 5 digits"),
+  bathrooms: z
+    .number()
+    .min(1, "The number must have at least 1 digit")
+    .max(5, "The number must not exceed 5")
+    .int(),
+  bedrooms: z
+    .number()
+    .min(1, "The number must have at least 1 digit")
+    .max(5, "The number must not exceed 5")
+    .int(),
   address: requiredString.max(100),
   city: requiredString.max(100),
   country: requiredString.max(100),
   details: requiredString.max(5000),
-  buildingAge: numericRequiredString.max(100).optional(),
+  buildingAge: z.number().min(1).max(10).int().optional(),
   imagesUrl: z.array(z.string()),
-  hasParking: z.boolean().default(false).optional(),
-  hasSwimmingPool: z.boolean().default(false).optional(),
-  hasLaundryRoom: z.boolean().default(false).optional(),
-  hasWoodenCeiling: z.boolean().default(false).optional(),
-  hasCentralHeating: z.boolean().default(false).optional(),
-  hasAlarm: z.boolean().default(false).optional(),
+  hasParking: z.boolean().default(false),
+  hasSwimmingPool: z.boolean().default(false),
+  hasLaundryRoom: z.boolean().default(false),
+  hasWoodenCeiling: z.boolean().default(false),
+  hasCentralHeating: z.boolean().default(false),
+  hasAlarm: z.boolean().default(false),
   contactName: requiredString.max(100),
   contactEmail: z.string().email().min(1, "Required"),
-  contactPhone: requiredString.regex(/^\d+$/, "Must be a number"),
+  contactPhone: requiredString.regex(
+    /^\d{11}$/,
+    "Must be a valid 11-digit number"
+  ),
 });
 
 export type TAddingPropertySchema = z.infer<typeof AddingPropertySchema>;

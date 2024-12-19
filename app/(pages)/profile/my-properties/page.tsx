@@ -13,6 +13,7 @@ async function getData(): Promise<Property[]> {
       price: true,
       address: true,
       city: true,
+      slug: true,
     },
   });
   if (properties.length === 0) return notFound();

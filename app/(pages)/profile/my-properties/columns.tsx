@@ -13,9 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export type Property = {
   id: string;
+  slug: string;
   propertyTitle: string;
   type: string;
   rooms: number;
@@ -76,8 +78,16 @@ export const columns: ColumnDef<Property>[] = [
               Copy property ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-            <DropdownMenuItem>Edit property details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/properties/${property.slug}`}>
+                View property details
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/profile/update-property/${property.id}`}>
+                Update property details
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Delete property</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

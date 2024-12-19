@@ -32,43 +32,46 @@ import Image from "next/image";
 import { useUploadThing } from "@/lib/uploadthing";
 import FormError from "@/components/errorMessage";
 import FormSuccess from "@/components/successMessage";
-import { number } from "zod";
-import { useRouter } from "next/navigation";
 
-type FileWithPreview = File & { preview: string };
-export default function AddPropertyForm() {
+interface UpdatePropertyFormProps {
+  defaultValues: {
+    id: string;
+    propertyTitle: string;
+    status: string;
+    type: string;
+    area: number;
+    rooms: number;
+    price: number;
+    bathrooms: number;
+    imagesUrl: string[];
+    address: string;
+    city: string;
+    country: string;
+    details: string;
+    buildingAge: number | null;
+    bedrooms: number;
+    hasParking: boolean;
+    hasSwimmingPool: boolean;
+    hasLaundryRoom: boolean;
+    hasWoodenCeiling: boolean;
+    hasCentralHeating: boolean;
+    hasAlarm: boolean;
+    contactName: string;
+    contactEmail: string;
+    contactPhone: string;
+  };
+}
+
+export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
   const [success, setSuccess] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
+
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
-  const form = useForm<TAddingPropertySchema>({
+  const form = useForm({
     resolver: zodResolver(AddingPropertySchema),
-    defaultValues: {
-      hasAlarm: false,
-      hasCentralHeating: false,
-      hasLaundryRoom: false,
-      hasParking: false,
-      hasSwimmingPool: false,
-      hasWoodenCeiling: false,
-      imagesUrl: [],
-      propertyTitle: "",
-      price: 0,
-      area: 0,
-      address: "",
-      city: "",
-      country: "",
-      contactEmail: "",
-      contactName: "",
-      contactPhone: "",
-      details: "",
-      buildingAge: 0,
-      rooms: 0,
-      bathrooms: 0,
-      bedrooms: 0,
-    },
+    defaultValues,
   });
 
   const { startUpload, isUploading } = useUploadThing("propertyImages", {
@@ -84,7 +87,6 @@ export default function AddPropertyForm() {
     const newFiles = acceptedFiles.map((file) =>
       Object.assign(file, { preview: URL.createObjectURL(file) })
     );
-    setFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -93,42 +95,10 @@ export default function AddPropertyForm() {
   });
 
   const submit = async (values: TAddingPropertySchema) => {
-    setError("");
-    setSuccess("");
-    try {
-      if (!files.length) {
-        setError("Please upload at least one image.");
-        return;
-      }
-
-      const uploadData = await startUpload(files);
-      if (!uploadData) {
-        setError("Image upload failed. Please try again.");
-        return;
-      }
-
-      const imageUrls = uploadData.map((item) => item.url);
-      form.setValue("imagesUrl", imageUrls);
-
-      const updateValues = { ...values, imagesUrl: imageUrls };
-
-      startTransition(async () => {
-        await addingProperty(updateValues).then((data) => {
-          setFiles([]);
-          form.reset();
-          setSuccess(data?.success);
-          setError(data?.error);
-          router.push("/profile/my-properties");
-        });
-      });
-    } catch (err) {
-      setError("Submission failed. Please try again.");
-    }
+    console.log(values);
   };
 
-  const removeFile = (name: string) => {
-    setFiles((files) => files.filter((file) => file.name !== name));
-  };
+  const removeFile = (name: string) => {};
 
   return (
     <div>
@@ -136,7 +106,7 @@ export default function AddPropertyForm() {
         <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
           {/* Overview */}
           <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">Add property details </h2>
+            <h2 className="font-semibold text-2xl">Update property details </h2>
             <FormField
               control={form.control}
               name="propertyTitle"
@@ -216,16 +186,7 @@ export default function AddPropertyForm() {
                   <FormItem>
                     <FormLabel>Size in ft*</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Ex:3,200"
-                        {...field}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^\d,]/g, "");
-                          field.onChange(
-                            parseFloat(value.replace(/,/g, "")) || ""
-                          );
-                        }}
-                      />
+                      <Input placeholder="Ex:3,200sqft" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -240,15 +201,7 @@ export default function AddPropertyForm() {
                       Building Age <span className="text-sm">(optional)</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^\d,]/g, "");
-                          field.onChange(
-                            parseFloat(value.replace(/,/g, "")) || ""
-                          );
-                        }}
-                      />
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -264,8 +217,8 @@ export default function AddPropertyForm() {
                     <FormLabel>Total rooms</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value?.toString()}
+                        onValueChange={(value) => field.onChange(value)}
+                        defaultValue=""
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -291,8 +244,8 @@ export default function AddPropertyForm() {
                     <FormLabel>Bedrooms</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value?.toString()}
+                        onValueChange={(value) => field.onChange(value)}
+                        defaultValue=""
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -318,8 +271,8 @@ export default function AddPropertyForm() {
                     <FormLabel>Bathrooms</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value?.toString()}
+                        onValueChange={(value) => field.onChange(value)}
+                        defaultValue=""
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -379,30 +332,7 @@ export default function AddPropertyForm() {
               </FormItem>
             )}
           />
-          <ul className="flex gap-2">
-            {files &&
-              files.map((file) => (
-                <li key={file.name} className="relative">
-                  <Image
-                    src={file.preview}
-                    alt={file.name}
-                    width={150}
-                    height={150}
-                    className=" object-cover rounded-md max-h-[150px] w-full"
-                    onLoad={() => URL.revokeObjectURL(file.preview)}
-                  />
-                  <div className="absolute top-0 right-0 p-2">
-                    <button
-                      type="button"
-                      className=" flex justify-center items-center p-1 rounded-full h-7 w-7 bg-white border"
-                      onClick={() => removeFile(file.name)}
-                    >
-                      <X />
-                    </button>
-                  </div>
-                </li>
-              ))}
-          </ul>
+          <ul className="flex gap-2"></ul>
 
           {/*  Select Amenities */}
           <div className="space-y-3">
@@ -613,13 +543,7 @@ export default function AddPropertyForm() {
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/[^\d,]/g, "");
-                      field.onChange(parseFloat(value.replace(/,/g, "")) || "");
-                    }}
-                  />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

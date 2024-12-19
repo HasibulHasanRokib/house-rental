@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 export async function addingProperty(values: TAddingPropertySchema) {
   try {
     const validation = AddingPropertySchema.safeParse(values);
+
     if (!validation.success) {
       return { error: "Invalid values! Please check your inputs!" };
     }
@@ -48,22 +49,22 @@ export async function addingProperty(values: TAddingPropertySchema) {
     await db.property.create({
       data: {
         address,
-        area: Number(area),
-        bathrooms: Number(bathrooms),
-        bedrooms: Number(bedrooms),
+        area,
+        bathrooms,
+        bedrooms,
         city,
         contactEmail,
         contactName,
         contactPhone,
         details,
-        price: Number(price),
+        price,
         propertyTitle,
-        rooms: Number(rooms),
+        rooms,
         slug,
         country,
         status,
         type,
-        buildingAge: Number(area),
+        buildingAge,
         hasAlarm,
         hasCentralHeating,
         hasLaundryRoom,
