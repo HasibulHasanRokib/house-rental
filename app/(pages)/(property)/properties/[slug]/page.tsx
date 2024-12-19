@@ -5,7 +5,7 @@ import db from "@/lib/db";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import ImageSlider from "../../_components/imageSlider";
+import ImageSlider from "../../../../../components/property/imageSlider";
 import { formatMoney } from "@/lib/utils";
 import {
   Bed,
@@ -30,7 +30,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import CommentSection from "../../_components/commentSection";
+import CommentSection from "../../../../../components/property/commentSection";
 
 interface PageProps {
   params: {

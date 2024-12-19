@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../../components/ui/card";
+} from "../ui/card";
 import Property1 from "@/public/images/properties-1.jpg";
 import { CalendarDays, MapPin } from "lucide-react";
 import { FaBath, FaBed } from "react-icons/fa";

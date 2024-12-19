@@ -1,7 +1,7 @@
 "use cache";
 import MaxWidthWrapper from "@/components/maxWidthWrapper";
-import FilterProperty from "@/app/(pages)/(property)/_components/filterProperty";
-import PropertyResult from "@/app/(pages)/(property)/_components/propertyResult";
+import FilterProperty from "@/components/property/filterProperty";
+import PropertyResult from "@/components/property/propertyResult";
 import { PropertyFilterValue } from "@/lib/validation";
 
 interface PageProps {

@@ -1,22 +1,17 @@
-import { User, Edit, LogOut, Mail, Users, Home } from "lucide-react";
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { auth, signOut } from "@/auth";
 
-const navItems = [
-  { icon: User, label: "Profile", href: "/profile" },
-  { icon: Edit, label: "Edit profile", href: "/profile/edit-profile" },
-  { icon: Home, label: "Properties", href: "/all-properties" },
-  { icon: Users, label: "Tenants", href: "/all-properties" },
-  { icon: Mail, label: "Message", href: "/all-properties" },
-];
+import { auth, signOut } from "@/auth";
+import { Button } from "../ui/button";
+import { LogOut } from "lucide-react";
+import ProfileNavItems from "./profileNavItems";
+
 export default async function ProfileSidebar() {
   const session = await auth();
+  const isOwner = session?.user.role === "owner";
 
   return (
     <>
-      <div className="flex w-64 flex-col justify-between border-r p-4 ">
+      <div className="flex w-64 flex-col justify-between border-r p-6 ">
         <div>
           <div className="flex items-center space-x-2 mb-6">
             <Avatar>
@@ -27,19 +22,15 @@ export default async function ProfileSidebar() {
             </Avatar>
             <div>
               <p className="font-medium">{session?.user.name}</p>
-              <p className="text-xs text-gray-400">{session?.user.email}</p>
+              <p className="text-xs text-gray-400">
+                As a{" "}
+                <span className="text-gray-800 font-semibold capitalize">
+                  {session?.user.role}
+                </span>
+              </p>
             </div>
           </div>
-          <nav>
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <Button variant="ghost" className="w-full justify-start mb-2">
-                  <item.icon className="mr-2 h-4 w-4" />
-                  {item.label}
-                </Button>
-              </Link>
-            ))}
-          </nav>
+          <ProfileNavItems isOwner={isOwner} />
         </div>
         <form
           action={async () => {

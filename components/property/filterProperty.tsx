@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CirclePlus, SearchCheck } from "lucide-react";
-import { Input } from "../../../../components/ui/input";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -21,7 +21,7 @@ import db from "@/lib/db";
 import { options } from "@/lib/types";
 import { propertyFilterSchema, PropertyFilterValue } from "@/lib/validation";
 import { redirect } from "next/navigation";
-import { Button, buttonVariants } from "../../../../components/ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import Link from "next/link";
 
 async function filterProperty(formData: FormData) {

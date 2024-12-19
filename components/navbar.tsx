@@ -32,7 +32,7 @@ export default async function Navbar() {
                   className={buttonVariants({
                     variant: "outline",
                   })}
-                  href={"/add-property"}
+                  href={"/profile/add-property"}
                 >
                   Create listing
                 </Link>
