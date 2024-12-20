@@ -26,22 +26,9 @@ export default async function Navbar() {
 
         {session?.user ? (
           <ul className="flex items-center space-x-3">
-            {session.user.role === "owner" ? (
-              <li>
-                <Link
-                  className={buttonVariants({
-                    variant: "outline",
-                  })}
-                  href={"/profile/add-property"}
-                >
-                  Create listing
-                </Link>
-              </li>
-            ) : (
-              <li>
-                <SignOut />
-              </li>
-            )}
+            <li>
+              <SignOut />
+            </li>
             <li>
               <Link href={"/profile"}>
                 <Avatar>

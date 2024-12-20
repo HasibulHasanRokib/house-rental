@@ -7,6 +7,7 @@ export const propertyFilterSchema = z.object({
   status: z.string().optional(),
   type: z.string().optional(),
   city: z.string().optional(),
+  country: z.string().optional(),
   bedrooms: z.string().optional(),
   bathrooms: z.string().optional(),
   hasWoodenCeiling: z.coerce.boolean().optional(),

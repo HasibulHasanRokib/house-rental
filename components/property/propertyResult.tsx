@@ -3,18 +3,24 @@ import PropertyListItem from "./propertyListItem";
 import Link from "next/link";
 import { PropertyFilterValue } from "@/lib/validation";
 import { Prisma, Property } from "@prisma/client";
+import { PaginationControl } from "./pagination-control";
 
 interface PropertyResultProps {
-  filterValue: PropertyFilterValue;
+  filterValues: PropertyFilterValue;
+  page?: number;
 }
 
 export default async function PropertyResult({
-  filterValue: {
+  filterValues,
+  page = 1,
+}: PropertyResultProps) {
+  const {
     q,
     status,
     type,
     city,
     bedrooms,
+    country,
     bathrooms,
     hasWoodenCeiling,
     hasParking,
@@ -22,8 +28,7 @@ export default async function PropertyResult({
     hasAlarm,
     hasSwimmingPool,
     hasLaundryRoom,
-  },
-}: PropertyResultProps) {
+  } = filterValues;
   const searchString = q
     ?.split(" ")
     .filter((word) => word.length > 0)
@@ -35,7 +40,7 @@ export default async function PropertyResult({
           { propertyTitle: { search: searchString } },
           { city: { search: searchString } },
           { address: { search: searchString } },
-          { state: { search: searchString } },
+          { country: { search: searchString } },
           { status: { search: searchString } },
           { type: { search: searchString } },
         ],
@@ -55,6 +60,7 @@ export default async function PropertyResult({
       status ? { status } : undefined,
       type ? { type } : undefined,
       city ? { city } : undefined,
+      country ? { country } : undefined,
       parsedBedrooms !== undefined ? { bedrooms: parsedBedrooms } : undefined,
       parsedBathrooms !== undefined
         ? { bathrooms: parsedBathrooms }
@@ -68,10 +74,21 @@ export default async function PropertyResult({
     ].filter(Boolean) as Prisma.PropertyWhereInput[],
   };
 
-  const properties = await db.property.findMany({
+  const perPage = 5;
+
+  const propertiesPromise = await db.property.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    skip: (page - 1) * perPage,
+    take: perPage,
   });
+
+  const totalPropertiesPromise = db.property.count({ where });
+  const [properties, totalPropertiesResult] = await Promise.all([
+    propertiesPromise,
+    totalPropertiesPromise,
+  ]);
+  const totalPages = Math.floor(totalPropertiesResult / perPage);
   return (
     <>
       {properties.map((property: Property) => {
@@ -86,6 +103,7 @@ export default async function PropertyResult({
           <h2>No data found!</h2>
         </div>
       ) : null}
+      <PaginationControl totalPage={totalPages} />
     </>
   );
 }

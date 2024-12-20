@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Card } from "@/components/ui/card";
@@ -11,22 +12,18 @@ export default function ImageSlider({ images }: { images: string[] }) {
   };
 
   return (
-    <Card className="space-y-2 bg-white p-4">
-      <Image
-        src={image}
-        alt="images"
-        width={800}
-        height={400}
-        className="object-cover rounded-md max-h-[400px]"
-      />
-      <div className="flex gap-2">
+    <div className="grid grid-cols-6 space-x-2 bg-white p-4  ">
+      <div className="col-span-5">
+        <img src={image} alt="image" className="w-full max-h-[500px]" />
+      </div>
+      <div className="flex flex-col gap-2">
         {images.map((image) => {
           return (
             <Image
               src={image}
               alt="image"
               key={image}
-              width={100}
+              width={150}
               height={100}
               className="rounded-sm object-cover border cursor-pointer"
               onClick={() => handleImage(image)}
@@ -34,6 +31,6 @@ export default function ImageSlider({ images }: { images: string[] }) {
           );
         })}
       </div>
-    </Card>
+    </div>
   );
 }
