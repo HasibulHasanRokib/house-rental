@@ -1,4 +1,3 @@
-"use cache";
 import MaxWidthWrapper from "@/components/maxWidthWrapper";
 import FilterProperty from "@/components/property/filterProperty";
 import PropertyResult from "@/components/property/propertyResult";
@@ -10,6 +9,7 @@ interface PageProps {
     status?: string;
     type?: string;
     city?: string;
+    country?: string;
     bedrooms?: string;
     bathrooms?: string;
     hasWoodenCeiling?: string;
@@ -18,6 +18,7 @@ interface PageProps {
     hasAlarm?: string;
     hasSwimmingPool?: string;
     hasLaundryRoom?: string;
+    page?: string;
   };
 }
 
@@ -27,6 +28,7 @@ export default async function Properties({ searchParams }: PageProps) {
     status,
     type,
     city,
+    country,
     bedrooms,
     bathrooms,
     hasWoodenCeiling,
@@ -35,14 +37,16 @@ export default async function Properties({ searchParams }: PageProps) {
     hasAlarm,
     hasSwimmingPool,
     hasLaundryRoom,
-  } = await searchParams;
+    page,
+  } = searchParams;
 
-  const filterValue: PropertyFilterValue = {
+  const filterValues: PropertyFilterValue = {
     q,
     status,
     type,
     city,
     bedrooms,
+    country,
     bathrooms,
     hasWoodenCeiling: hasWoodenCeiling === "true",
     hasParking: hasParking === "true",
@@ -61,10 +65,13 @@ export default async function Properties({ searchParams }: PageProps) {
 
       <MaxWidthWrapper>
         <section className=" grid grid-cols-3 gap-4 relative">
-          <FilterProperty defaultValues={filterValue} />
+          <FilterProperty defaultValues={filterValues} />
           <div className="grid col-span-2 space-y-2">
             <div className="flex flex-col space-y-3">
-              <PropertyResult filterValue={filterValue} />
+              <PropertyResult
+                filterValues={filterValues}
+                page={page ? parseInt(page) : undefined}
+              />
             </div>
           </div>
         </section>
