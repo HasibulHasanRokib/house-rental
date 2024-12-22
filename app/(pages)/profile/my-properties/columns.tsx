@@ -13,27 +13,50 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-export type Property = {
-  id: string;
-  slug: string;
-  propertyTitle: string;
-  type: string;
-  rooms: number;
-  price: number;
-  address: string;
-  city: string;
-};
+import Link from "next/link";
+import { Property } from "@prisma/client";
+import Image from "next/image";
+import { deletePropertyAction } from "@/actions/property/deletePropertyAction";
+import { DeletePropertyBtn } from "@/components/property/deletePropertyBtn";
 
 export const columns: ColumnDef<Property>[] = [
   {
-    accessorKey: "propertyTitle",
-    header: "Property Title",
+    header: "Property",
+    cell: ({ row }) => {
+      const property = row.original;
+
+      return (
+        <Image src={property.imagesUrl[0]} alt="image" width={80} height={80} />
+      );
+    },
+  },
+  {
+    header: "Property title",
+    cell: ({ row }) => {
+      const property = row.original;
+
+      return <p>{property.propertyTitle.slice(0, 10)}...</p>;
+    },
   },
   {
     accessorKey: "type",
     header: "Type",
+  },
+  {
+    accessorKey: "rooms",
+    header: "Total rooms",
   },
   {
     accessorKey: "price",
@@ -49,13 +72,18 @@ export const columns: ColumnDef<Property>[] = [
       );
     },
   },
-  {
-    accessorKey: "address",
-    header: "Address",
-  },
+
   {
     accessorKey: "city",
     header: "City",
+  },
+  {
+    header: "Created at",
+    cell: ({ row }) => {
+      const property = row.original;
+
+      return <p>{property.createdAt.toLocaleDateString()}</p>;
+    },
   },
   {
     id: "actions",
@@ -72,23 +100,35 @@ export const columns: ColumnDef<Property>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(property.id)}
-            >
-              Copy property ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link href={`/properties/${property.slug}`}>
-                View property details
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href={`/profile/update-property/${property.id}`}>
-                Update property details
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>Delete property</DropdownMenuItem>
+            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Edit property details</DropdownMenuItem>
+            <div>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <p className="flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent hover:bg-accent">
+                    Delete property details
+                  </p>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your property and remove your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>
+                      <DeletePropertyBtn property={property} />
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       );

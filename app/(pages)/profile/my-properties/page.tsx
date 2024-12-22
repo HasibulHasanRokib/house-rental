@@ -1,21 +1,11 @@
 import db from "@/lib/db";
-import { Property, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { notFound } from "next/navigation";
+import { Property } from "@prisma/client";
 
 async function getData(): Promise<Property[]> {
-  const properties = await db.property.findMany({
-    select: {
-      id: true,
-      propertyTitle: true,
-      type: true,
-      rooms: true,
-      price: true,
-      address: true,
-      city: true,
-      slug: true,
-    },
-  });
+  const properties = await db.property.findMany();
   if (properties.length === 0) return notFound();
   return properties;
 }
@@ -26,6 +16,7 @@ export default async function MyProperties() {
       <div className="">
         <h2>My Property lists</h2>
       </div>
+
       <DataTable columns={columns} data={data} />
     </div>
   );
