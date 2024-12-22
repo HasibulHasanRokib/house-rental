@@ -28,7 +28,6 @@ import {
 import Link from "next/link";
 import { Property } from "@prisma/client";
 import Image from "next/image";
-import { deletePropertyAction } from "@/actions/property/deletePropertyAction";
 import { DeletePropertyBtn } from "@/components/property/deletePropertyBtn";
 
 export const columns: ColumnDef<Property>[] = [
@@ -101,8 +100,12 @@ export const columns: ColumnDef<Property>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-            <DropdownMenuItem>Edit property details</DropdownMenuItem>
+            <DropdownMenuItem>View property details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/profile/update-property/${property.id}`}>
+                Edit property details
+              </Link>
+            </DropdownMenuItem>
             <div>
               <AlertDialog>
                 <AlertDialogTrigger>

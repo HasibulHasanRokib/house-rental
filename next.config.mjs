@@ -3,7 +3,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "spruko.com",
+        hostname: "storage.googleapis.com",
       },
       {
         hostname: "utfs.io",

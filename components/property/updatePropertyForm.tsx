@@ -33,43 +33,24 @@ import { useUploadThing } from "@/lib/uploadthing";
 import FormError from "@/components/errorMessage";
 import FormSuccess from "@/components/successMessage";
 
-interface UpdatePropertyFormProps {
-  defaultValues: {
-    id: string;
-    propertyTitle: string;
-    status: string;
-    type: string;
-    area: number;
-    rooms: number;
-    price: number;
-    bathrooms: number;
-    imagesUrl: string[];
-    address: string;
-    city: string;
-    country: string;
-    details: string;
-    buildingAge: number | null;
-    bedrooms: number;
-    hasParking: boolean;
-    hasSwimmingPool: boolean;
-    hasLaundryRoom: boolean;
-    hasWoodenCeiling: boolean;
-    hasCentralHeating: boolean;
-    hasAlarm: boolean;
-    contactName: string;
-    contactEmail: string;
-    contactPhone: string;
-  };
-}
+import { useRouter } from "next/navigation";
+import { Property } from "@prisma/client";
+import { UpdatePropertyAction } from "@/actions/property/updatePropertyAction";
 
-export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
+type FileWithPreview = File & { preview: string };
+export function UpdatePropertyForm({
+  defaultValues,
+}: {
+  defaultValues: Property;
+}) {
   const [success, setSuccess] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  const form = useForm({
+  const form = useForm<Property>({
     resolver: zodResolver(AddingPropertySchema),
     defaultValues,
   });
@@ -87,6 +68,7 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
     const newFiles = acceptedFiles.map((file) =>
       Object.assign(file, { preview: URL.createObjectURL(file) })
     );
+    setFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -94,11 +76,27 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
     maxFiles: 5,
   });
 
-  const submit = async (values: TAddingPropertySchema) => {
-    console.log(values);
+  const submit = async (values: Property) => {
+    const newData = {
+      ...values,
+      id: defaultValues.id,
+      slug: defaultValues.slug,
+      userId: defaultValues.userId,
+    };
+    console.log(newData);
+    startTransition(async () => {
+      await UpdatePropertyAction(newData).then((data) => {
+        setFiles([]);
+        form.reset();
+        setSuccess(data?.success);
+        setError(data?.error);
+      });
+    });
   };
 
-  const removeFile = (name: string) => {};
+  const removeFile = (name: string) => {
+    setFiles((files) => files.filter((file) => file.name !== name));
+  };
 
   return (
     <div>
@@ -106,7 +104,7 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
         <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
           {/* Overview */}
           <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">Update property details </h2>
+            <h2 className="font-semibold text-2xl">Add property details </h2>
             <FormField
               control={form.control}
               name="propertyTitle"
@@ -128,7 +126,10 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue="">
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={defaultValues.status}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
@@ -152,7 +153,10 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                   <FormItem>
                     <FormLabel>Type</FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue="">
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={defaultValues.type}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
@@ -186,7 +190,16 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                   <FormItem>
                     <FormLabel>Size in ft*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex:3,200sqft" {...field} />
+                      <Input
+                        placeholder="Ex:3,200"
+                        {...field}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\d,]/g, "");
+                          field.onChange(
+                            parseFloat(value.replace(/,/g, "")) || ""
+                          );
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -201,7 +214,16 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                       Building Age <span className="text-sm">(optional)</span>
                     </FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Input
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\d,]/g, "");
+                          field.onChange(
+                            parseFloat(value.replace(/,/g, "")) || ""
+                          );
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -217,8 +239,8 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                     <FormLabel>Total rooms</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={(value) => field.onChange(value)}
-                        defaultValue=""
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value?.toString()}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -244,8 +266,8 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                     <FormLabel>Bedrooms</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={(value) => field.onChange(value)}
-                        defaultValue=""
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value?.toString()}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -271,8 +293,8 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
                     <FormLabel>Bathrooms</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={(value) => field.onChange(value)}
-                        defaultValue=""
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value?.toString()}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -332,7 +354,29 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
               </FormItem>
             )}
           />
-          <ul className="flex gap-2"></ul>
+          <ul className="flex gap-2">
+            {defaultValues &&
+              defaultValues.imagesUrl.map((file) => (
+                <li key={file} className="relative">
+                  <Image
+                    src={file}
+                    alt={"image"}
+                    width={150}
+                    height={150}
+                    className=" object-cover rounded-md max-h-[150px] w-full"
+                  />
+                  <div className="absolute top-0 right-0 p-2">
+                    <button
+                      type="button"
+                      className=" flex justify-center items-center p-1 rounded-full h-7 w-7 bg-white border"
+                      onClick={() => removeFile(file)}
+                    >
+                      <X />
+                    </button>
+                  </div>
+                </li>
+              ))}
+          </ul>
 
           {/*  Select Amenities */}
           <div className="space-y-3">
@@ -543,7 +587,13 @@ export function UpdatePropertyForm({ defaultValues }: UpdatePropertyFormProps) {
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\d,]/g, "");
+                      field.onChange(parseFloat(value.replace(/,/g, "")) || "");
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

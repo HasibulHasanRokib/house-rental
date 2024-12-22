@@ -230,7 +230,7 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
               </div>
               <div className="flex flex-col p-6 pt-0 space-y-3">
                 <Button variant="outline">Contact with owner</Button>
-                <Button>Rent property </Button>
+                {user?.role === "tenant" ? <Button>Rent property </Button> : ""}
               </div>
             </div>
             <SocialMedia
