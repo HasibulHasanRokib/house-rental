@@ -2,6 +2,7 @@ import MaxWidthWrapper from "@/components/maxWidthWrapper";
 import FilterProperty from "@/components/property/filterProperty";
 import PropertyResult from "@/components/property/propertyResult";
 import { PropertyFilterValue } from "@/lib/validation";
+import { Suspense } from "react";
 
 interface PageProps {
   searchParams: {
@@ -65,13 +66,15 @@ export default async function Properties({ searchParams }: PageProps) {
 
       <MaxWidthWrapper>
         <section className=" grid grid-cols-3 gap-4 relative">
-          <FilterProperty defaultValues={filterValues} />
+          <FilterProperty />
           <div className="grid col-span-2 space-y-2">
             <div className="flex flex-col space-y-3">
-              <PropertyResult
-                filterValues={filterValues}
-                page={page ? parseInt(page) : undefined}
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <PropertyResult
+                  filterValues={filterValues}
+                  page={page ? parseInt(page) : undefined}
+                />
+              </Suspense>
             </div>
           </div>
         </section>

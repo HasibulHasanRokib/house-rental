@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { propertyStatus, propertyTypes } from "./types";
 
 //filter validation
 export const propertyFilterSchema = z.object({

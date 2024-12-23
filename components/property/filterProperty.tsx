@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CirclePlus, SearchCheck } from "lucide-react";
+import { CirclePlus, SearchCheck, X } from "lucide-react";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -21,12 +21,13 @@ import db from "@/lib/db";
 import { options } from "@/lib/types";
 import { propertyFilterSchema, PropertyFilterValue } from "@/lib/validation";
 import { redirect } from "next/navigation";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
 
 async function filterProperty(formData: FormData) {
   "use server";
-  const value = Object.fromEntries(formData.entries());
+  const values = Object.fromEntries(formData.entries());
+  console.log(values);
   const {
     q,
     status,
@@ -40,7 +41,8 @@ async function filterProperty(formData: FormData) {
     hasAlarm,
     hasSwimmingPool,
     hasLaundryRoom,
-  } = propertyFilterSchema.parse(value);
+  } = propertyFilterSchema.parse(values);
+
   const searchParams = new URLSearchParams({
     ...(q && { q: q.trim() }),
     ...(status && { status }),
@@ -58,11 +60,12 @@ async function filterProperty(formData: FormData) {
   redirect(`/properties?${searchParams.toString()}`);
 }
 
-interface FilterPropertyProps {
-  defaultValues: PropertyFilterValue;
+async function clearFilter() {
+  "use server";
+  redirect("/properties");
 }
 
-const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
+const FilterProperty = async () => {
   const locations = (await db.property
     .findMany({
       select: { city: true },
@@ -84,29 +87,10 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
         <CardContent>
           <form action={filterProperty} className="my-3 space-y-3">
             {/* Search */}
-            <Input
-              name="q"
-              id="q"
-              placeholder="Search here..."
-              defaultValue={defaultValues.q}
-            />
-
-            {/* Property status */}
-            <Select name="status" defaultValue={defaultValues.status}>
-              <SelectTrigger>
-                <SelectValue placeholder="Property status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup id="status">
-                  <SelectLabel>Property status</SelectLabel>
-                  <SelectItem value="sale">For Sale</SelectItem>
-                  <SelectItem value="rent">For Rent</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Input name="q" id="q" placeholder="Search here..." />
 
             {/*  Property type */}
-            <Select name="type" defaultValue={defaultValues.type}>
+            <Select name="type">
               <SelectTrigger>
                 <SelectValue placeholder="Property type" />
               </SelectTrigger>
@@ -120,13 +104,13 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
             </Select>
 
             {/* City*/}
-            <Select name="city" defaultValue={defaultValues.city}>
+            <Select name="city">
               <SelectTrigger>
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup id="city">
-                  <SelectLabel>Location</SelectLabel>
+                  <SelectLabel>City</SelectLabel>
                   {locations.map((item) => (
                     <SelectItem className="capitalize" value={item} key={item}>
                       {item}
@@ -137,7 +121,7 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
             </Select>
 
             {/* Bedrooms */}
-            <Select name="bedrooms" defaultValue={defaultValues.bedrooms}>
+            <Select name="bedrooms">
               <SelectTrigger>
                 <SelectValue placeholder="Bedrooms" />
               </SelectTrigger>
@@ -153,7 +137,7 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
               </SelectContent>
             </Select>
             {/* Bathrooms*/}
-            <Select name="bathrooms" defaultValue={defaultValues.bathrooms}>
+            <Select name="bathrooms">
               <SelectTrigger>
                 <SelectValue placeholder="Bathrooms" />
               </SelectTrigger>
@@ -186,11 +170,6 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
                           type="radio"
                           name={item.name}
                           className=" accent-emerald-600 "
-                          defaultChecked={
-                            defaultValues[
-                              item.name as keyof PropertyFilterValue
-                            ] === true
-                          }
                         />
                         <label className="text-balance">{item.label}</label>
                       </div>
@@ -204,15 +183,16 @@ const FilterProperty = async ({ defaultValues }: FilterPropertyProps) => {
               Search property
             </Button>
           </form>
-          <Link
-            href={"/properties"}
-            className={buttonVariants({
-              variant: "outline",
-              className: "w-full",
-            })}
-          >
-            Clear filters
-          </Link>
+          <form action={clearFilter} className="mt-3">
+            <Button
+              type="submit"
+              variant="outline"
+              className="w-full flex items-center justify-center gap-2"
+            >
+              <X size={16} />
+              Clear filter
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </aside>

@@ -17,6 +17,7 @@ import {
   Heater,
   MapPin,
   Phone,
+  Mail,
 } from "lucide-react";
 import { FaSwimmingPool } from "react-icons/fa";
 
@@ -25,6 +26,10 @@ import { Button } from "@/components/ui/button";
 import { SocialMedia } from "@/components/property/social-media-lists";
 import defaultImage from "@/public/images/noavatar.jpg";
 import Map from "@/public/images/map.png";
+import { auth } from "@/auth";
+import { Property } from "@prisma/client";
+import Link from "next/link";
+import { RelatedPropertyCard } from "@/components/property/relatedPropertyCard";
 
 interface PageProps {
   params: {
@@ -52,11 +57,20 @@ export async function generateMetadata({
 }
 const PropertyDetails = async ({ params: { slug } }: PageProps) => {
   const property = await getProperty(slug);
+  const session = await auth();
 
   const user = await db.user.findUnique({
     where: {
       id: property.userId,
     },
+  });
+
+  const relatedProperties = await db.property.findMany({
+    where: {
+      city: property.city,
+      slug: { not: slug },
+    },
+    take: 4,
   });
 
   return (
@@ -89,7 +103,7 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
               </div>
             </div>
             <div className="bg-white p-4">
-              <div className="grid grid-cols-3 gap-2 p-4">
+              <div className="grid grid-cols-2 gap-2 p-4">
                 <span className="flex items-center space-x-2">
                   <strong className="text-primary">Status:</strong>
                   <p className="capitalize">{property.status}</p>
@@ -159,7 +173,7 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
               {/* Amenities */}
               <div>
                 <h5 className="font-semibold text-xl">Amenities</h5>
-                <div className="grid grid-cols-4 gap-2 p-4">
+                <div className="grid grid-cols-4 gap-4 p-4">
                   {property.hasAlarm ? (
                     <span className="flex items-center space-x-2">
                       <AlarmSmoke size={30} className="text-primary" />
@@ -216,21 +230,25 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
                     />
                   </div>
                   <h2 className="text-2xl font-bold text-center mb-2">
-                    {user?.username}
+                    {property?.contactName}
                   </h2>
                   <div className="flex items-center text-gray-600 mb-2">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span>{user?.address}</span>
+                    <Mail className="w-4 h-4 mr-2" />
+                    <span>{property?.contactEmail}</span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Phone className="w-4 h-4 mr-2" />
-                    <span>{user?.phoneNo}</span>
+                    <span>{property?.contactPhone}</span>
                   </div>
                 </div>
               </div>
               <div className="flex flex-col p-6 pt-0 space-y-3">
                 <Button variant="outline">Contact with owner</Button>
-                {user?.role === "tenant" ? <Button>Rent property </Button> : ""}
+                {session?.user.role === "tenant" ? (
+                  <Button>Rent now</Button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <SocialMedia
@@ -252,6 +270,25 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
             </div>
           </div>
         </div>
+        {/* relatedProperties */}
+        {relatedProperties.length === 0 ? (
+          ""
+        ) : (
+          <div className="space-y-6">
+            <h2 className="font-sans  my-4 font-semibold text-2xl ">
+              Related properties
+            </h2>
+            <div className="grid grid-cols-4 gap-2">
+              {relatedProperties.map((property: Property) => {
+                return (
+                  <Link href={`/properties/${property.slug}`} key={property.id}>
+                    <RelatedPropertyCard property={property} />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

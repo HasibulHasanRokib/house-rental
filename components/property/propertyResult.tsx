@@ -3,7 +3,8 @@ import PropertyListItem from "./propertyListItem";
 import Link from "next/link";
 import { PropertyFilterValue } from "@/lib/validation";
 import { Prisma, Property } from "@prisma/client";
-import { PaginationControl } from "./pagination-control";
+import { Pagination } from "./pagination-control";
+import PropertyCard from "./propertyCard";
 
 interface PropertyResultProps {
   filterValues: PropertyFilterValue;
@@ -88,13 +89,13 @@ export default async function PropertyResult({
     propertiesPromise,
     totalPropertiesPromise,
   ]);
-  const totalPages = Math.floor(totalPropertiesResult / perPage);
+  const totalPages = Math.ceil(totalPropertiesResult / perPage);
   return (
     <>
       {properties.map((property: Property) => {
         return (
           <Link href={`/properties/${property.slug}`} key={property.id}>
-            <PropertyListItem property={property} />
+            <PropertyCard property={property} />
           </Link>
         );
       })}
@@ -103,7 +104,12 @@ export default async function PropertyResult({
           <h2>No data found!</h2>
         </div>
       ) : null}
-      <PaginationControl totalPage={totalPages} />
+
+      <Pagination
+        currentPage={page}
+        filterValues={filterValues}
+        totalPage={totalPages}
+      />
     </>
   );
 }
