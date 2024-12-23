@@ -18,7 +18,7 @@ export function RelatedPropertyCard({ property }: { property: Property }) {
         />
       </div>
       <CardHeader>
-        <h3 className="text-2xl font-semibold text-primary truncate">
+        <h3 className="text-2xl font-semibold text-primary truncate font-sans">
           {property.propertyTitle}
         </h3>
         <div className="flex items-center gap-2 text-muted-foreground">
