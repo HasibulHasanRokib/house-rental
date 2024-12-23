@@ -5,6 +5,7 @@ import db from "@/lib/db";
 import { setSlug } from "@/lib/utils";
 import { AddingPropertySchema, TAddingPropertySchema } from "@/lib/validation";
 import { nanoid } from "nanoid";
+import { revalidatePath } from "next/cache";
 
 export async function addingProperty(values: TAddingPropertySchema) {
   try {
@@ -76,6 +77,7 @@ export async function addingProperty(values: TAddingPropertySchema) {
       },
     });
 
+    revalidatePath("/properties/my-properties");
     return { success: "Adding property successful." };
   } catch (error) {
     return { error: "Something went wrong!" };

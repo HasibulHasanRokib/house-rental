@@ -100,7 +100,11 @@ export const columns: ColumnDef<Property>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View property details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/properties/${property.slug}`}>
+                View property details
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href={`/profile/update-property/${property.id}`}>
                 Edit property details

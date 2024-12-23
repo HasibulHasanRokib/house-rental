@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { editProfileSchema, TEditProfileSchema } from "@/lib/auth/validation";
 import db from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function updateProfileAction(values: TEditProfileSchema) {
   try {
@@ -28,6 +29,7 @@ export async function updateProfileAction(values: TEditProfileSchema) {
         gender,
       },
     });
+    revalidatePath("/profile");
     return { success: "Update Successful" };
   } catch (error) {
     console.log(error);

@@ -17,9 +17,9 @@ const navItems = [
   { icon: User, label: "Profile", href: "/profile" },
   { icon: Edit, label: "Edit profile", href: "/profile/edit-profile" },
   { icon: Mail, label: "Message", href: "/profile/message" },
-  { icon: Home, label: "My properties", href: "/profile/my-properties" },
 ];
 const ownerNavItems = [
+  { icon: Home, label: "My properties", href: "/profile/my-properties" },
   { icon: CirclePlus, label: "Add property", href: "/profile/add-property" },
   { icon: Users, label: "My tenants", href: "/profile/my-tenants" },
 ];
