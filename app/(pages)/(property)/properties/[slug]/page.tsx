@@ -18,11 +18,12 @@ import {
   MapPin,
   Phone,
   Mail,
+  ArrowRight,
 } from "lucide-react";
 import { FaSwimmingPool } from "react-icons/fa";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { SocialMedia } from "@/components/property/social-media-lists";
 import defaultImage from "@/public/images/noavatar.jpg";
 import Map from "@/public/images/map.png";
@@ -245,7 +246,15 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
               <div className="flex flex-col p-6 pt-0 space-y-3">
                 <Button variant="outline">Contact with owner</Button>
                 {session?.user.role === "tenant" ? (
-                  <Button>Rent now</Button>
+                  <Link
+                    href={`/property/priview?id=${property.id}`}
+                    className={buttonVariants({
+                      variant: "default",
+                    })}
+                  >
+                    Continue
+                    <ArrowRight />
+                  </Link>
                 ) : (
                   ""
                 )}
