@@ -91,6 +91,7 @@ export const createCheckoutSession = async (data: ActionProps) => {
         from: dateRange.from.toISOString(),
         to: dateRange.to.toISOString(),
         totalPrice: totalPrice.toString(),
+        paymentId: finalizeBookingAfterPayment.id,
       },
       line_items: [{ price: product.default_price as string, quantity: 1 }],
     });
