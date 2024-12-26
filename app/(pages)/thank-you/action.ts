@@ -22,3 +22,39 @@ export async function getPaymentStatus({ paymentId }: { paymentId: string }) {
     return false;
   }
 }
+
+//property
+
+export const getPropertyById = async ({
+  propertyId,
+}: {
+  propertyId: string;
+}) => {
+  const property = await db.property.findFirst({
+    where: { id: propertyId },
+  });
+
+  if (!property) throw new Error("This property does not exist.");
+
+  return property;
+};
+//User
+
+export const getUserById = async ({ userId }: { userId: string }) => {
+  const user = await db.user.findFirst({
+    where: { id: userId },
+  });
+
+  if (!user) throw new Error("This user does not exist.");
+
+  return user;
+};
+export const getOWnerById = async ({ userId }: { userId: string }) => {
+  const owner = await db.user.findFirst({
+    where: { id: userId },
+  });
+
+  if (!owner) throw new Error("This owner does not exist.");
+
+  return owner;
+};
