@@ -247,7 +247,7 @@ const PropertyDetails = async ({ params: { slug } }: PageProps) => {
                 <Button variant="outline">Contact with owner</Button>
                 {session?.user.role === "tenant" ? (
                   <Link
-                    href={`/property/priview?id=${property.id}`}
+                    href={`/property/preview?id=${property.id}`}
                     className={buttonVariants({
                       variant: "default",
                     })}

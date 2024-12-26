@@ -3,23 +3,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatMoney } from "@/lib/utils";
 import { Property, User } from "@prisma/client";
-import {
-  Calendar,
-  DollarSign,
-  Home,
-  Mail,
-  MapPin,
-  Phone,
-  User2,
-} from "lucide-react";
+import { Calendar, Mail, MapPin, Phone, User2 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Confetti from "react-dom-confetti";
 
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 import { DateRangePicker } from "./DateRangePicker";
 import FormError from "@/components/errorMessage";
+import MaxWidthWrapper from "@/components/maxWidthWrapper";
+import { createCheckoutSession } from "@/actions/property/checkoutAction";
+import { useRouter } from "next/navigation";
 export default function PropertyPreview({
   property,
   user,
@@ -30,12 +25,13 @@ export default function PropertyPreview({
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [dateRange, setDateRange] = useState({
     from: new Date(),
-    to: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+    to: new Date(new Date().setMonth(new Date().getMonth() + 2)),
   });
-  const [error, setError] = useState("");
+
+  const [error, setError] = useState<string | undefined>("");
   useEffect(() => setShowConfetti(true));
 
-  const handleDateRangeChange = (range: DateRange | undefined) => {
+  const handleDateRangeChange = (range: any) => {
     setDateRange(range);
     validateDateRange(range);
   };
@@ -47,13 +43,6 @@ export default function PropertyPreview({
       const months = days / 30;
       if (months < 2) {
         setError("You must select at least a 2-month rental period.");
-        setDateRange({
-          from: new Date(),
-          to: new Date(new Date().setMonth(new Date().getMonth() + 2)),
-        });
-        setTimeout(() => {
-          setError("");
-        }, 2000);
       } else {
         setError("");
       }
@@ -71,6 +60,27 @@ export default function PropertyPreview({
     return property.price;
   };
 
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const handleCheckout = () => {
+    startTransition(async () => {
+      const totalPrice = calculateTotalPrice();
+      const data = {
+        propertyId: property.id,
+        userId: user.id,
+        totalPrice,
+        dateRange,
+      };
+      await createCheckoutSession(data).then((data) => {
+        if (data?.url) {
+          router.push(data.url);
+        } else {
+          setError(data?.error);
+        }
+      });
+    });
+  };
+
   return (
     <>
       <div
@@ -83,7 +93,7 @@ export default function PropertyPreview({
         />
       </div>
       <div className="min-h-screen py-2 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <MaxWidthWrapper>
           <Card className="overflow-hidden  shadow-none border-none rounded">
             <CardHeader className=" p-6">
               <CardTitle className="text-3xl font-bold border-b-2 py-2">
@@ -158,9 +168,10 @@ export default function PropertyPreview({
                       </p>
                     </CardContent>
                   </Card>
+
                   <Card className="border-none shadow-none">
                     <CardHeader>
-                      <CardTitle>Rental Period (Minimum 2 month)</CardTitle>
+                      <CardTitle>Rental Period</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <p className="flex items-center text-gray-600">
@@ -193,16 +204,44 @@ export default function PropertyPreview({
                     <Button
                       size="lg"
                       className="w-full text-lg"
-                      disabled={!!error}
+                      onClick={handleCheckout}
+                      disabled={!!error || isPending}
                     >
-                      Proceed to Checkout
+                      {isPending ? "Loading..." : "Proceed to Checkout"}
                     </Button>
+                    <Card className="border border-yellow-400 bg-yellow-50 shadow-md">
+                      <CardHeader>
+                        <CardTitle className="text-yellow-600">
+                          Important Notice
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2 text-yellow-700">
+                        <>
+                          <p>
+                            1. Rental period must be a minimum of 2 months (60
+                            days).
+                          </p>
+                          <p>
+                            2. You will be required to pay for at least two full
+                            months.
+                          </p>
+                          <p>
+                            3. If the rental period includes months with 31
+                            days, the additional day will also be charged.
+                          </p>
+                          <p>
+                            4. Please ensure your selected rental dates meet
+                            these requirements.
+                          </p>
+                        </>
+                      </CardContent>
+                    </Card>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-        </div>
+        </MaxWidthWrapper>
       </div>
     </>
   );

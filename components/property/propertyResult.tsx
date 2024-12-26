@@ -1,5 +1,4 @@
 import db from "@/lib/db";
-import PropertyListItem from "./propertyListItem";
 import Link from "next/link";
 import { PropertyFilterValue } from "@/lib/validation";
 import { Prisma, Property } from "@prisma/client";
@@ -42,7 +41,6 @@ export default async function PropertyResult({
           { city: { search: searchString } },
           { address: { search: searchString } },
           { country: { search: searchString } },
-          { status: { search: searchString } },
           { type: { search: searchString } },
         ],
       }
@@ -56,9 +54,9 @@ export default async function PropertyResult({
     : undefined;
 
   const where: Prisma.PropertyWhereInput = {
+    status: "accepted",
     AND: [
       searchFilter,
-      status ? { status } : undefined,
       type ? { type } : undefined,
       city ? { city } : undefined,
       country ? { country } : undefined,

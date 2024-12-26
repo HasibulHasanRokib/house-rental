@@ -25,9 +25,7 @@ const requiredString = z.string().min(1, "Required");
 
 export const AddingPropertySchema = z.object({
   propertyTitle: requiredString.max(100),
-  status: z.enum(["rent", "sell"], {
-    required_error: "You need to select a type.",
-  }),
+
   type: z.enum(["houses", "apartment"], {
     required_error: "You need to select a type.",
   }),

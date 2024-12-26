@@ -1,5 +1,4 @@
 "use server";
-"use server";
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
@@ -45,7 +44,7 @@ export async function UpdatePropertyAction(values: Property) {
       price,
       propertyTitle,
       rooms,
-      status,
+
       type,
       buildingAge,
       hasAlarm,
@@ -75,7 +74,7 @@ export async function UpdatePropertyAction(values: Property) {
         rooms,
         slug,
         country,
-        status,
+
         type,
         buildingAge,
         hasAlarm,
