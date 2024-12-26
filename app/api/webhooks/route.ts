@@ -20,46 +20,33 @@ export async function POST(req: NextRequest) {
     );
 
     if (event.type === "checkout.session.completed") {
-      if (!event.data.object.customer_details?.email) {
-        throw new Error("Missing user email");
+      const session = event.data.object as Stripe.Checkout.Session;
+
+      console.log("Checkout session completed:", session);
+
+      const metadata = session.metadata || {};
+      const { userId, paymentId, propertyId, totalPrice, from, to } = metadata;
+      console.log({ propertyId });
+
+      if (!userId || !paymentId || !propertyId || !totalPrice || !from || !to) {
+        console.error("Missing or invalid metadata in session");
+        throw new Error("Invalid or missing metadata");
       }
-    }
 
-    const session = event.data.object as Stripe.Checkout.Session;
-    const metadata = session.metadata || {};
-    const { userId, paymentId, propertyId, totalPrice, from, to } = metadata;
-
-    // const { userId, paymentId, propertyId, totalPrice, from, to } =
-    //   session.metadata || {
-    //     userId: null,
-    //     paymentId: null,
-    //     propertyId: null,
-    //     totalPrice: null,
-    //     from: null,
-    //     to: null,
-    //   };
-
-    if (!userId || !paymentId || !propertyId || !totalPrice || !from || !to) {
-      throw new Error("Invalid or missing metadata");
-    }
-
-    await db.rent.update({
-      where: {
-        id: paymentId,
-      },
-      data: {
-        isPaid: true,
-        startDate: new Date(from),
-        endDate: new Date(to),
-        amount: parseFloat(totalPrice),
-        property: {
-          update: {
-            status: "booked",
-          },
+      await db.rent.update({
+        where: { id: paymentId },
+        data: {
+          id: paymentId,
+          isPaid: true,
+          startDate: new Date(from),
+          endDate: new Date(to),
+          amount: parseFloat(totalPrice),
+          property: { update: { status: "booked" } },
         },
-      },
-    });
-    return NextResponse.json({ result: event, ok: true });
+      });
+      console.log("Database updated successfully");
+    }
+    return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

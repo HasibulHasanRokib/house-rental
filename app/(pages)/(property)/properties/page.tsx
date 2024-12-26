@@ -2,6 +2,7 @@ import MaxWidthWrapper from "@/components/maxWidthWrapper";
 import FilterProperty from "@/components/property/filterProperty";
 import PropertyResult from "@/components/property/propertyResult";
 import { PropertyFilterValue } from "@/lib/validation";
+import { Loader2 } from "lucide-react";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -74,7 +75,16 @@ export default async function Properties({ searchParams }: PageProps) {
           <FilterProperty />
           <div className="grid col-span-2 space-y-2">
             <div className="flex flex-col space-y-3">
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense
+                fallback={
+                  <div className="w-full mt-24 flex justify-center">
+                    <div className="flex flex-col items-center gap-1">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      <h3>Loading properties...</h3>
+                    </div>
+                  </div>
+                }
+              >
                 <PropertyResult
                   filterValues={filterValues}
                   page={page ? parseInt(page) : undefined}
