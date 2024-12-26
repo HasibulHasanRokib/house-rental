@@ -26,19 +26,21 @@ export async function POST(req: NextRequest) {
     }
 
     const session = event.data.object as Stripe.Checkout.Session;
+    const metadata = session.metadata || {};
+    const { userId, paymentId, propertyId, totalPrice, from, to } = metadata;
 
-    const { userId, paymentId, propertyId, totalPrice, from, to } =
-      session.metadata || {
-        userId: null,
-        paymentId: null,
-        propertyId: null,
-        totalPrice: null,
-        from: null,
-        to: null,
-      };
+    // const { userId, paymentId, propertyId, totalPrice, from, to } =
+    //   session.metadata || {
+    //     userId: null,
+    //     paymentId: null,
+    //     propertyId: null,
+    //     totalPrice: null,
+    //     from: null,
+    //     to: null,
+    //   };
 
     if (!userId || !paymentId || !propertyId || !totalPrice || !from || !to) {
-      throw new Error("Invalid request metadata");
+      throw new Error("Invalid or missing metadata");
     }
 
     await db.rent.update({
@@ -47,9 +49,9 @@ export async function POST(req: NextRequest) {
       },
       data: {
         isPaid: true,
-        startDate: from,
-        endDate: to,
-        amount: Number(totalPrice),
+        startDate: new Date(from),
+        endDate: new Date(to),
+        amount: parseFloat(totalPrice),
         property: {
           update: {
             status: "booked",
