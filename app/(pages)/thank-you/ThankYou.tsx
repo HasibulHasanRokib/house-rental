@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   getOWnerById,
   getPaymentStatus,
@@ -23,10 +23,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/utils";
+import Confetti from "react-dom-confetti";
 
 const ThankYou = () => {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get("paymentId") || "";
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  useEffect(() => setShowConfetti(true));
 
   const { data } = useQuery({
     queryKey: ["get-payment-status"],
@@ -81,84 +84,16 @@ const ThankYou = () => {
   const { amount, propertyId, userId, startDate, endDate, createdAt } = data;
 
   return (
-    // <div className="bg-muted">
-    //   <div className="my-10  flex items-center justify-center p-4">
-    //     <Card className="w-full max-w-3xl">
-    //       <CardHeader>
-    //         <div className="flex items-center space-x-2">
-    //           <CheckCircle className="w-8 h-8 text-green-500" />
-    //           <CardTitle className="text-2xl font-bold text-green-700">
-    //             Thank You for Your Booking!
-    //           </CardTitle>
-    //         </div>
-    //       </CardHeader>
-    //       <CardContent>
-    //         <div className="space-y-6">
-    //           <div>
-    //             <h2 className="text-xl font-semibold mb-2">
-    //               Booking Confirmation
-    //             </h2>
-    //             <p className="text-gray-600">
-    //               Your payment has been successfully processed and your booking
-    //               is confirmed.
-    //             </p>
-    //           </div>
-
-    //           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    //             <div>
-    //               <h3 className="font-semibold mb-1">Payment Details</h3>
-    //               <p>
-    //                 <span className="font-medium">Payment ID:</span> {paymentId}
-    //               </p>
-    //               <p>
-    //                 <span className="font-medium">Payment Date:</span>{" "}
-    //               </p>
-    //             </div>
-
-    //             <div>
-    //               <h3 className="font-semibold mb-1">User Information</h3>
-    //               <p>
-    //                 <span className="font-medium">Name:</span>{" "}
-    //               </p>
-    //               <p>
-    //                 <span className="font-medium">Email:</span>{" "}
-    //               </p>
-    //             </div>
-
-    //             <div>
-    //               <h3 className="font-semibold mb-1">Property Details</h3>
-    //               <p>
-    //                 <span className="font-medium">Name:</span>{" "}
-    //               </p>
-    //               <p>
-    //                 <span className="font-medium">Address:</span>{" "}
-    //               </p>
-    //             </div>
-
-    //             <div>
-    //               <h3 className="font-semibold mb-1">Booking Period</h3>
-    //               <p>
-    //                 <span className="font-medium">Start Date:</span>{" "}
-    //               </p>
-    //               <p>
-    //                 <span className="font-medium">End Date:</span>{" "}
-    //               </p>
-    //             </div>
-    //           </div>
-
-    //           <div className="mt-6">
-    //             <p className="text-sm text-gray-500">
-    //               If you have any questions or need to make changes to your
-    //               booking, please don&apos;t hesitate to contact our customer
-    //               support.
-    //             </p>
-    //           </div>
-    //         </div>
-    //       </CardContent>
-    //     </Card>
-    //   </div>
-    // </div>
     <>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute inset-0 overflow-hidden flex justify-center"
+      >
+        <Confetti
+          active={showConfetti}
+          config={{ elementCount: 200, spread: 360 }}
+        />
+      </div>
       <div className="py-2 px-4 sm:px-6 lg:px-8">
         <Card className="max-w-4xl mx-auto shadow-none rounded-none">
           <CardHeader className="bg-green-500 text-white ">
