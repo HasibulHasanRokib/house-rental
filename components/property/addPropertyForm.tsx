@@ -30,8 +30,8 @@ import { X } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { useUploadThing } from "@/lib/uploadthing";
-import FormError from "@/components/errorMessage";
-import FormSuccess from "@/components/successMessage";
+import FormError from "@/components/FormError";
+import FormSuccess from "@/components/FormSuccess";
 import { number } from "zod";
 import { useRouter } from "next/navigation";
 
@@ -347,8 +347,8 @@ export default function AddPropertyForm() {
                     {isDragActive
                       ? "Drop the files here..."
                       : isUploading
-                      ? `Uploading :${uploadProgress}%`
-                      : "Drag & drop files here, or click to select"}
+                        ? `Uploading :${uploadProgress}%`
+                        : "Drag & drop files here, or click to select"}
                   </div>
                 </FormControl>
                 <FormMessage />

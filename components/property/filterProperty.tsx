@@ -76,7 +76,7 @@ const FilterProperty = async () => {
     )) as string[];
 
   return (
-    <aside className="sticky top-0 h-fit w-full">
+    <aside className="hidden lg:block">
       <Card>
         <CardHeader className="border-b">
           <CardTitle className="flex items-center gap-2">

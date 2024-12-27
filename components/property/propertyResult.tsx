@@ -2,8 +2,8 @@ import db from "@/lib/db";
 import Link from "next/link";
 import { PropertyFilterValue } from "@/lib/validation";
 import { Prisma, Property } from "@prisma/client";
-import { Pagination } from "./pagination-control";
-import PropertyCard from "./propertyCard";
+import { Pagination } from "./PaginationControl";
+import PropertyCard from "./PropertyCard";
 
 interface PropertyResultProps {
   filterValues: PropertyFilterValue;
@@ -16,7 +16,7 @@ export default async function PropertyResult({
 }: PropertyResultProps) {
   const {
     q,
-    status,
+
     type,
     city,
     bedrooms,

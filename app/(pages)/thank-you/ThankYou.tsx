@@ -20,7 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/utils";
 import Confetti from "react-dom-confetti";
-import MaxWidthWrapper from "@/components/maxWidthWrapper";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Image from "next/image";
 
 const ThankYou = () => {

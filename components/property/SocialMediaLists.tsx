@@ -8,7 +8,7 @@ interface SocialMediaProps {
   youtube?: string;
 }
 
-export function SocialMedia({
+export function SocialMediaLists({
   facebook = "#",
   twitter = "#",
   instagram = "#",
@@ -18,10 +18,10 @@ export function SocialMedia({
   return (
     <div className="w-full bg-white p-4 mt-2">
       <h2 className="text-2xl font-semibold mb-4 font-sans">Social Media</h2>
-      <div className="flex gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         <a
           href={facebook}
-          className="p-2 bg-[#1877f2] rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center p-2 bg-[#1877f2] rounded-lg hover:opacity-90 transition-opacity"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -30,7 +30,7 @@ export function SocialMedia({
         </a>
         <a
           href={twitter}
-          className="p-2 bg-[#1da1f2] rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center p-2 bg-[#1da1f2] rounded-lg hover:opacity-90 transition-opacity"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -39,7 +39,7 @@ export function SocialMedia({
         </a>
         <a
           href={instagram}
-          className="p-2 bg-[#e4405f] rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center p-2 bg-[#e4405f] rounded-lg hover:opacity-90 transition-opacity"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -48,7 +48,7 @@ export function SocialMedia({
         </a>
         <a
           href={github}
-          className="p-2 bg-black rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center p-2 bg-black rounded-lg hover:opacity-90 transition-opacity"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -57,7 +57,7 @@ export function SocialMedia({
         </a>
         <a
           href={youtube}
-          className="p-2 bg-[#ff0000] rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center p-2 bg-[#ff0000] rounded-lg hover:opacity-90 transition-opacity"
           target="_blank"
           rel="noopener noreferrer"
         >

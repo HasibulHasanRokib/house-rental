@@ -18,13 +18,14 @@ export default function NavLink() {
           pathName === link.href ||
           (link.href !== "/" && pathName.startsWith(link.href));
         return (
-          <Link
-            className={isActive ? "font-bold text-primary" : "text-gray-700"}
-            key={link.name}
-            href={link.href}
-          >
-            {link.name}
-          </Link>
+          <div className="" key={link.name}>
+            <Link
+              className={isActive ? "font-bold text-primary " : "text-gray-700"}
+              href={link.href}
+            >
+              {link.name}
+            </Link>
+          </div>
         );
       })}
     </>

@@ -1,24 +1,36 @@
-import MaxWidthWrapper from "./maxWidthWrapper";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className=" bg-white border-y ">
+    <footer className="bg-white border-y">
       <MaxWidthWrapper>
-        <div className="flex h-20 justify-between items-center">
-          <div>
+        <div className="flex flex-col sm:flex-row justify-between items-center h-auto sm:h-20 py-4 sm:py-0">
+          {/* Copyright */}
+          <div className="mb-4 sm:mb-0 text-center sm:text-left">
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} All rights reserved
             </p>
           </div>
-          <div className="flex items-center space-x-8">
-            <Link href={"#"} className="text-sm text-muted-foreground">
+
+          {/* Links */}
+          <div className="flex flex-col sm:flex-row items-center sm:space-x-8 space-y-2 sm:space-y-0">
+            <Link
+              href={"#"}
+              className="text-sm text-muted-foreground hover:underline"
+            >
               Terms
             </Link>
-            <Link href={"#"} className="text-sm text-muted-foreground">
+            <Link
+              href={"#"}
+              className="text-sm text-muted-foreground hover:underline"
+            >
               Privacy Policy
             </Link>
-            <Link href={"#"} className="text-sm text-muted-foreground">
+            <Link
+              href={"#"}
+              className="text-sm text-muted-foreground hover:underline"
+            >
               Cookie Policy
             </Link>
           </div>

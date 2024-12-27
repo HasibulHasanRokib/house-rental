@@ -20,8 +20,8 @@ import { Button } from "../ui/button";
 import { useState, useTransition } from "react";
 import { Input } from "../ui/input";
 import { registerAction } from "@/actions/auth/registerAction";
-import FormError from "../errorMessage";
-import FormSuccess from "../successMessage";
+import FormError from "../FormError";
+import FormSuccess from "../FormSuccess";
 import Link from "next/link";
 import { loginAction } from "@/actions/auth/loginAction";
 import { Card, CardContent } from "../ui/card";
@@ -57,7 +57,10 @@ export default function LoginForm() {
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2 min-h-[600px]">
           <Form {...form}>
-            <form className="p-6 md:p-8" onSubmit={form.handleSubmit(submit)}>
+            <form
+              className="p-6 md:p-8 mt-20"
+              onSubmit={form.handleSubmit(submit)}
+            >
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold">Welcome back</h1>
