@@ -3,6 +3,10 @@ import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { Resend } from "resend";
+import PaymentConfirmationEmail from "@/emails/paymentReceivedEmail";
+
+const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,18 +26,14 @@ export async function POST(req: NextRequest) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
 
-      console.log("Checkout session completed:", session);
-
       const metadata = session.metadata || {};
       const { userId, paymentId, propertyId, totalPrice, from, to } = metadata;
-      console.log({ propertyId });
 
       if (!userId || !paymentId || !propertyId || !totalPrice || !from || !to) {
-        console.error("Missing or invalid metadata in session");
         throw new Error("Invalid or missing metadata");
       }
 
-      await db.rent.update({
+      const updatedPayment = await db.rent.update({
         where: { id: paymentId },
         data: {
           id: paymentId,
@@ -44,11 +44,38 @@ export async function POST(req: NextRequest) {
           property: { update: { status: "booked" } },
         },
       });
-      console.log("Database updated successfully");
+
+      const payment = await db.rent.findFirst({
+        where: { id: updatedPayment.id },
+        include: {
+          user: true,
+          property: true,
+        },
+      });
+
+      //For tenant
+      await resend.emails.send({
+        from: "HouseRent <rokib4000@gmail.com>",
+        to: [event.data.object.customer_details?.email!],
+        subject: "Payment confirmed!",
+        react: PaymentConfirmationEmail({
+          paymentId,
+          paymentDate: updatedPayment.createdAt.toLocaleDateString(),
+          rentalPeriodFrom: updatedPayment.startDate?.toLocaleString()!,
+          rentalPeriodTo: updatedPayment.endDate?.toLocaleString()!,
+          amount: updatedPayment.amount,
+          property: payment!.property!,
+          user: payment!.user!,
+        }),
+      });
+      console.log({
+        email: "rokib4000@gmail.com",
+        to: event.data.object.customer_details?.email,
+      });
     }
+
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       { message: "Something went wrong", ok: false },
       { status: 500 }
