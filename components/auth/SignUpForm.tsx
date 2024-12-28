@@ -21,6 +21,8 @@ import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import ImageOne from "@/public/images/properties-1.jpg";
+import ErrorMessage from "../ErrorMessage";
+import SuccessMessage from "../SuccessMessage";
 
 export default function SignUpForm() {
   const [error, setError] = useState<string | undefined>();
@@ -122,7 +124,7 @@ export default function SignUpForm() {
                       <FormItem>
                         <FormLabel>First name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Jhon dev" {...field} />
+                          <Input placeholder="John dev" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -135,7 +137,7 @@ export default function SignUpForm() {
                       <FormItem>
                         <FormLabel>Last name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Jhon dev" {...field} />
+                          <Input placeholder="John dev" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -177,8 +179,8 @@ export default function SignUpForm() {
                 <Button type="submit" className="w-full">
                   {isPending ? "Loading..." : "Login"}
                 </Button>
-                {error && <FormError message={error} />}
-                {success && <FormSuccess message={success} />}
+                {error && <ErrorMessage message={error} />}
+                {success && <SuccessMessage message={success} />}
 
                 <div className="text-center text-sm">
                   Already have an account?{" "}

@@ -1,7 +1,8 @@
 import { auth } from "@/auth";
+import AddPropertyForm from "@/components/property/AddPropertyForm";
 import { notFound } from "next/navigation";
 
-export default async function AddProperty() {
+export default async function Page() {
   const session = await auth();
   if (session?.user.role !== "owner") return notFound();
   return (

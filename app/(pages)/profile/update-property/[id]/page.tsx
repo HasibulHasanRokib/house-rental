@@ -1,4 +1,4 @@
-import { UpdatePropertyForm } from "@/components/property/updatePropertyForm";
+import { UpdatePropertyForm } from "@/components/property/UpdatePropertyForm";
 import db from "@/lib/db";
 import { notFound } from "next/navigation";
 import { cache } from "react";
@@ -19,9 +19,7 @@ const getProperty = cache(async (id: string) => {
   return property;
 });
 
-export default async function UpdatePropertyPage({
-  params: { id },
-}: PageProps) {
+export default async function Page({ params: { id } }: PageProps) {
   const property = await getProperty(id);
   return (
     <div className="p-4">

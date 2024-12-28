@@ -1,3 +1,4 @@
+import MaxWidthWrapper from "@/components/MaxWithWrapper";
 import { Metadata } from "next";
 import React from "react";
 export const metadata: Metadata = {

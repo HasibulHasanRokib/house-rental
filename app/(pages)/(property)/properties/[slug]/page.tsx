@@ -28,6 +28,9 @@ import defaultImage from "@/public/images/noavatar.jpg";
 import Map from "@/public/images/map.png";
 import { auth } from "@/auth";
 import Link from "next/link";
+import ImageSection from "@/components/property/ImageSection";
+import SocialMediaLists from "@/components/property/SocialMediaLists";
+import RelatedPropertyCard from "@/components/property/RelatedPropertyCard";
 
 interface PageProps {
   params: {
@@ -113,7 +116,25 @@ const Page = async ({ params: { slug } }: PageProps) => {
               <div className="space-y-2">
                 <h5 className="font-semibold text-xl">Description</h5>
                 <p className="text-sm text-justify text-muted-foreground">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Veniam, nobis ipsam suscipit ipsum, nisi optio atque autem ea
+                  quidem est illum odio provident iste voluptas neque ad nulla,
+                  perspiciatis earum magni fugit laborum magnam. Aliquid
+                  deserunt deleniti tempore magnam asperiores facilis animi
+                  voluptates, ipsa officiis ratione repellendus possimus hic aut
+                  omnis in enim eaque sint dicta. Aspernatur laboriosam soluta
+                  doloremque iure omnis maiores magnam fugiat debitis accusamus,
+                  aperiam doloribus ut natus quibusdam quaerat aliquid
+                  reprehenderit. Laborum iusto possimus soluta consequuntur, et,
+                  quis voluptatem quaerat ad rem quod nobis ex aut? At dolores
+                  vel, nobis numquam accusamus corporis quo recusandae fugiat
+                  ullam labore, perspiciatis veniam veritatis provident?
+                  Necessitatibus in explicabo quia repellendus. Blanditiis, eum.
+                  Et, perspiciatis. Sed exercitationem totam fugiat molestiae.
+                  At temporibus consectetur voluptatem provident dignissimos
+                  laborum velit ipsa, rerum dolor, obcaecati expedita eius,
+                  nulla perspiciatis eveniet commodi ea deserunt dolore cum eos
+                  quam libero alias non labore. Placeat, nulla!
                 </p>
               </div>
               <div className="space-y-2">

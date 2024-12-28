@@ -15,7 +15,7 @@ async function getData(): Promise<Property[]> {
   });
   return properties;
 }
-export default async function MyProperties() {
+export default async function Page() {
   const data = await getData();
   return (
     <div className="p-4">

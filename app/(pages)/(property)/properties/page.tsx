@@ -1,3 +1,8 @@
+import MaxWidthWrapper from "@/components/MaxWithWrapper";
+import FilterProperty from "@/components/property/FilterProperty";
+import PropertyResult from "@/components/property/PropertyResult";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PropertyFilterValue } from "@/lib/validation";
 import { Loader2 } from "lucide-react";
 import { Metadata } from "next";
@@ -73,7 +78,21 @@ export default async function Page({ searchParams }: PageProps) {
 
       <MaxWidthWrapper>
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 relative">
-          <FilterProperty />
+          <div className="relative">
+            <div className="hidden md:block sticky top-24">
+              <FilterProperty />
+            </div>
+            <div>
+              <Dialog>
+                <DialogTrigger asChild className="block md:hidden">
+                  <Button variant="outline">Filter</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <FilterProperty />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
 
           <div className="lg:col-span-2 space-y-4">
             <div className="flex flex-col space-y-3">

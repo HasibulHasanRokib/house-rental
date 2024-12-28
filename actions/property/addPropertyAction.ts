@@ -7,7 +7,7 @@ import { AddingPropertySchema, TAddingPropertySchema } from "@/lib/validation";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 
-export async function addingProperty(values: TAddingPropertySchema) {
+export async function addingPropertyAction(values: TAddingPropertySchema) {
   try {
     const validation = AddingPropertySchema.safeParse(values);
 

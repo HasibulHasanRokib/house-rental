@@ -13,6 +13,8 @@ import { DateRangePicker } from "./DateRangePicker";
 
 import { createCheckoutSession } from "@/actions/property/checkoutAction";
 import { useRouter } from "next/navigation";
+import MaxWidthWrapper from "@/components/MaxWithWrapper";
+import ErrorMessage from "@/components/ErrorMessage";
 export default function PropertyPreview({
   property,
   user,
@@ -191,7 +193,7 @@ export default function PropertyPreview({
                         dateRange={dateRange}
                         onDateRangeChange={handleDateRangeChange}
                       />
-                      {error && <FormError message={error} />}
+                      {error && <ErrorMessage message={error} />}
                     </CardContent>
                   </Card>
 

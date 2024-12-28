@@ -28,7 +28,7 @@ import {
 import Link from "next/link";
 import { Property } from "@prisma/client";
 import Image from "next/image";
-import { DeletePropertyBtn } from "@/components/property/deletePropertyBtn";
+import { DeletePropertyBtn } from "@/components/property/DeletePropertyBtn";
 
 export const columns: ColumnDef<Property>[] = [
   {

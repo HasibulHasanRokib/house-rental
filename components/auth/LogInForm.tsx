@@ -20,6 +20,8 @@ import { loginAction } from "@/actions/auth/loginAction";
 import { Card, CardContent } from "../ui/card";
 import ImageOne from "@/public/images/img-1.jpg";
 import Image from "next/image";
+import ErrorMessage from "../ErrorMessage";
+import SuccessMessage from "../SuccessMessage";
 
 export default function LoginForm() {
   const [error, setError] = useState<string | undefined>();
@@ -104,8 +106,8 @@ export default function LoginForm() {
                 <Button type="submit" className="w-full">
                   {isPending ? "Loading..." : "Login"}
                 </Button>
-                {error && <FormError message={error} />}
-                {success && <FormSuccess message={success} />}
+                {error && <ErrorMessage message={error} />}
+                {success && <SuccessMessage message={success} />}
 
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}

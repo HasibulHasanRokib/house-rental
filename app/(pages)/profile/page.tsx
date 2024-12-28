@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { auth } from "@/auth";
 import db from "@/lib/db";
 
-export default async function Profile() {
+export default async function Page() {
   const session = await auth();
   const user = await db.user.findUnique({
     where: { id: session?.user.id },

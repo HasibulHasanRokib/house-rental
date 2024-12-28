@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import EditForm from "./EditForm";
+import EditProfileForm from "@/components/profile/EditProfileForm";
 import db from "@/lib/db";
 
 export default async function page() {
@@ -18,7 +18,7 @@ export default async function page() {
   return (
     <div className="p-6">
       <h2>Update Personal Information</h2>
-      <EditForm user={user} />
+      <EditProfileForm user={user} />
     </div>
   );
 }

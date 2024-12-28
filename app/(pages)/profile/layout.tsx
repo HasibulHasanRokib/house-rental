@@ -1,10 +1,11 @@
-import ProfileSidebar from "@/components/profile/profileSidebar";
+import MaxWidthWrapper from "@/components/MaxWithWrapper";
+import ProfileSideBar from "@/components/profile/ProfileSideBar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <MaxWidthWrapper>
       <div className="flex  border">
-        <ProfileSidebar />
+        <ProfileSideBar />
         <main className="flex-1 min-h-[80vh]">{children}</main>
       </div>
     </MaxWidthWrapper>

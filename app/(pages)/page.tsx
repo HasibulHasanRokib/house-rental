@@ -8,6 +8,7 @@ import { TbCoinTaka } from "react-icons/tb";
 
 import db from "@/lib/db";
 import Link from "next/link";
+import MaxWidthWrapper from "@/components/MaxWithWrapper";
 
 export default async function Page() {
   const cities = await db.property.findMany({

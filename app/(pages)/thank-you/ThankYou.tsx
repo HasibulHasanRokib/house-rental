@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatMoney } from "@/lib/utils";
 import Confetti from "react-dom-confetti";
 import Image from "next/image";
+import MaxWidthWrapper from "@/components/MaxWithWrapper";
 
 const ThankYou = () => {
   const searchParams = useSearchParams();
