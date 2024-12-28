@@ -1,7 +1,7 @@
 "use client";
 import { updateProfileAction } from "@/actions/auth/updateProfileAction";
-import FormError from "@/components/errorMessage";
-import FormSuccess from "@/components/successMessage";
+import FormError from "@/components/FormError";
+import FormSuccess from "@/components/FormSuccess";
 import { Button } from "@/components/ui/button";
 import {
   Form,

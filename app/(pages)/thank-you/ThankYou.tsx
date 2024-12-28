@@ -1,17 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import {
-  getOWnerById,
-  getPaymentStatus,
-  getPropertyById,
-  getUserById,
-} from "./action";
+import { getPaymentStatus } from "./action";
 import {
   Calendar,
   CheckCircle,
-  Clock,
   CreditCard,
   Home,
   Loader2,
@@ -19,41 +14,25 @@ import {
   MapPin,
   Phone,
   User,
+  User2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/utils";
 import Confetti from "react-dom-confetti";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Image from "next/image";
 
 const ThankYou = () => {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get("paymentId") || "";
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
+
   useEffect(() => setShowConfetti(true));
 
   const { data } = useQuery({
     queryKey: ["get-payment-status"],
-    queryFn: async () => getPaymentStatus({ paymentId }),
-    retry: true,
-    retryDelay: 500,
-  });
-
-  const { data: property } = useQuery({
-    queryKey: ["get-property"],
-    queryFn: async () => getPropertyById({ propertyId }),
-    retry: true,
-    retryDelay: 500,
-  });
-
-  const { data: user } = useQuery({
-    queryKey: ["get-user"],
-    queryFn: async () => getUserById({ userId }),
-    retry: true,
-    retryDelay: 500,
-  });
-  const { data: owner } = useQuery({
-    queryKey: ["get-owner"],
-    queryFn: async () => getOWnerById({ userId: property?.userId! }),
+    queryFn: async () => await getPaymentStatus({ paymentId }),
     retry: true,
     retryDelay: 500,
   });
@@ -81,7 +60,7 @@ const ThankYou = () => {
     );
   }
 
-  const { amount, propertyId, userId, startDate, endDate, createdAt } = data;
+  const { amount, startDate, endDate, createdAt, userId } = data;
 
   return (
     <>
@@ -94,177 +73,144 @@ const ThankYou = () => {
           config={{ elementCount: 200, spread: 360 }}
         />
       </div>
-      <div className="py-2 px-4 sm:px-6 lg:px-8">
-        <Card className="max-w-4xl mx-auto shadow-none rounded-none">
-          <CardHeader className="bg-green-500 text-white ">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-8 h-8" />
-              <CardTitle className="text-2xl font-bold">
-                Rental Confirmed!
+      <div className="min-h-screen py-2 px-4 sm:px-6 lg:px-8">
+        <MaxWidthWrapper>
+          <Card className="overflow-hidden  shadow-none border-none rounded">
+            <CardHeader className=" p-6">
+              <CardTitle className="text-3xl font-bold border-b-2 py-2">
+                <p className="text-base font-medium text-primary">Thank you!</p>
+                <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+                  Payment Confirmed
+                </h1>
               </CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="space-y-8">
-              <section>
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <Home className="w-6 h-6 mr-2 text-blue-500" />
-                  Property Details
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600 flex items-center mt-1">
-                      Title: {property?.propertyTitle}
-                    </p>
-                    <p className="text-gray-600 flex items-center mt-1">
-                      Address: {property?.address},{property?.city}
-                    </p>
-                    <p className="text-gray-600 mt-1 capitalize">
-                      Area: {property?.area} sqrt
-                    </p>
-                    <p className="text-gray-600 mt-1 capitalize">
-                      Bedrooms: {property?.bedrooms}
-                    </p>
-                    <p className="text-gray-600 mt-1 capitalize">
-                      Bathrooms: {property?.bathrooms}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Amenities:</p>
-                    <ul className="list-disc list-inside text-gray-600">
-                      {property?.hasAlarm && <li>Alarm</li>}
-                      {property?.hasCentralHeating && <li>Central Heating</li>}
-                      {property?.hasLaundryRoom && <li>Laundry Room</li>}
-                      {property?.hasParking && <li>Parking</li>}
-                      {property?.hasSwimmingPool && <li>Swimming Pool</li>}
-                      {property?.hasWoodenCeiling && <li>Wooden Ceiling</li>}
-                    </ul>
-                  </div>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <Image
+                    src={data.property?.imagesUrl[0]!}
+                    alt={data.property?.propertyTitle!}
+                    width={600}
+                    height={400}
+                    className="rounded-lg shadow-lg"
+                  />
+                  <Card className="border-none shadow-none">
+                    <CardHeader>
+                      <CardTitle>Property Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="text-2xl font-bold">
+                        {data.property?.propertyTitle}
+                      </p>
+                      <p className="flex items-center text-gray-600">
+                        <MapPin className="mr-2 h-4 w-4" />{" "}
+                        {data.property?.address}
+                      </p>
+                      <p className="flex items-center text-xl font-semibold text-green-600">
+                        {formatMoney(data.property?.price!)} / month
+                      </p>
+                      <div>
+                        <p className="font-medium">Amenities:</p>
+                        <ul className="list-disc list-inside text-gray-600">
+                          {data.property?.hasAlarm && <li>Alarm</li>}
+                          {data.property?.hasCentralHeating && (
+                            <li>Central Heating</li>
+                          )}
+                          {data.property?.hasLaundryRoom && (
+                            <li>Laundry Room</li>
+                          )}
+                          {data.property?.hasParking && <li>Parking</li>}
+                          {data.property?.hasSwimmingPool && (
+                            <li>Swimming Pool</li>
+                          )}
+                          {data.property?.hasWoodenCeiling && (
+                            <li>Wooden Ceiling</li>
+                          )}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </section>
+                <div className="space-y-4">
+                  <Card className="border-none shadow-none">
+                    <CardHeader>
+                      <CardTitle>Payment Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="text-gray-600">
+                        <span className="font-medium">Amount paid:</span>{" "}
+                        {formatMoney(amount)}
+                      </p>
+                      <p className="text-gray-600">
+                        <span className="font-medium">Payment method:</span>{" "}
+                        Credit Card
+                      </p>
 
-              <section>
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <CreditCard className="w-6 h-6 mr-2 text-blue-500" />
-                  Payment Information
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Amount paid:</span>{" "}
-                      {formatMoney(amount)}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Payment method:</span>{" "}
-                      Credit Card
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Payment ID:</span>{" "}
-                      {paymentId}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Payment date:</span>{" "}
-                      {createdAt.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <User className="w-6 h-6 mr-2 text-blue-500" />
-                  Tenant Information
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">User id:</span> {user?.id}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Name:</span>{" "}
-                      {user?.username}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Email:</span> {user?.email}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Gender:</span>{" "}
-                      {user?.gender}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Address:</span>{" "}
-                      {user?.address}
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <User className="w-6 h-6 mr-2 text-blue-500" />
-                  Owner Information
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">User id:</span> {owner?.id}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Name:</span>{" "}
-                      {owner?.username}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Email:</span> {owner?.email}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Gender:</span>{" "}
-                      {owner?.gender}
-                    </p>
-                    <p className="text-gray-600">
-                      <span className="font-medium">Address:</span>{" "}
-                      {owner?.address}
-                    </p>
-                  </div>
-                </div>
-              </section>
-              <section>
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <Calendar className="w-6 h-6 mr-2 text-blue-500" />
-                  Rental Period
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">From:</span>{" "}
-                      {startDate?.toDateString()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium">To:</span>{" "}
-                      {endDate?.toDateString()}
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <div className="border-t pt-6 flex justify-between items-center">
-                <p className="text-sm text-gray-500">
-                  Need help? Contact our support team at support@houserent.com
-                </p>
-                <div className="space-x-4">
-                  <Button variant="outline">Print Confirmation</Button>
+                      <p className="text-gray-600">
+                        <span className="font-medium">Payment date:</span>{" "}
+                        {createdAt.toLocaleString()}
+                      </p>
+                      <p className="text-gray-600">
+                        <span className="font-medium">Payment ID:</span>{" "}
+                        {paymentId}
+                      </p>
+                      <p className="text-gray-600">
+                        <span className="font-medium">User ID:</span> {userId}
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-none shadow-none">
+                    <CardHeader>
+                      <CardTitle>Owner Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="flex items-center">
+                        <User2 className="mr-2 h-4 w-4" />{" "}
+                        {data.property?.contactName}
+                      </p>
+                      <p className="flex items-center">
+                        <Mail className="mr-2 h-4 w-4" />{" "}
+                        {data.property?.contactEmail}
+                      </p>
+                      <p className="flex items-center">
+                        <Phone className="mr-2 h-4 w-4" />{" "}
+                        {data.property?.contactPhone}
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-none shadow-none">
+                    <CardHeader>
+                      <CardTitle>Tenant Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="flex items-center">
+                        <User2 className="mr-2 h-4 w-4" /> {data.user.username}
+                      </p>
+                      <p className="flex items-center">
+                        <Mail className="mr-2 h-4 w-4" /> {data.user.email}
+                      </p>
+                      <p className="flex items-center">
+                        <Phone className="mr-2 h-4 w-4" /> {data.user.phoneNo}
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-none shadow-none">
+                    <CardHeader>
+                      <CardTitle>Rental Period</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="flex items-center text-gray-600">
+                        <Calendar className="mr-2 h-4 w-4" />{" "}
+                        {startDate?.toLocaleDateString()} to{" "}
+                        {endDate?.toLocaleDateString()}
+                      </p>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </MaxWidthWrapper>
       </div>
     </>
   );
