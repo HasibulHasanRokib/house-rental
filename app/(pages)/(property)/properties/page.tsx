@@ -1,6 +1,3 @@
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import FilterProperty from "@/components/property/FilterProperty";
-import PropertyResult from "@/components/property/PropertyResult";
 import { PropertyFilterValue } from "@/lib/validation";
 import { Loader2 } from "lucide-react";
 import { Metadata } from "next";

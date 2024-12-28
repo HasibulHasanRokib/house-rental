@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  logInSchema,
-  registerSchema,
-  TLoginSchema,
-  TRegisterSchema,
-} from "@/lib/auth/validation";
+import { logInSchema, TLoginSchema } from "@/lib/auth/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -19,9 +14,7 @@ import {
 import { Button } from "../ui/button";
 import { useState, useTransition } from "react";
 import { Input } from "../ui/input";
-import { registerAction } from "@/actions/auth/registerAction";
-import FormError from "../FormError";
-import FormSuccess from "../FormSuccess";
+
 import Link from "next/link";
 import { loginAction } from "@/actions/auth/loginAction";
 import { Card, CardContent } from "../ui/card";

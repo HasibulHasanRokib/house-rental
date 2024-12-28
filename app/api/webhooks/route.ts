@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
-import PaymentConfirmationEmail from "@/emails/PaymentReceivedEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 

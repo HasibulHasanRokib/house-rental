@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  User,
-  Edit,
-  LogOut,
-  Mail,
-  Users,
-  Home,
-  CirclePlus,
-} from "lucide-react";
+import { User, Edit, Mail, Users, Home, CirclePlus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";

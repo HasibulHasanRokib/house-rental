@@ -4,7 +4,6 @@ import db from "@/lib/db";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import ImageSlider from "@/components/property/ImageSection";
 import { formatMoney } from "@/lib/utils";
 import {
   Bed,
@@ -24,15 +23,11 @@ import { FaSwimmingPool } from "react-icons/fa";
 
 import Image from "next/image";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { SocialMediaLists } from "@/components/property/SocialMediaLists";
+
 import defaultImage from "@/public/images/noavatar.jpg";
 import Map from "@/public/images/map.png";
 import { auth } from "@/auth";
-import { Property } from "@prisma/client";
 import Link from "next/link";
-
-import ImageSection from "@/components/property/ImageSection";
-import { RelatedPropertyCard } from "@/components/property/RelatedPropertyCard";
 
 interface PageProps {
   params: {

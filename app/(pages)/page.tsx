@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
->>>>>>> 87812bbd3cba602eefb135e54ac5b95d2e2b9e64
 import Image from "next/image";
 import Image1 from "@/public/images/img-1.jpg";
 import { Card, CardTitle } from "@/components/ui/card";
@@ -12,7 +8,6 @@ import { TbCoinTaka } from "react-icons/tb";
 
 import db from "@/lib/db";
 import Link from "next/link";
-import MaxWidthWrapper from "@/components/maxWithWrapper";
 
 export default async function Page() {
   const cities = await db.property.findMany({

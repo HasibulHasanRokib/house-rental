@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -6,9 +5,6 @@ import React, { useEffect, useState } from "react";
 import { getPaymentStatus } from "./action";
 import {
   Calendar,
-  CheckCircle,
-  CreditCard,
-  Home,
   Loader2,
   Mail,
   MapPin,
@@ -17,10 +13,8 @@ import {
   User2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/utils";
 import Confetti from "react-dom-confetti";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Image from "next/image";
 
 const ThankYou = () => {

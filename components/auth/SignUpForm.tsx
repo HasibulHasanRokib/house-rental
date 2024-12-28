@@ -15,8 +15,7 @@ import { Button } from "../ui/button";
 import { useState, useTransition } from "react";
 import { Input } from "../ui/input";
 import { registerAction } from "@/actions/auth/registerAction";
-import FormError from "../FormError";
-import FormSuccess from "../FormSuccess";
+
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import { Card, CardContent } from "../ui/card";

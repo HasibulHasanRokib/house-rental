@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatMoney } from "@/lib/utils";
@@ -11,8 +10,7 @@ import Confetti from "react-dom-confetti";
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 import { DateRangePicker } from "./DateRangePicker";
-import FormError from "@/components/FormError";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+
 import { createCheckoutSession } from "@/actions/property/checkoutAction";
 import { useRouter } from "next/navigation";
 export default function PropertyPreview({

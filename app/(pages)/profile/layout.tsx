@@ -1,4 +1,3 @@
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProfileSidebar from "@/components/profile/profileSidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
