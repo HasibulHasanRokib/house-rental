@@ -6,7 +6,7 @@ import Stripe from "stripe";
 import { Resend } from "resend";
 import PaymentConfirmationEmail from "@/emails/PaymentReceivedEmail";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const resend = new Resend("re_MRFXX87J_4fwwA2DR3B4aybFfiBNRWqgr");
 
 export async function POST(req: NextRequest) {
   try {
