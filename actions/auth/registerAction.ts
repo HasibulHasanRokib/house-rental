@@ -19,6 +19,7 @@ export async function registerAction(values: TRegisterSchema) {
     const userExist = await getUserByEmail(email);
 
     if (userExist) return { error: "Email already exist." };
+
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(password, salt);
 

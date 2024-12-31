@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Button } from "../ui/button";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { registerAction } from "@/actions/auth/registerAction";
 
@@ -23,10 +23,9 @@ import Image from "next/image";
 import ImageOne from "@/public/images/properties-1.jpg";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SignUpForm() {
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
   const [title, setTitle] = useState<boolean>(false);
 
   const form = useForm<TRegisterSchema>({
@@ -40,18 +39,17 @@ export default function SignUpForm() {
     },
   });
 
-  const [isPending, startTransition] = useTransition();
-  const submit = (values: TRegisterSchema) => {
-    setError("");
-    setSuccess("");
-
-    startTransition(async () => {
-      await registerAction(values).then((data) => {
-        setSuccess(data?.success);
-        setError(data.error);
+  const { mutate, isPending, data, isSuccess } = useMutation({
+    mutationFn: registerAction,
+    onSuccess: (res) => {
+      if (res.success) {
         form.reset();
-      });
-    });
+      }
+    },
+  });
+
+  const submit = (values: TRegisterSchema) => {
+    mutate(values);
   };
 
   return (
@@ -124,7 +122,7 @@ export default function SignUpForm() {
                       <FormItem>
                         <FormLabel>First name</FormLabel>
                         <FormControl>
-                          <Input placeholder="John dev" {...field} />
+                          <Input placeholder="John " {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -137,7 +135,7 @@ export default function SignUpForm() {
                       <FormItem>
                         <FormLabel>Last name</FormLabel>
                         <FormControl>
-                          <Input placeholder="John dev" {...field} />
+                          <Input placeholder="Deo" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -176,11 +174,13 @@ export default function SignUpForm() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <Button disabled={isPending} type="submit" className="w-full">
                   {isPending ? "Loading..." : "Login"}
                 </Button>
-                {error && <ErrorMessage message={error} />}
-                {success && <SuccessMessage message={success} />}
+                {data?.error && <ErrorMessage message={data.error} />}
+                {isSuccess && data?.success && (
+                  <SuccessMessage message={data.success} />
+                )}
 
                 <div className="text-center text-sm">
                   Already have an account?{" "}
