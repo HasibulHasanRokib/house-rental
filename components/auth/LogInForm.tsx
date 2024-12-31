@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Button } from "../ui/button";
-import { useState, useTransition } from "react";
 import { Input } from "../ui/input";
 
 import Link from "next/link";
@@ -22,11 +21,12 @@ import ImageOne from "@/public/images/img-1.jpg";
 import Image from "next/image";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import LoadingAnimate from "../LoadingAnimate";
 
 export default function LoginForm() {
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-
+  const router = useRouter();
   const form = useForm<TLoginSchema>({
     resolver: zodResolver(logInSchema),
     defaultValues: {
@@ -35,16 +35,19 @@ export default function LoginForm() {
     },
   });
 
-  const [isPending, startTransition] = useTransition();
+  const { mutate, data, isPending } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: loginAction,
+    onSuccess: (res) => {
+      if (res.success) {
+        form.reset();
+        router.push("/");
+      }
+    },
+  });
+
   const submit = (values: TLoginSchema) => {
-    setError("");
-    setSuccess("");
-    startTransition(async () => {
-      await loginAction(values).then((data) => {
-        setSuccess(data?.success);
-        setError(data?.error);
-      });
-    });
+    mutate(values);
   };
 
   return (
@@ -103,11 +106,11 @@ export default function LoginForm() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
-                  {isPending ? "Loading..." : "Login"}
+                <Button disabled={isPending} type="submit" className="w-full">
+                  {isPending ? <LoadingAnimate text="Loading" /> : "Login"}
                 </Button>
-                {error && <ErrorMessage message={error} />}
-                {success && <SuccessMessage message={success} />}
+                {data?.error && <ErrorMessage message={data?.error} />}
+                {data?.success && <SuccessMessage message={data?.success} />}
 
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}

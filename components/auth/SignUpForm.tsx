@@ -24,6 +24,7 @@ import ImageOne from "@/public/images/properties-1.jpg";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
 import { useMutation } from "@tanstack/react-query";
+import LoadingAnimate from "../LoadingAnimate";
 
 export default function SignUpForm() {
   const [title, setTitle] = useState<boolean>(false);
@@ -175,12 +176,10 @@ export default function SignUpForm() {
                 />
 
                 <Button disabled={isPending} type="submit" className="w-full">
-                  {isPending ? "Loading..." : "Login"}
+                  {isPending ? <LoadingAnimate text="Loading" /> : "Login"}
                 </Button>
                 {data?.error && <ErrorMessage message={data.error} />}
-                {isSuccess && data?.success && (
-                  <SuccessMessage message={data.success} />
-                )}
+                {data?.success && <SuccessMessage message={data.success} />}
 
                 <div className="text-center text-sm">
                   Already have an account?{" "}
