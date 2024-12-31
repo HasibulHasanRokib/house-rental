@@ -17,6 +17,8 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
+import LoadingAnimate from "../LoadingAnimate";
+import { useRouter } from "next/navigation";
 
 interface EditFormProps {
   user: {
@@ -31,6 +33,7 @@ interface EditFormProps {
 export default function EditProfileForm({ user }: EditFormProps) {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+  const router = useRouter();
 
   const form = useForm<TEditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
@@ -50,11 +53,15 @@ export default function EditProfileForm({ user }: EditFormProps) {
     setSuccess("");
     startTransition(async () => {
       await updateProfileAction(values).then((data) => {
-        setSuccess(data?.success);
+        if (data.success) {
+          setSuccess(data?.success);
+          router.push("/profile");
+        }
         setError(data?.error);
       });
     });
   };
+
   return (
     <div className="py-4">
       <Form {...form}>
@@ -144,7 +151,9 @@ export default function EditProfileForm({ user }: EditFormProps) {
           />
           {error && <ErrorMessage message={error} />}
           {success && <SuccessMessage message={success} />}
-          <Button type="submit">{isPending ? "Loading..." : "Update"}</Button>
+          <Button disabled={isPending} type="submit">
+            {isPending ? <LoadingAnimate text="Updating" /> : "Update"}
+          </Button>
         </form>
       </Form>
     </div>

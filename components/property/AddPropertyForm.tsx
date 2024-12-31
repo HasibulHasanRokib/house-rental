@@ -33,6 +33,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
+import LoadingAnimate from "../LoadingAnimate";
 
 type FileWithPreview = File & { preview: string };
 export default function AddPropertyForm() {
@@ -113,11 +114,14 @@ export default function AddPropertyForm() {
 
       startTransition(async () => {
         await addingPropertyAction(updateValues).then((data) => {
-          setFiles([]);
-          form.reset();
-          setSuccess(data?.success);
+          if (data.success) {
+            setFiles([]);
+            form.reset();
+            setSuccess(data?.success);
+            router.push("/profile/my-properties");
+          }
+
           setError(data?.error);
-          router.push("/profile/my-properties");
         });
       });
     } catch (err) {
@@ -174,6 +178,29 @@ export default function AddPropertyForm() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="buildingAge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Building Age <span className="text-sm">(optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\d,]/g, "");
+                          field.onChange(
+                            parseFloat(value.replace(/,/g, "")) || ""
+                          );
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
@@ -208,31 +235,6 @@ export default function AddPropertyForm() {
               />
               <FormField
                 control={form.control}
-                name="buildingAge"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Building Age <span className="text-sm">(optional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^\d,]/g, "");
-                          field.onChange(
-                            parseFloat(value.replace(/,/g, "")) || ""
-                          );
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <FormField
-                control={form.control}
                 name="rooms"
                 render={({ field }) => (
                   <FormItem>
@@ -258,6 +260,8 @@ export default function AddPropertyForm() {
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="bedrooms"
@@ -602,7 +606,7 @@ export default function AddPropertyForm() {
           />
           {/* Submit Button */}
           <Button type="submit" disabled={isPending || isUploading}>
-            {isUploading ? "Uploading..." : "Submit"}
+            {isUploading ? <LoadingAnimate text="Adding" /> : "Submit"}
           </Button>
           {error && <ErrorMessage message={error} />}
           {success && <SuccessMessage message={success} />}

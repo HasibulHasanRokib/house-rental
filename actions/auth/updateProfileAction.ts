@@ -3,16 +3,16 @@
 import { auth } from "@/auth";
 import { editProfileSchema, TEditProfileSchema } from "@/lib/auth/validation";
 import db from "@/lib/db";
-import { revalidatePath } from "next/cache";
 
 export async function updateProfileAction(values: TEditProfileSchema) {
   try {
     const validation = editProfileSchema.safeParse(values);
+    console.log(validation.data);
 
     if (!validation.success)
       return { error: "Invalid values! Please check your inputs!" };
 
-    const { id, username, phone, address, gender, occupation } =
+    const { id, username, phone, address, gender, occupation, image } =
       validation.data;
     const session = await auth();
 
@@ -27,9 +27,9 @@ export async function updateProfileAction(values: TEditProfileSchema) {
         address,
         phoneNo: phone,
         gender,
+        image,
       },
     });
-    revalidatePath("/profile");
     return { success: "Update Successful" };
   } catch (error) {
     console.log(error);

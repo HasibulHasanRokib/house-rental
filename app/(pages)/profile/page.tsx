@@ -12,12 +12,18 @@ export default async function Page() {
   return (
     <div className="p-6">
       <div>
-        <h2>Personal Information</h2>
+        <div className="border-b py-3 space-y-2">
+          <h2 className="font-semibold text-xl">Profile</h2>
+          <p className="text-sm text-muted-foreground">
+            This is how others will see you on the site.
+          </p>
+        </div>
+
         <div>
           <div className="mt-6 space-y-2">
             <div className="grid gap-2">
               <Label>Name</Label>
-              <Input disabled value={user?.username} />
+              <Input disabled value={user?.username.toLocaleUpperCase()} />
             </div>
             <div className="grid gap-2">
               <Label>Email</Label>

@@ -21,12 +21,14 @@ import ImageOne from "@/public/images/img-1.jpg";
 import Image from "next/image";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import LoadingAnimate from "../LoadingAnimate";
+import { useState, useTransition } from "react";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [success, setSuccess] = useState<string | undefined>();
+  const [error, setError] = useState<string | undefined>();
+
   const form = useForm<TLoginSchema>({
     resolver: zodResolver(logInSchema),
     defaultValues: {
@@ -35,19 +37,17 @@ export default function LoginForm() {
     },
   });
 
-  const { mutate, data, isPending } = useMutation({
-    mutationKey: ["login"],
-    mutationFn: loginAction,
-    onSuccess: (res) => {
-      if (res.success) {
-        form.reset();
-        router.push("/");
-      }
-    },
-  });
-
   const submit = (values: TLoginSchema) => {
-    mutate(values);
+    setError("");
+    setSuccess("");
+    startTransition(async () => {
+      await loginAction(values).then((data) => {
+        if (data.success) {
+          setSuccess(data.success);
+        }
+        setError(data.error);
+      });
+    });
   };
 
   return (
@@ -109,8 +109,8 @@ export default function LoginForm() {
                 <Button disabled={isPending} type="submit" className="w-full">
                   {isPending ? <LoadingAnimate text="Loading" /> : "Login"}
                 </Button>
-                {data?.error && <ErrorMessage message={data?.error} />}
-                {data?.success && <SuccessMessage message={data?.success} />}
+                {error && <ErrorMessage message={error} />}
+                {success && <SuccessMessage message={success} />}
 
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}

@@ -2,12 +2,12 @@ import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { auth } from "@/auth";
 import { SignOut } from "./auth/SignOut";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NavLink from "./NavLink";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AlignJustify } from "lucide-react";
 import MaxWidthWrapper from "./MaxWithWrapper";
+import UserAvatar from "./UserAvatar";
 
 export default async function Navbar() {
   const session = await auth();
@@ -38,15 +38,7 @@ export default async function Navbar() {
               </li>
               <li>
                 <Link href={"/profile"}>
-                  <Avatar>
-                    <AvatarImage
-                      src={session?.user?.image || ""}
-                      alt="avatar"
-                    />
-                    <AvatarFallback>
-                      {session.user.name?.toUpperCase().slice(0, 2)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar name={session?.user?.name} />
                 </Link>
               </li>
             </div>

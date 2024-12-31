@@ -2,9 +2,8 @@
 
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
-import { getUserByEmail } from "@/lib/auth/user";
 import { logInSchema, TLoginSchema } from "@/lib/auth/validation";
-import bcrypt from "bcryptjs";
+import { AuthError } from "next-auth";
 
 export async function loginAction(values: TLoginSchema) {
   try {
@@ -15,14 +14,6 @@ export async function loginAction(values: TLoginSchema) {
     }
     const { email, password } = validation.data;
 
-    const userExist = await getUserByEmail(email);
-
-    if (!userExist) return { error: "Invalid email!" };
-
-    const passOk = await bcrypt.compareSync(password, userExist.password);
-
-    if (!passOk) return { error: "Invalid credentials!" };
-
     await signIn("credentials", {
       email,
       password,
@@ -30,6 +21,16 @@ export async function loginAction(values: TLoginSchema) {
     });
     return { success: "Log in successful." };
   } catch (error) {
-    return { error: "Something went wrong!" };
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CallbackRouteError":
+          return { error: "Something went wrong!" };
+        case "CredentialsSignin":
+          return { error: "Invalid credentials!" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+    }
+    throw error;
   }
 }

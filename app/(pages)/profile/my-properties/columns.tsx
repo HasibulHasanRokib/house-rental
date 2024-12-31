@@ -29,6 +29,7 @@ import Link from "next/link";
 import { Property } from "@prisma/client";
 import Image from "next/image";
 import { DeletePropertyBtn } from "@/components/property/DeletePropertyBtn";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<Property>[] = [
   {
@@ -37,7 +38,13 @@ export const columns: ColumnDef<Property>[] = [
       const property = row.original;
 
       return (
-        <Image src={property.imagesUrl[0]} alt="image" width={80} height={80} />
+        <Image
+          src={property.imagesUrl[0]}
+          alt="image"
+          width={80}
+          height={80}
+          className="rounded-sm object-cover"
+        />
       );
     },
   },
@@ -46,30 +53,24 @@ export const columns: ColumnDef<Property>[] = [
     cell: ({ row }) => {
       const property = row.original;
 
-      return <p>{property.propertyTitle.slice(0, 10)}...</p>;
+      return (
+        <div className="">
+          <p>{property.propertyTitle.slice(0, 15)}...</p>
+          <p className="capitalize text-xs text-muted-foreground">
+            {property.type}
+          </p>
+        </div>
+      );
     },
   },
-  {
-    accessorKey: "type",
-    header: "Type",
-  },
+
   {
     accessorKey: "rooms",
-    header: "Total rooms",
+    header: "Rooms",
   },
   {
     accessorKey: "price",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Price",
   },
 
   {
@@ -77,11 +78,45 @@ export const columns: ColumnDef<Property>[] = [
     header: "City",
   },
   {
-    header: "Created at",
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Create at
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+
     cell: ({ row }) => {
       const property = row.original;
 
       return <p>{property.createdAt.toLocaleDateString()}</p>;
+    },
+  },
+  {
+    header: "Status",
+    cell: ({ row }) => {
+      const property = row.original;
+
+      return (
+        <Badge
+          variant={
+            property.status === "pending"
+              ? "secondary"
+              : property.status === "accepted"
+                ? "outline"
+                : property.status === "rejected"
+                  ? "destructive"
+                  : "default"
+          }
+        >
+          {property.status.toUpperCase()}
+        </Badge>
+      );
     },
   },
   {

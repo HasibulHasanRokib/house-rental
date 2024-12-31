@@ -14,7 +14,7 @@ export default function Footer() {
           </div>
 
           {/* Links */}
-          <div className="flex flex-col sm:flex-row items-center sm:space-x-8 space-y-2 sm:space-y-0">
+          <div className="sm:flex hidden sm:flex-row items-center sm:space-x-8 space-y-2 sm:space-y-0">
             <Link
               href={"#"}
               className="text-sm text-muted-foreground hover:underline"
