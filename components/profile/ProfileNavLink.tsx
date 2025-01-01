@@ -21,17 +21,20 @@ const ownerNavItems = [
   { icon: PieChart, label: "Overview", href: "/profile/overview" },
   { icon: Home, label: "My properties", href: "/profile/my-properties" },
   { icon: CirclePlus, label: "Add property", href: "/profile/add-property" },
-  { icon: Users, label: "My tenants", href: "/profile/my-tenants" },
 ];
 
 export default function ProfileNavLink({ isOwner }: { isOwner: boolean }) {
   const pathName = usePathname();
+
+  const combinedNavItems = [...navItems, ...(isOwner ? ownerNavItems : [])];
+
   return (
     <nav>
-      {[...navItems, ...(isOwner ? ownerNavItems : [])].map((item) => {
+      {combinedNavItems.map((item) => {
         const isActive =
           pathName === item.href ||
           (item.href !== "/profile" && pathName.startsWith(item.href));
+
         return (
           <Link key={item.href} href={item.href}>
             <Button
@@ -41,11 +44,26 @@ export default function ProfileNavLink({ isOwner }: { isOwner: boolean }) {
               }`}
             >
               <item.icon className="mr-2 h-4 w-4" />
-              <span className="hidden md:block"> {item.label}</span>
+              <span className="hidden md:block">{item.label}</span>
             </Button>
           </Link>
         );
       })}
+      {!isOwner && (
+        <Link href="/profile/my-booking">
+          <Button
+            variant="ghost"
+            className={`w-full justify-start mb-2 ${
+              pathName === "/profile/my-booking"
+                ? "bg-accent text-accent-foreground"
+                : ""
+            }`}
+          >
+            <Home className="mr-2 h-4 w-4" />
+            <span className="hidden md:block">My Booking</span>
+          </Button>
+        </Link>
+      )}
     </nav>
   );
 }

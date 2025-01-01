@@ -10,13 +10,13 @@ interface PropertyCardProps {
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
   return (
-    <Card className="w-full overflow-hidden grid grid-cols-1 md:grid-cols-2">
+    <Card className="w-full overflow-hidden grid grid-cols-1 md:grid-cols-2 ">
       <div>
         <div className="relative">
           <img
             src={property.imagesUrl[0]}
             alt="Modern living room"
-            className="w-full h-[200px] md:h-[250px] object-cover"
+            className="w-full h-[200px] md:h-[250px] object-cover "
           />
           <div className="absolute top-4 left-4 flex gap-2">
             <Badge variant="secondary" className="capitalize">

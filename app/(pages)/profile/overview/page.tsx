@@ -10,18 +10,52 @@ import {
 } from "@/components/ui/card";
 import db from "@/lib/db";
 import { formatMoney, relativeData } from "@/lib/utils";
-import {
-  Activity,
-  CreditCard,
-  DollarSign,
-  Home,
-  HousePlus,
-  Users,
-} from "lucide-react";
+import { CreditCard, DollarSign, Home, HousePlus } from "lucide-react";
 import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 async function Page() {
   const session = await auth();
+  const pendingProperties = await db.property.count({
+    where: { userId: session?.user.id, status: "pending" },
+  });
+  const tenants = await db.rent.findMany({
+    where: {
+      AND: [
+        {
+          property: {
+            userId: session?.user.id,
+            status: "booked",
+          },
+        },
+      ],
+    },
+    include: {
+      user: true,
+      property: true,
+    },
+  });
+
+  const totalAmount = await db.rent.aggregate({
+    _sum: {
+      amount: true,
+    },
+    where: {
+      property: {
+        userId: session?.user.id,
+        status: "booked",
+      },
+    },
+  });
 
   const totalSum = await db.property.aggregate({
     where: {
@@ -95,26 +129,6 @@ async function Page() {
         gte: new Date(new Date().setDate(new Date().getDate() - 30)),
       },
     },
-  });
-  const tenantsList = await db.rent.findMany({
-    where: {
-      AND: [
-        {
-          property: {
-            userId: session?.user.id,
-          },
-        },
-      ],
-    },
-    include: {
-      user: {
-        select: {
-          email: true,
-          username: true,
-        },
-      },
-    },
-    distinct: ["userId"],
   });
 
   return (
@@ -215,94 +229,88 @@ async function Page() {
             </div>
           </CardContent>
         </Card>
-      </div>
-      <div className="grid md:grid-cols-2 gap-3">
         <Card>
-          <CardHeader>
-            <CardTitle>Tenant information</CardTitle>
-            <CardDescription>View tenant details</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {tenantsList.map((data, index) => {
-              return (
-                <div
-                  key={data.id}
-                  className="flex flex-col md:flex-row md:justify-between gap-2 items-center p-2 bg-slate-50 rounded-md"
-                >
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="https://ui.shadcn.com/avatars/02.png"
-                      className="w-12 h-12 object-cover rounded-full"
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <span className="font-semibold">
-                        {data.user.username}
-                      </span>
-                      <span className="text-muted-foreground text-xs">
-                        {data.user.email}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Badge variant={"secondary"} className="p-2">
-                      Join at {data.createdAt.toLocaleDateString()}
-                    </Badge>
-                  </div>
-                </div>
-              );
-            })}
-            {newPaymentInfo.length === 0 ? (
-              <div className="text-center">
-                <h2>No data found!</h2>
+          <CardContent className="p-6">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <HousePlus className="h-4 w-4" />
+                Pending property
               </div>
-            ) : null}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Payment</CardTitle>
-            <CardDescription>
-              Your {totalBooked} home rent this month
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {newPaymentInfo.map((data) => {
-              return (
-                <div
-                  key={data.id}
-                  className="flex flex-col md:flex-row md:justify-between gap-2 items-center py-5 hover:bg-slate-50 rounded-md"
-                >
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="https://ui.shadcn.com/avatars/02.png"
-                      className="w-12 h-12 object-cover rounded-full"
-                      alt=""
-                    />
-
-                    <div className="flex flex-col">
-                      <span className="font-semibold">
-                        {data.user.username}
-                      </span>
-                      <span className="text-muted-foreground text-xs">
-                        {data.user.email}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div>{formatMoney(data.amount)}</div>
-                </div>
-              );
-            })}
-            {newPaymentInfo.length === 0 ? (
-              <div className="text-center">
-                <h2>No data found!</h2>
+              <div className="flex flex-col gap-1">
+                <span className="text-2xl font-bold">+{pendingProperties}</span>
+                <span className="text-sm text-muted-foreground">
+                  +total pending properties
+                </span>
               </div>
-            ) : null}
+            </div>
           </CardContent>
         </Card>
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>My tenants list</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table className="min-w-full">
+            <TableCaption>My tenants list</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="hidden md:table-cell">#</TableHead>
+                <TableHead>Tenant</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  Phone no.
+                </TableHead>
+                <TableHead className="hidden md:table-cell">Property</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  Start Date
+                </TableHead>
+                <TableHead className="hidden md:table-cell">End Date</TableHead>
+                <TableHead>Paid amount</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {tenants.map((tenant, index) => (
+                <TableRow key={tenant.id}>
+                  <TableCell className="hidden md:table-cell">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col space-y-1">
+                      <span className="capitalize">{tenant.user.username}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {tenant.user.email}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {tenant.user.phoneNo}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {tenant.property?.propertyTitle}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {tenant?.startDate?.toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {tenant?.endDate?.toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>{formatMoney(tenant.amount)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={6} className="text-right font-semibold">
+                  Total
+                </TableCell>
+                <TableCell>
+                  {formatMoney(Number(totalAmount._sum.amount))}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

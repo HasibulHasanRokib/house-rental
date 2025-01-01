@@ -9,12 +9,16 @@ export function DeletePropertyBtn({ property }: { property: Property }) {
   const handleDelete = async (property: Property) => {
     const response = await deletePropertyAction(property);
     if (response.error) {
-      alert(response.error);
+      toast({
+        variant: "destructive",
+        title: response.error,
+        description: "Please try again",
+      });
     } else {
       toast({
         variant: "default",
         title: response.success,
-        description: "There was a problem with your request.",
+        description: "Your property and remove  property data from our servers",
       });
     }
   };

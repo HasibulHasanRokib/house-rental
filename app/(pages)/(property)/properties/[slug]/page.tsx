@@ -81,8 +81,8 @@ const Page = async ({ params: { slug } }: PageProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
           <div className="space-y-4 lg:col-span-4">
             <ImageSection images={property.imagesUrl} />
-            <div className="bg-white py-6 px-4 flex justify-between items-center">
-              <article className="space-y-2">
+            <div className="bg-white py-6 px-4 flex max-md:flex-col justify-between md:items-center items-start max-md:space-y-4">
+              <article className="space-y-2 ">
                 <h2 className="font-semibold text-3xl">
                   {property.propertyTitle}
                 </h2>
@@ -93,7 +93,7 @@ const Page = async ({ params: { slug } }: PageProps) => {
                   </p>
                 </span>
               </article>
-              <div className="flex flex-col items-end space-y-2">
+              <div className="flex flex-col md:items-end space-y-2">
                 <p className="font-semibold text-primary text-2xl">
                   {formatMoney(property.price)}
                 </p>
@@ -270,7 +270,9 @@ const Page = async ({ params: { slug } }: PageProps) => {
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
               {relatedProperties.map((related) => (
-                <RelatedPropertyCard key={related.id} property={related} />
+                <Link href={`/properties/${property.slug}`} key={related.id}>
+                  <RelatedPropertyCard property={related} />
+                </Link>
               ))}
             </div>
           </div>

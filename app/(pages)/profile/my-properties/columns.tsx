@@ -54,8 +54,8 @@ export const columns: ColumnDef<Property>[] = [
       const property = row.original;
 
       return (
-        <div className="">
-          <p>{property.propertyTitle.slice(0, 15)}...</p>
+        <div>
+          <p className="truncate">{property.propertyTitle}</p>
           <p className="capitalize text-xs text-muted-foreground">
             {property.type}
           </p>
@@ -159,7 +159,7 @@ export const columns: ColumnDef<Property>[] = [
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone. This will permanently delete
-                      your property and remove your data from our servers.
+                      your property and remove property data from our servers.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

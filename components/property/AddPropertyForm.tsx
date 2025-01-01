@@ -55,8 +55,6 @@ export default function AddPropertyForm() {
       hasWoodenCeiling: false,
       imagesUrl: [],
       propertyTitle: "",
-      price: 0,
-      area: 0,
       address: "",
       city: "",
       country: "",
@@ -64,10 +62,6 @@ export default function AddPropertyForm() {
       contactName: "",
       contactPhone: "",
       details: "",
-      buildingAge: 0,
-      rooms: 0,
-      bathrooms: 0,
-      bedrooms: 0,
     },
   });
 
@@ -147,13 +141,13 @@ export default function AddPropertyForm() {
                 <FormItem>
                   <FormLabel>Property title</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input placeholder="Enter your property title" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="type"
@@ -188,6 +182,7 @@ export default function AddPropertyForm() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        placeholder="Enter your building age"
                         {...field}
                         onChange={(e) => {
                           const value = e.target.value.replace(/[^\d,]/g, "");
@@ -210,7 +205,7 @@ export default function AddPropertyForm() {
               Property Details <span className="text-sm">(required)</span>
             </h2>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="area"
@@ -261,7 +256,7 @@ export default function AddPropertyForm() {
                 )}
               />
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="bedrooms"
@@ -358,7 +353,7 @@ export default function AddPropertyForm() {
               </FormItem>
             )}
           />
-          <ul className="flex gap-2">
+          <ul className="flex max-md:flex-col gap-2">
             {files &&
               files.map((file) => (
                 <li key={file.name} className="relative">
@@ -388,7 +383,7 @@ export default function AddPropertyForm() {
             <h2 className="font-semibold text-2xl">
               Select Amenities <span className="text-sm">(optional)</span>
             </h2>
-            <div className="grid grid-cols-3 gap-4 py-4">
+            <div className="grid md:grid-cols-3 gap-4 py-4">
               <FormField
                 control={form.control}
                 name="hasAlarm"
@@ -501,7 +496,7 @@ export default function AddPropertyForm() {
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="city"
@@ -537,7 +532,7 @@ export default function AddPropertyForm() {
             <h2 className="font-semibold text-2xl">
               Owner Information <span className="text-sm">(required)</span>
             </h2>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid md:grid-cols-3 gap-2">
               <FormField
                 control={form.control}
                 name="contactName"

@@ -35,6 +35,7 @@ import { Property } from "@prisma/client";
 import { UpdatePropertyAction } from "@/actions/property/updatePropertyAction";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
+import LoadingAnimate from "../LoadingAnimate";
 
 type FileWithPreview = File & { preview: string };
 export function UpdatePropertyForm({
@@ -82,12 +83,15 @@ export function UpdatePropertyForm({
       slug: defaultValues.slug,
       userId: defaultValues.userId,
     };
-    console.log(newData);
     startTransition(async () => {
       await UpdatePropertyAction(newData).then((data) => {
-        setFiles([]);
-        form.reset();
-        setSuccess(data?.success);
+        if (data?.success) {
+          setFiles([]);
+          form.reset();
+          setSuccess(data?.success);
+          router.push(`/profile/my-properties`);
+        }
+
         setError(data?.error);
       });
     });
@@ -111,13 +115,13 @@ export function UpdatePropertyForm({
                 <FormItem>
                   <FormLabel>Property title</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input placeholder="Enter your property title" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="type"
@@ -127,7 +131,7 @@ export function UpdatePropertyForm({
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={defaultValues.type}
+                        defaultValue={field.value}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />
@@ -145,6 +149,31 @@ export function UpdatePropertyForm({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="buildingAge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Building Age <span className="text-sm">(optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your building age"
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\d,]/g, "");
+                          field.onChange(
+                            parseFloat(value.replace(/,/g, "")) || ""
+                          );
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
@@ -154,7 +183,7 @@ export function UpdatePropertyForm({
               Property Details <span className="text-sm">(required)</span>
             </h2>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="area"
@@ -177,32 +206,6 @@ export function UpdatePropertyForm({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="buildingAge"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Building Age <span className="text-sm">(optional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value ?? ""}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^\d,]/g, "");
-                          field.onChange(
-                            parseFloat(value.replace(/,/g, "")) || ""
-                          );
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-2">
               <FormField
                 control={form.control}
                 name="rooms"
@@ -230,6 +233,8 @@ export function UpdatePropertyForm({
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="bedrooms"
@@ -326,22 +331,23 @@ export function UpdatePropertyForm({
               </FormItem>
             )}
           />
-          <ul className="flex gap-2">
-            {defaultValues &&
-              defaultValues.imagesUrl.map((file) => (
-                <li key={file} className="relative">
+          <ul className="flex max-md:flex-col gap-2">
+            {files &&
+              files.map((file) => (
+                <li key={file.name} className="relative">
                   <Image
-                    src={file}
-                    alt={"image"}
+                    src={file.preview}
+                    alt={file.name}
                     width={150}
                     height={150}
                     className=" object-cover rounded-md max-h-[150px] w-full"
+                    onLoad={() => URL.revokeObjectURL(file.preview)}
                   />
                   <div className="absolute top-0 right-0 p-2">
                     <button
                       type="button"
                       className=" flex justify-center items-center p-1 rounded-full h-7 w-7 bg-white border"
-                      onClick={() => removeFile(file)}
+                      onClick={() => removeFile(file.name)}
                     >
                       <X />
                     </button>
@@ -355,7 +361,7 @@ export function UpdatePropertyForm({
             <h2 className="font-semibold text-2xl">
               Select Amenities <span className="text-sm">(optional)</span>
             </h2>
-            <div className="grid grid-cols-3 gap-4 py-4">
+            <div className="grid md:grid-cols-3 gap-4 py-4">
               <FormField
                 control={form.control}
                 name="hasAlarm"
@@ -468,7 +474,7 @@ export function UpdatePropertyForm({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="city"
@@ -504,7 +510,7 @@ export function UpdatePropertyForm({
             <h2 className="font-semibold text-2xl">
               Owner Information <span className="text-sm">(required)</span>
             </h2>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid md:grid-cols-3 gap-2">
               <FormField
                 control={form.control}
                 name="contactName"
@@ -573,7 +579,7 @@ export function UpdatePropertyForm({
           />
           {/* Submit Button */}
           <Button type="submit" disabled={isPending || isUploading}>
-            {isUploading ? "Uploading..." : "Submit"}
+            {isUploading ? <LoadingAnimate text="Updating" /> : "Submit"}
           </Button>
           {error && <ErrorMessage message={error} />}
           {success && <SuccessMessage message={success} />}

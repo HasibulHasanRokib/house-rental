@@ -18,7 +18,7 @@ export default function RelatedPropertyCard({
           alt="Modern house with glass walls"
           width={400}
           height={250}
-          className="w-full object-cover max-h-[250px]"
+          className="w-full object-cover max-h-[250px] hover:scale-105 transition-transform duration-300"
         />
       </div>
       <CardHeader>
@@ -38,15 +38,15 @@ export default function RelatedPropertyCard({
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-muted-foreground text-sm sm:text-base">
           <div className="flex items-center gap-2">
-            <Square className="h-4 w-4 shrink-0" />
+            <Square className="h-4 w-4 shrink-0 md:hidden" />
             <span>{property.area} sq ft</span>
           </div>
           <div className="flex items-center gap-2">
-            <BedDouble className="h-4 w-4 shrink-0" />
+            <BedDouble className="h-4 w-4 shrink-0 md:hidden" />
             <span>{property.bedrooms} Bed</span>
           </div>
           <div className="flex items-center gap-2">
-            <Bath className="h-4 w-4 shrink-0" />
+            <Bath className="h-4 w-4 shrink-0 md:hidden" />
             <span>{property.bathrooms} Bath</span>
           </div>
         </div>

@@ -12,6 +12,7 @@ import MaxWidthWrapper from "@/components/MaxWithWrapper";
 
 export default async function Page() {
   const cities = await db.property.findMany({
+    where: { status: "accepted" },
     select: { city: true },
     distinct: ["city"],
   });
@@ -33,7 +34,7 @@ export default async function Page() {
       </section>
 
       {/* Featured Properties */}
-      <section>
+      <section className="bh-white ">
         <MaxWidthWrapper className="flex flex-col space-y-10 px-4 sm:px-8 lg:px-16">
           <div>
             <p className="text-primary text-base sm:text-lg">
@@ -43,7 +44,7 @@ export default async function Page() {
               Featured <span className="text-primary">Properties</span>
             </h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {cities.map(({ city }) => {
               return (
                 <Link
@@ -60,7 +61,7 @@ export default async function Page() {
       </section>
 
       {/* What are you looking for? */}
-      <section className="bg-white py-6">
+      <section className="py-6">
         <MaxWidthWrapper className="flex flex-col space-y-10 px-4 sm:px-8 lg:px-16">
           <div>
             <h3 className="font-semibold text-2xl sm:text-3xl">
@@ -76,26 +77,30 @@ export default async function Page() {
               />
             </div>
             <div className="flex flex-col justify-between space-y-4">
-              <Card className="flex items-center hover:bg-slate-100 p-6 gap-6">
-                <PiBuildingApartment size={50} className="text-primary" />
-                <div className="space-y-2">
-                  <CardTitle>Apartments</CardTitle>
-                  <p className="text-muted-foreground text-sm sm:text-base">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Donec luctus tincidunt aliquam.
-                  </p>
-                </div>
-              </Card>
-              <Card className="flex items-center p-6 hover:bg-slate-100 gap-6">
-                <GiHouse size={50} className="text-primary" />
-                <div className="space-y-2">
-                  <CardTitle>Houses</CardTitle>
-                  <p className="text-muted-foreground text-sm sm:text-base">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Donec luctus tincidunt aliquam.
-                  </p>
-                </div>
-              </Card>
+              <Link href={`/properties?type=apartment`}>
+                <Card className="flex items-center hover:bg-slate-100 p-6 gap-6">
+                  <PiBuildingApartment size={50} className="text-primary" />
+                  <div className="space-y-2">
+                    <CardTitle>Apartments</CardTitle>
+                    <p className="text-muted-foreground text-sm sm:text-base">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Donec luctus tincidunt aliquam.
+                    </p>
+                  </div>
+                </Card>
+              </Link>
+              <Link href={"/properties?type=houses"}>
+                <Card className="flex items-center p-6 hover:bg-slate-100 gap-6">
+                  <GiHouse size={50} className="text-primary" />
+                  <div className="space-y-2">
+                    <CardTitle>Houses</CardTitle>
+                    <p className="text-muted-foreground text-sm sm:text-base">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Donec luctus tincidunt aliquam.
+                    </p>
+                  </div>
+                </Card>
+              </Link>
               <Card className="flex hover:bg-slate-100 items-center p-6 gap-6">
                 <GiMechanicGarage size={50} className="text-primary" />
                 <div className="space-y-2">

@@ -15,7 +15,7 @@ export default async function ProfileSideBar() {
           <div className="flex items-center space-x-2 mb-6">
             {/* <UserAvatar name={session?.user.name} /> */}
             <div className="hidden md:block">
-              <p className="font-medium">{session?.user.name}</p>
+              <p className="font-medium capitalize">{session?.user.name}</p>
               <p className="text-xs text-gray-400">
                 As a{" "}
                 <span className="text-gray-800 font-semibold capitalize">
@@ -32,7 +32,10 @@ export default async function ProfileSideBar() {
             await signOut();
           }}
         >
-          <Button variant="ghost" className="w-full justify-start">
+          <Button
+            variant="ghost"
+            className="w-full justify-start hidden md:flex"
+          >
             <LogOut className="mr-2 h-4 w-4" />
             <span className="hidden md:block">Sign out</span>
           </Button>

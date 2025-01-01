@@ -4,7 +4,11 @@ export const protectedRoute = [
   "/profile",
   "/profile/edit-profile",
   "/profile/add-property",
-  "/profile/update-property/:id",
+  "/profile/update-property",
+  "/profile/overview",
+  "/profile/my-property",
+  "/property/preview",
+  "/thank-you",
 ];
 
 export const apiRoutePrefix = "/api/auth";

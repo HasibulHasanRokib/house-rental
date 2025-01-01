@@ -21,6 +21,6 @@ export async function deletePropertyAction(property: Property) {
     revalidatePath("/profile/my-properties");
     return { success: "Property deleted successfully." };
   } catch (error) {
-    return { error };
+    return { error: "Something went wrong!" };
   }
 }
