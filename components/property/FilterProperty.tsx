@@ -16,7 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
+import { PropertyFilterValue } from "@/lib/validation";
 import db from "@/lib/db";
 import { options } from "@/lib/types";
 import { propertyFilterSchema } from "@/lib/validation";
@@ -26,7 +26,6 @@ import { Button } from "../ui/button";
 async function filterProperty(formData: FormData) {
   "use server";
   const values = Object.fromEntries(formData.entries());
-  console.log(values);
   const {
     q,
     status,
@@ -64,7 +63,13 @@ async function clearFilter() {
   redirect("/properties");
 }
 
-const FilterProperty = async () => {
+const FilterProperty = async ({
+  defaultValues,
+}: {
+  defaultValues: PropertyFilterValue;
+}) => {
+  console.log(defaultValues.city);
+
   const locations = (await db.property
     .findMany({
       select: { city: true },
@@ -89,7 +94,7 @@ const FilterProperty = async () => {
             <Input name="q" id="q" placeholder="Search here..." />
 
             {/*  Property type */}
-            <Select name="type">
+            <Select name="type" defaultValue={defaultValues.type}>
               <SelectTrigger>
                 <SelectValue placeholder="Property type" />
               </SelectTrigger>
@@ -103,7 +108,7 @@ const FilterProperty = async () => {
             </Select>
 
             {/* City*/}
-            <Select name="city">
+            <Select name="city" defaultValue={defaultValues.city}>
               <SelectTrigger>
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
@@ -120,7 +125,7 @@ const FilterProperty = async () => {
             </Select>
 
             {/* Bedrooms */}
-            <Select name="bedrooms">
+            <Select name="bedrooms" defaultValue={defaultValues.bedrooms}>
               <SelectTrigger>
                 <SelectValue placeholder="Bedrooms" />
               </SelectTrigger>
@@ -136,7 +141,7 @@ const FilterProperty = async () => {
               </SelectContent>
             </Select>
             {/* Bathrooms*/}
-            <Select name="bathrooms">
+            <Select name="bathrooms" defaultValue={defaultValues.bathrooms}>
               <SelectTrigger>
                 <SelectValue placeholder="Bathrooms" />
               </SelectTrigger>

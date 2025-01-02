@@ -103,11 +103,15 @@ export default async function PropertyResult({
         </div>
       ) : null}
 
-      <Pagination
-        currentPage={page}
-        filterValues={filterValues}
-        totalPage={totalPages}
-      />
+      {properties.length > 5 ? (
+        <Pagination
+          currentPage={page}
+          filterValues={filterValues}
+          totalPage={totalPages}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }

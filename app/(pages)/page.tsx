@@ -34,7 +34,7 @@ export default async function Page() {
       </section>
 
       {/* Featured Properties */}
-      <section className="bh-white ">
+      <section>
         <MaxWidthWrapper className="flex flex-col space-y-10 px-4 sm:px-8 lg:px-16">
           <div>
             <p className="text-primary text-base sm:text-lg">

@@ -63,7 +63,7 @@ export default function EditProfileForm({ user }: EditFormProps) {
   };
 
   return (
-    <div className="py-4">
+    <div>
       <Form {...form}>
         <form className="space-y-4 " onSubmit={form.handleSubmit(submit)}>
           <FormField

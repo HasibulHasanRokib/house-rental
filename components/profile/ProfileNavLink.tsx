@@ -44,7 +44,7 @@ export default function ProfileNavLink({ isOwner }: { isOwner: boolean }) {
               }`}
             >
               <item.icon className="mr-2 h-4 w-4" />
-              <span className="hidden md:block">{item.label}</span>
+              <span>{item.label}</span>
             </Button>
           </Link>
         );
@@ -60,7 +60,7 @@ export default function ProfileNavLink({ isOwner }: { isOwner: boolean }) {
             }`}
           >
             <Home className="mr-2 h-4 w-4" />
-            <span className="hidden md:block">My Booking</span>
+            <span>My Booking</span>
           </Button>
         </Link>
       )}

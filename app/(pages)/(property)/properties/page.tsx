@@ -66,21 +66,12 @@ export default async function Page({ searchParams }: PageProps) {
   };
 
   return (
-    <div className="space-y-8 my-10 relative">
-      <div className="flex flex-col space-y-3 justify-center items-center text-center px-4 sm:px-8">
-        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-          Properties Listing
-        </h3>
-        <p className="text-muted-foreground text-sm sm:text-base">
-          Find your favorite properties
-        </p>
-      </div>
-
+    <div className=" relative">
       <MaxWidthWrapper>
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 relative">
           <div className="relative">
             <div className="hidden md:block sticky top-24">
-              <FilterProperty />
+              <FilterProperty defaultValues={filterValues} />
             </div>
             <div>
               <Dialog>
@@ -88,7 +79,7 @@ export default async function Page({ searchParams }: PageProps) {
                   <Button variant="outline">Filter</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
-                  <FilterProperty />
+                  {/* <FilterProperty /> */}
                 </DialogContent>
               </Dialog>
             </div>

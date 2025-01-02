@@ -140,37 +140,43 @@ export const columns: ColumnDef<Property>[] = [
                 View property details
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href={`/profile/update-property/${property.id}`}>
-                Edit property details
-              </Link>
-            </DropdownMenuItem>
-            <div>
-              <AlertDialog>
-                <AlertDialogTrigger>
-                  <p className="flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent hover:bg-accent">
-                    Delete property details
-                  </p>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your property and remove property data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>
-                      <DeletePropertyBtn property={property} />
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+
+            {property.status !== "booked" && (
+              <>
+                <DropdownMenuItem>
+                  <Link href={`/profile/update-property/${property.id}`}>
+                    Edit property details
+                  </Link>
+                </DropdownMenuItem>
+                <div>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <p className="flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent hover:bg-accent">
+                        Delete property details
+                      </p>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your property and remove property data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>
+                          <DeletePropertyBtn property={property} />
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

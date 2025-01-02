@@ -176,7 +176,7 @@ export default function SignUpForm() {
                 />
 
                 <Button disabled={isPending} type="submit" className="w-full">
-                  {isPending ? <LoadingAnimate text="Loading" /> : "Login"}
+                  {isPending ? <LoadingAnimate text="Loading" /> : "Sign up"}
                 </Button>
                 {data?.error && <ErrorMessage message={data.error} />}
                 {data?.success && <SuccessMessage message={data.success} />}

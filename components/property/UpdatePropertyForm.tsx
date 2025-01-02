@@ -102,94 +102,93 @@ export function UpdatePropertyForm({
   };
 
   return (
-    <div>
+    <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
           {/* Overview */}
-          <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">Add property details </h2>
+
+          <FormField
+            control={form.control}
+            name="propertyTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Property title<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your property title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="grid grid-cols-2 gap-2">
             <FormField
               control={form.control}
-              name="propertyTitle"
+              name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Property title</FormLabel>
+                  <FormLabel>
+                    Type<span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your property title" {...field} />
+                    <Select onValueChange={field.onChange} defaultValue="">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {propertyTypes.map((data) => (
+                          <SelectItem key={data.value} value={data.value}>
+                            {data.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="grid md:grid-cols-2 gap-2">
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Type</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an option" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {propertyTypes.map((data) => (
-                            <SelectItem key={data.value} value={data.value}>
-                              {data.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="buildingAge"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Building Age <span className="text-sm">(optional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your building age"
-                        {...field}
-                        value={field.value ?? ""}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^\d,]/g, "");
-                          field.onChange(
-                            parseFloat(value.replace(/,/g, "")) || ""
-                          );
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="buildingAge"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Building Age <span className="text-sm">(optional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your building age"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^\d,]/g, "");
+                        field.onChange(
+                          parseFloat(value.replace(/,/g, "")) || ""
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {/* Property Details */}
           <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">
-              Property Details <span className="text-sm">(required)</span>
-            </h2>
+            <h2 className="font-semibold text-2xl">Property Details</h2>
 
-            <div className="grid md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="area"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Size in ft*</FormLabel>
+                    <FormLabel>
+                      Size in ft<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex:3,200"
@@ -211,7 +210,9 @@ export function UpdatePropertyForm({
                 name="rooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Total rooms</FormLabel>
+                    <FormLabel>
+                      Total rooms<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(value) => field.onChange(Number(value))}
@@ -234,13 +235,15 @@ export function UpdatePropertyForm({
                 )}
               />
             </div>
-            <div className="grid md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="bedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bedrooms</FormLabel>
+                    <FormLabel>
+                      Bedrooms<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(value) => field.onChange(Number(value))}
@@ -267,7 +270,9 @@ export function UpdatePropertyForm({
                 name="bathrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bathrooms</FormLabel>
+                    <FormLabel>
+                      Bathrooms<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(value) => field.onChange(Number(value))}
@@ -295,9 +300,11 @@ export function UpdatePropertyForm({
               name="details"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>
+                    Description<span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Textarea placeholder="" {...field} />
+                    <Textarea placeholder="Enter your text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -312,12 +319,14 @@ export function UpdatePropertyForm({
             render={() => (
               <FormItem>
                 <FormLabel>
-                  <p className="text-2xl">Upload Image</p>
+                  <p className="text-2xl">
+                    Upload Image<span className="text-red-500">*</span>
+                  </p>
                 </FormLabel>
                 <FormControl>
                   <div
                     {...getRootProps()}
-                    className="border-2 h-24 border-dotted flex justify-center items-center rounded-md p-4"
+                    className="border-2 h-24 border-dotted flex justify-center items-center rounded-md p-4 bg-slate-50"
                   >
                     <input {...getInputProps()} accept="image/*" />
                     {isDragActive
@@ -331,23 +340,22 @@ export function UpdatePropertyForm({
               </FormItem>
             )}
           />
-          <ul className="flex max-md:flex-col gap-2">
-            {files &&
-              files.map((file) => (
-                <li key={file.name} className="relative">
+          <ul className="flex gap-2">
+            {defaultValues.imagesUrl &&
+              defaultValues.imagesUrl.map((file) => (
+                <li key={file} className="relative">
                   <Image
-                    src={file.preview}
-                    alt={file.name}
+                    src={file}
+                    alt="image"
                     width={150}
                     height={150}
-                    className=" object-cover rounded-md max-h-[150px] w-full"
-                    onLoad={() => URL.revokeObjectURL(file.preview)}
+                    className=" object-cover rounded-md h-[150px]  w-[250px] ring-2 ring-primary"
                   />
                   <div className="absolute top-0 right-0 p-2">
                     <button
                       type="button"
                       className=" flex justify-center items-center p-1 rounded-full h-7 w-7 bg-white border"
-                      onClick={() => removeFile(file.name)}
+                      onClick={() => removeFile(file)}
                     >
                       <X />
                     </button>
@@ -361,7 +369,7 @@ export function UpdatePropertyForm({
             <h2 className="font-semibold text-2xl">
               Select Amenities <span className="text-sm">(optional)</span>
             </h2>
-            <div className="grid md:grid-cols-3 gap-4 py-4">
+            <div className="grid grid-cols-3 gap-4 py-4">
               <FormField
                 control={form.control}
                 name="hasAlarm"
@@ -457,16 +465,16 @@ export function UpdatePropertyForm({
 
           {/* Address & Location */}
           <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">
-              Address & Location <span className="text-sm">(required)</span>
-            </h2>
+            <h2 className="font-semibold text-2xl">Address & Location</h2>
 
             <FormField
               control={form.control}
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>
+                    Address<span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
                   </FormControl>
@@ -474,13 +482,15 @@ export function UpdatePropertyForm({
                 </FormItem>
               )}
             />
-            <div className="grid md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <FormField
                 control={form.control}
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>
+                      City<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -494,7 +504,9 @@ export function UpdatePropertyForm({
                 name="country"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Country</FormLabel>
+                    <FormLabel>
+                      Country<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -507,16 +519,16 @@ export function UpdatePropertyForm({
 
           {/* Owner Information */}
           <div className="space-y-3">
-            <h2 className="font-semibold text-2xl">
-              Owner Information <span className="text-sm">(required)</span>
-            </h2>
-            <div className="grid md:grid-cols-3 gap-2">
+            <h2 className="font-semibold text-2xl">Owner Information</h2>
+            <div className="grid grid-cols-3 gap-2">
               <FormField
                 control={form.control}
                 name="contactName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact Name</FormLabel>
+                    <FormLabel>
+                      Contact Name<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="John dev" {...field} />
                     </FormControl>
@@ -529,7 +541,9 @@ export function UpdatePropertyForm({
                 name="contactEmail"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact Email</FormLabel>
+                    <FormLabel>
+                      Contact Email<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="email"
@@ -546,7 +560,9 @@ export function UpdatePropertyForm({
                 name="contactPhone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact Phone</FormLabel>
+                    <FormLabel>
+                      Contact Phone<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -563,7 +579,9 @@ export function UpdatePropertyForm({
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price</FormLabel>
+                <FormLabel>
+                  Price<span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -579,12 +597,12 @@ export function UpdatePropertyForm({
           />
           {/* Submit Button */}
           <Button type="submit" disabled={isPending || isUploading}>
-            {isUploading ? <LoadingAnimate text="Updating" /> : "Submit"}
+            {isPending ? <LoadingAnimate text="Updating" /> : "Update"}
           </Button>
           {error && <ErrorMessage message={error} />}
           {success && <SuccessMessage message={success} />}
         </form>
       </Form>
-    </div>
+    </>
   );
 }
