@@ -2,6 +2,7 @@
 import { deletePropertyAction } from "@/actions/property/deletePropertyAction";
 import { useToast } from "@/hooks/use-toast";
 import { Property } from "@prisma/client";
+import { buttonVariants } from "../ui/button";
 
 export function DeletePropertyBtn({ property }: { property: Property }) {
   const { toast } = useToast();

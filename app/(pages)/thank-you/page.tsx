@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const Page = async () => {
   const session = await auth();
-  if (!session || !session.user || session.user.role !== "tenant") {
+  if (!session || !session.user) {
     return notFound();
   }
 

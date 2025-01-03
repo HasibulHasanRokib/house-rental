@@ -11,6 +11,7 @@ import UserAvatar from "./UserAvatar";
 
 export default async function Navbar() {
   const session = await auth();
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -23,61 +24,85 @@ export default async function Navbar() {
             </p>
           </Link>
         </div>
-
-        {/* Navigation Links */}
-        <div className="hidden md:flex gap-6 lg:gap-10 items-center">
-          <NavLink />
-        </div>
-
-        {/* User Actions */}
-        <ul className="flex items-center space-x-4">
-          {session?.user ? (
-            <div className="flex items-center space-x-4">
-              <li>
-                <SignOut />
-              </li>
-              <li>
-                <Link href={"/profile"}>
-                  <UserAvatar name={session?.user?.name} />
-                </Link>
-              </li>
+        {!isAdmin ? (
+          <>
+            {/* Navigation Links */}
+            <div className="hidden md:flex gap-6 lg:gap-10 items-center">
+              <NavLink />
             </div>
-          ) : (
-            <div className="flex items-center space-x-4">
+
+            {/* User Actions */}
+            <ul className="flex items-center space-x-4">
+              {session?.user ? (
+                <div className="flex items-center space-x-4">
+                  <li>
+                    <SignOut />
+                  </li>
+                  <li>
+                    <Link href={"/profile"}>
+                      <UserAvatar name={session?.user?.name} />
+                    </Link>
+                  </li>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <li>
+                    <Link
+                      href={"/auth/signup"}
+                      className="text-sm sm:text-base"
+                    >
+                      Sign up
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={buttonVariants({
+                        variant: "default",
+                      })}
+                      href={"/auth/login"}
+                    >
+                      Log In
+                    </Link>
+                  </li>
+                </div>
+              )}
               <li>
-                <Link href={"/auth/signup"} className="text-sm sm:text-base">
-                  Sign up
-                </Link>
+                <div className="md:hidden flex gap-6 lg:gap-10 items-center">
+                  <Sheet>
+                    <SheetTrigger>
+                      <AlignJustify />
+                    </SheetTrigger>
+                    <SheetContent>
+                      <div className="flex justify-center items-center mt-20">
+                        <div className="grid grid-rows-4 items-center gap-10">
+                          <NavLink />
+                        </div>
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
               </li>
+            </ul>
+          </>
+        ) : (
+          <>
+            <ul className="flex items-center space-x-4">
               <li>
                 <Link
                   className={buttonVariants({
-                    variant: "default",
+                    variant: "outline",
                   })}
-                  href={"/auth/login"}
+                  href={"/admin"}
                 >
-                  Log In
+                  Dashboard
                 </Link>
               </li>
-            </div>
-          )}
-          <li>
-            <div className="md:hidden flex gap-6 lg:gap-10 items-center">
-              <Sheet>
-                <SheetTrigger>
-                  <AlignJustify />
-                </SheetTrigger>
-                <SheetContent>
-                  <div className="flex justify-center items-center mt-20">
-                    <div className="grid grid-rows-4 items-center gap-10">
-                      <NavLink />
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </li>
-        </ul>
+              <li>
+                <UserAvatar name={session?.user?.name} />
+              </li>
+            </ul>
+          </>
+        )}
       </MaxWidthWrapper>
     </nav>
   );

@@ -23,7 +23,7 @@ const ThankYou = () => {
   const paymentId = searchParams.get("paymentId") || "";
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
-  useEffect(() => setShowConfetti(true));
+  useEffect(() => setShowConfetti(true), []);
 
   const { data } = useQuery({
     queryKey: ["get-payment-status"],

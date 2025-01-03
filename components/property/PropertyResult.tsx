@@ -103,7 +103,7 @@ export default async function PropertyResult({
         </div>
       ) : null}
 
-      {properties.length > 5 ? (
+      {properties.length > 4 ? (
         <Pagination
           currentPage={page}
           filterValues={filterValues}
