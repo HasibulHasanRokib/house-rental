@@ -34,9 +34,18 @@ import { useRouter } from "next/navigation";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
 import LoadingAnimate from "../LoadingAnimate";
+import { User } from "@prisma/client";
 
+interface Props {
+  user: {
+    username: string;
+    email: string;
+    phoneNo: string | null;
+  };
+}
 type FileWithPreview = File & { preview: string };
-export default function AddPropertyForm() {
+
+export default function AddPropertyForm({ user }: Props) {
   const [success, setSuccess] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [files, setFiles] = useState<FileWithPreview[]>([]);
@@ -58,9 +67,9 @@ export default function AddPropertyForm() {
       address: "",
       city: "",
       country: "",
-      contactEmail: "",
-      contactName: "",
-      contactPhone: "",
+      contactEmail: user.email,
+      contactName: user.username,
+      contactPhone: user.phoneNo!,
       details: "",
     },
   });

@@ -55,7 +55,7 @@ export default function EditProfileForm({ user }: EditFormProps) {
       await updateProfileAction(values).then((data) => {
         if (data.success) {
           setSuccess(data?.success);
-          router.push("/profile");
+          router.refresh();
         }
         setError(data?.error);
       });

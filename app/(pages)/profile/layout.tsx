@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import ProfileSideBar from "@/components/profile/ProfileSideBar";
 import { Card } from "@/components/ui/card";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -18,12 +18,12 @@ export default async function Layout({
 }) {
   const session = await auth();
   if (!session) {
-    return notFound();
+    return redirect("/auth/login");
   }
   return (
     <div className="flex p-4 gap-2">
       <ProfileSideBar />
-      <Card className="flex-1 min-h-svh space-y-8">{children}</Card>
+      <Card className="flex-1 min-h-svh space-y-8 min-w-max">{children}</Card>
     </div>
   );
 }

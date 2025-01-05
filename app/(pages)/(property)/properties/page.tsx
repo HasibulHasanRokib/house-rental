@@ -79,7 +79,7 @@ export default async function Page({ searchParams }: PageProps) {
                   <Button variant="outline">Filter</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
-                  {/* <FilterProperty /> */}
+                  <FilterProperty defaultValues={filterValues} />
                 </DialogContent>
               </Dialog>
             </div>

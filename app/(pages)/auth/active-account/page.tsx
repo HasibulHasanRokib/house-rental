@@ -1,10 +1,8 @@
 import ActiveForm from "@/components/auth/ActiveForm";
-import MaxWidthWrapper from "@/components/MaxWithWrapper";
-import React from "react";
 
 const Page = () => {
   return (
-    <div className="max-w-xl mx-auto p-4">
+    <div className="max-w-screen-lg mx-auto p-4 sm:p-6 md:p-8">
       <ActiveForm />
     </div>
   );

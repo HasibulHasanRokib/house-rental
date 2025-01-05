@@ -278,7 +278,7 @@ const Page = async ({ params: { slug } }: PageProps) => {
           </div>
         </div>
         {relatedProperties.length > 0 && (
-          <div className="bg-white my-6">
+          <div className=" my-6">
             <h2 className="text-2xl font-semibold py-6 px-4">
               Related Properties
             </h2>

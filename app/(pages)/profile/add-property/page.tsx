@@ -9,6 +9,7 @@ import {
 
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import db from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Add Property",
@@ -16,7 +17,19 @@ export const metadata: Metadata = {
 };
 export default async function Page() {
   const session = await auth();
+
   if (session?.user.role !== "owner") return notFound();
+
+  const user = await db.user.findFirst({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      username: true,
+      email: true,
+      phoneNo: true,
+    },
+  });
   return (
     <>
       <CardHeader>
@@ -25,9 +38,7 @@ export default async function Page() {
           This is how others will see you on the site.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <AddPropertyForm />
-      </CardContent>
+      <CardContent>{user && <AddPropertyForm user={user} />}</CardContent>
     </>
   );
 }

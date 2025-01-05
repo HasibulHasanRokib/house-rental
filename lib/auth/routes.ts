@@ -1,5 +1,9 @@
 export const publicRoutes = ["/"];
-export const authRoutes = ["/auth/login", "/auth/signup"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/signup",
+  "/auth/active-account",
+];
 export const protectedRoute = [
   "/profile",
   "/profile/edit-profile",

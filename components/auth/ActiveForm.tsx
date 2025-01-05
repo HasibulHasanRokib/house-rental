@@ -43,25 +43,27 @@ export default function ActiveForm() {
   }, [onsubmit]);
 
   return (
-    <Card className="w-[550px] flex justify-center items-center flex-col mt-10">
+    <Card className="w-full max-w-md mx-auto p-6 sm:p-8 lg:p-10 flex flex-col items-center mt-8">
       <CardHeader className="text-center">
-        <CardTitle>Verification</CardTitle>
-        <CardDescription>Verify your email account.</CardDescription>
+        <CardTitle className="text-lg sm:text-xl">Verification</CardTitle>
+        <CardDescription className="text-sm sm:text-base">
+          Verify your email account.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="w-full">
         {!error && !success && <LoadingAnimate text="Loading..." />}
 
         <ErrorMessage message={error} />
         <SuccessMessage message={success} />
       </CardContent>
-      <CardFooter>
+      <CardFooter className="w-full text-center flex justify-center items-center">
         <Link
           href={"/auth/login"}
           className={buttonVariants({
             variant: "default",
           })}
         >
-          Login
+          Go to Login
         </Link>
       </CardFooter>
     </Card>

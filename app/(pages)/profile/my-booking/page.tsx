@@ -59,21 +59,20 @@ async function Page() {
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
-              <TableHead>Owner info</TableHead>
-              <TableHead>Phone no.</TableHead>
-              <TableHead>Property</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>End Date</TableHead>
-              <TableHead>Payment id</TableHead>
-
-              <TableHead>Paid amount</TableHead>
+              <TableHead className="truncate">Owner info</TableHead>
+              <TableHead className="truncate">Phone no.</TableHead>
+              <TableHead className="truncate">Property</TableHead>
+              <TableHead className="truncate">Start Date</TableHead>
+              <TableHead className="truncate">End Date</TableHead>
+              <TableHead className="truncate">Payment id</TableHead>
+              <TableHead className="truncate">Paid amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {bookedList.map((data, index) => (
               <TableRow key={data.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>
+                <TableCell className="truncate">
                   <div className="flex flex-col space-y-1">
                     <span className="capitalize">
                       {data.property?.User?.username}
@@ -83,17 +82,27 @@ async function Page() {
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{data.property?.User?.phoneNo}</TableCell>
-                <TableCell>{data.property?.propertyTitle}</TableCell>
-                <TableCell>{data?.startDate?.toLocaleDateString()}</TableCell>
-                <TableCell>{data?.endDate?.toLocaleDateString()}</TableCell>
+                <TableCell className="truncate">
+                  {data.property?.User?.phoneNo}
+                </TableCell>
+                <TableCell className="truncate">
+                  {data.property?.propertyTitle}
+                </TableCell>
+                <TableCell className="truncate">
+                  {data?.startDate?.toLocaleDateString()}
+                </TableCell>
+                <TableCell className="truncate">
+                  {data?.endDate?.toLocaleDateString()}
+                </TableCell>
                 <TableCell className=" truncate hover:underline">
                   <Link href={`/thank-you?paymentId=${data.id}`}>
                     {data.id.slice(0, 6)}...
                   </Link>
                 </TableCell>
 
-                <TableCell>{formatMoney(data.amount)}</TableCell>
+                <TableCell className="truncate">
+                  {formatMoney(data.amount)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

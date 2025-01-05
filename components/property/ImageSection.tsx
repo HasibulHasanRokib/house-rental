@@ -26,8 +26,8 @@ export default function ImageSection({ images }: { images: string[] }) {
             alt="Thumbnail"
             key={img}
             width={150}
-            height={100}
-            className="rounded-md object-cover border cursor-pointer hover:ring-2 hover:ring-primary"
+            height={150}
+            className="rounded-md h-full w-full object-cover border cursor-pointer hover:ring-2 hover:ring-primary"
             onClick={() => handleImage(img)}
           />
         ))}

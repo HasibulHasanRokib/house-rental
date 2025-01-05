@@ -32,9 +32,70 @@ export const metadata: Metadata = {
 
 async function Page() {
   const session = await auth();
+
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
   const pendingProperties = await db.property.count({
     where: { userId: session?.user.id, status: "pending" },
   });
+
+  const totalSum = await db.property.aggregate({
+    where: {
+      userId: session?.user.id,
+      status: "accepted",
+    },
+    _sum: {
+      price: true,
+    },
+  });
+
+  const totalProperties = await db.property.count({
+    where: { userId: session?.user.id, status: "accepted" },
+  });
+
+  const totalBooked = await db.property.count({
+    where: { userId: session?.user.id, status: "booked" },
+  });
+
+  const totalSalesToday = await db.rent.aggregate({
+    _sum: {
+      amount: true,
+    },
+    where: {
+      AND: [
+        {
+          property: {
+            userId: session?.user.id,
+          },
+        },
+      ],
+      createdAt: {
+        gte: todayStart,
+      },
+    },
+  });
+  const totalSalesThisMonth = await db.rent.aggregate({
+    _sum: {
+      amount: true,
+    },
+    where: {
+      AND: [
+        {
+          property: {
+            userId: session?.user.id,
+          },
+        },
+      ],
+      createdAt: {
+        gte: thirtyDaysAgo,
+      },
+    },
+  });
+
   const tenants = await db.rent.findMany({
     where: {
       AND: [
@@ -60,80 +121,6 @@ async function Page() {
       property: {
         userId: session?.user.id,
         status: "booked",
-      },
-    },
-  });
-
-  const totalSum = await db.property.aggregate({
-    where: {
-      userId: session?.user.id,
-      status: "accepted",
-    },
-    _sum: {
-      price: true,
-    },
-  });
-  const totalProperties = await db.property.count({
-    where: { userId: session?.user.id, status: "accepted" },
-  });
-
-  const totalBooked = await db.property.count({
-    where: { userId: session?.user.id, status: "booked" },
-  });
-
-  const newPaymentInfo = await db.rent.findMany({
-    where: {
-      AND: [
-        {
-          property: {
-            userId: session?.user.id,
-          },
-        },
-      ],
-    },
-    include: {
-      user: {
-        select: {
-          email: true,
-          username: true,
-        },
-      },
-    },
-
-    orderBy: { createdAt: "desc" },
-  });
-
-  const totalSalesToday = await db.rent.aggregate({
-    _sum: {
-      amount: true,
-    },
-    where: {
-      AND: [
-        {
-          property: {
-            userId: session?.user.id,
-          },
-        },
-      ],
-      createdAt: {
-        gte: new Date(new Date().getDate()),
-      },
-    },
-  });
-  const totalSalesThisMonth = await db.rent.aggregate({
-    _sum: {
-      amount: true,
-    },
-    where: {
-      AND: [
-        {
-          property: {
-            userId: session?.user.id,
-          },
-        },
-      ],
-      createdAt: {
-        gte: new Date(new Date().setDate(new Date().getDate() - 30)),
       },
     },
   });
@@ -171,14 +158,14 @@ async function Page() {
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CreditCard className="h-4 w-4" />
-                  Sales
+                  Transitions
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold">
                     +{formatMoney(Number(totalSalesThisMonth._sum.amount))}
                   </span>
                   <span className="text-sm text-muted-foreground">
-                    +total earn this month
+                    +total transition this month
                   </span>
                 </div>
               </div>
@@ -190,14 +177,14 @@ async function Page() {
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CreditCard className="h-4 w-4" />
-                  Sales
+                  Transitions
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold">
                     +{formatMoney(Number(totalSalesToday._sum.amount))}
                   </span>
                   <span className="text-sm text-muted-foreground">
-                    +total earn today
+                    +total transitions today
                   </span>
                 </div>
               </div>
@@ -211,9 +198,7 @@ async function Page() {
                   Properties
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-2xl font-bold">
-                    +{totalProperties - totalBooked}
-                  </span>
+                  <span className="text-2xl font-bold">+{totalProperties}</span>
                   <span className="text-sm text-muted-foreground">
                     +total properties left
                   </span>

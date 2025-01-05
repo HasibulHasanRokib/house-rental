@@ -132,7 +132,10 @@ export function UpdatePropertyForm({
                     Type<span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue="">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={defaultValues.type}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select an option" />
                       </SelectTrigger>

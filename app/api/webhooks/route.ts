@@ -5,8 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import PaymentConfirmationEmail from "@/emails/PaymentReceivedEmail";
+import { render } from "@react-email/components";
+import { sentEmailWithNodemailer } from "@/lib/sendEmail";
 
-const resend = new Resend("re_H852q2rG_5cwSBcv9aqLL4pVhrBMok6pw");
+// const resend = new Resend("re_H852q2rG_5cwSBcv9aqLL4pVhrBMok6pw");
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -52,12 +54,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    //For tenant
-    const { data, error } = await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
-      to: [event.data.object.customer_details?.email!],
-      subject: "Payment confirmed!",
-      react: PaymentConfirmationEmail({
+    const emailHtml = await render(
+      PaymentConfirmationEmail({
         paymentId,
         paymentDate: updatedPayment.createdAt.toLocaleDateString(),
         rentalPeriodFrom: updatedPayment.startDate?.toLocaleString()!,
@@ -65,14 +63,37 @@ export async function POST(req: NextRequest) {
         amount: updatedPayment.amount,
         property: payment!.property!,
         user: payment!.user!,
-      }),
-    });
+      })
+    );
+    const emailData = {
+      email: event.data.object.customer_details?.email!,
+      subject: "Verification email account.",
+      html: emailHtml,
+    };
 
-    if (error) {
-      return console.error({ error });
-    }
+    await sentEmailWithNodemailer(emailData);
 
-    console.log({ data });
+    //For tenant
+    // const { data, error } = await resend.emails.send({
+    //   from: "Acme <onboarding@resend.dev>",
+    //   to: [event.data.object.customer_details?.email!],
+    //   subject: "Payment confirmed!",
+    //   react: PaymentConfirmationEmail({
+    // paymentId,
+    // paymentDate: updatedPayment.createdAt.toLocaleDateString(),
+    // rentalPeriodFrom: updatedPayment.startDate?.toLocaleString()!,
+    // rentalPeriodTo: updatedPayment.endDate?.toLocaleString()!,
+    // amount: updatedPayment.amount,
+    // property: payment!.property!,
+    // user: payment!.user!,
+    //   }),
+    // });
+
+    // if (error) {
+    //   return console.error({ error });
+    // }
+
+    // console.log({ data });
   }
 
   return NextResponse.json({ received: true }, { status: 200 });
