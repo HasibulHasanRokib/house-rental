@@ -38,7 +38,7 @@ function VerifiedEmail({ name, token }: { name: string; token: string }) {
                 <Text className="font-bold text-center ">
                   Please{" "}
                   <Link
-                    href={`${baseUrl}/active-account?token=${token}`}
+                    href={`${baseUrl}/auth/active-account?token=${token}`}
                     className="cursor-pointer underline text-lg px-1"
                   >
                     Click here
