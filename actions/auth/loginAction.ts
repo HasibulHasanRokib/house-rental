@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
+import { getUserByEmail } from "@/lib/auth/user";
 import { logInSchema, TLoginSchema } from "@/lib/auth/validation";
 import { AuthError } from "next-auth";
 
@@ -14,11 +15,17 @@ export async function loginAction(values: TLoginSchema) {
     }
     const { email, password } = validation.data;
 
+    const userExist = await getUserByEmail(email);
+    if (!userExist?.emailVerified) {
+      return { error: "Email not verified!" };
+    }
+
     await signIn("credentials", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
+
     return { success: "Log in successful." };
   } catch (error) {
     if (error instanceof AuthError) {

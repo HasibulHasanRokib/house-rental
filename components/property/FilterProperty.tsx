@@ -68,8 +68,6 @@ const FilterProperty = async ({
 }: {
   defaultValues: PropertyFilterValue;
 }) => {
-  console.log(defaultValues.city);
-
   const locations = (await db.property
     .findMany({
       select: { city: true },

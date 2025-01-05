@@ -31,6 +31,7 @@ import Link from "next/link";
 import ImageSection from "@/components/property/ImageSection";
 import SocialMediaLists from "@/components/property/SocialMediaLists";
 import RelatedPropertyCard from "@/components/property/RelatedPropertyCard";
+import ErrorMessage from "@/components/ErrorMessage";
 
 interface PageProps {
   params: {
@@ -41,6 +42,9 @@ interface PageProps {
 const getProperty = cache(async (slug: string) => {
   const property = await db.property.findUnique({
     where: { slug },
+    include: {
+      User: true,
+    },
   });
 
   if (!property) notFound();
@@ -61,9 +65,13 @@ const Page = async ({ params: { slug } }: PageProps) => {
   const property = await getProperty(slug);
   const session = await auth();
 
-  const user = await db.user.findUnique({
+  const user = await db.user.findFirst({
     where: {
-      id: property.userId,
+      id: session?.user?.id,
+    },
+    select: {
+      role: true,
+      completed: true,
     },
   });
 
@@ -102,12 +110,22 @@ const Page = async ({ params: { slug } }: PageProps) => {
             </div>
             <div className="bg-white p-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-4">
+                <div className="flex items-center space-x-2">
+                  <strong>Status:</strong>
+                  <span className="capitalize">
+                    {property.status === "accepted" ? (
+                      <p className="text-primary">Verified</p>
+                    ) : property.status === "pending" ? (
+                      <p className="text-blue-600">Pending</p>
+                    ) : property.status === "booked" ? (
+                      <p className="text-primary">Booked</p>
+                    ) : (
+                      <p className="text-destructive">Rejected</p>
+                    )}
+                  </span>
+                </div>
                 <span className="flex items-center space-x-2">
-                  <strong className="text-primary">Status:</strong>
-                  <p className="capitalize">{property.status}</p>
-                </span>
-                <span className="flex items-center space-x-2">
-                  <strong className="text-primary">Type:</strong>
+                  <strong>Type:</strong>
                   <p className="capitalize">{property.type}</p>
                 </span>
               </div>
@@ -210,8 +228,8 @@ const Page = async ({ params: { slug } }: PageProps) => {
                 <div className="flex flex-col items-center">
                   <div className="relative w-32 h-32 mb-4">
                     <Image
-                      src={user?.image || defaultImage}
-                      alt={`${user?.username}'s profile picture`}
+                      src={property.User?.image || defaultImage}
+                      alt={`${property.User?.username}'s profile picture`}
                       fill
                       className="rounded-full object-cover"
                     />
@@ -230,18 +248,24 @@ const Page = async ({ params: { slug } }: PageProps) => {
                 </div>
               </div>
               <div className="flex flex-col p-6 pt-0 space-y-3">
-                <Button variant="outline">Contact with owner</Button>
-                {session?.user.role === "tenant" && (
-                  <Link
-                    href={`/property/preview?id=${property.id}`}
-                    className={buttonVariants({
-                      variant: "default",
-                    })}
-                  >
-                    Continue
-                    <ArrowRight />
-                  </Link>
-                )}
+                <Button variant="outline" disabled>
+                  Contact with owner
+                </Button>
+                {session &&
+                  user?.role === "tenant" &&
+                  (user.completed === false ? (
+                    <ErrorMessage message="Please complete your information to proceed!" />
+                  ) : (
+                    <Link
+                      href={`/property/preview?id=${property.id}`}
+                      className={buttonVariants({
+                        variant: "default",
+                      })}
+                    >
+                      Continue
+                      <ArrowRight />
+                    </Link>
+                  ))}
               </div>
             </div>
             <SocialMediaLists
@@ -251,16 +275,6 @@ const Page = async ({ params: { slug } }: PageProps) => {
               github="https://github.com"
               youtube="https://youtube.com"
             />
-            <div className="bg-white p-4 mt-2">
-              <h2 className="text-2xl font-semibold mb-4">Map</h2>
-              <Image
-                src={Map}
-                alt="map"
-                width={500}
-                height={500}
-                className="object-cover border rounded-sm w-full"
-              />
-            </div>
           </div>
         </div>
         {relatedProperties.length > 0 && (

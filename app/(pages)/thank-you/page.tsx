@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import ThankYou from "./ThankYou";
 import { auth } from "@/auth";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const Page = async () => {
   const session = await auth();
   if (!session || !session.user) {
-    return notFound();
+    return redirect("/auth/login");
   }
 
   return (

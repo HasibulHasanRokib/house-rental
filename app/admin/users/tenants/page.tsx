@@ -86,6 +86,13 @@ export default async function Page() {
             ))}
           </TableBody>
         </Table>
+        {tenants.length === 0 ? (
+          <p className="text-center text-muted-foreground">
+            No tenants data found!
+          </p>
+        ) : (
+          ""
+        )}
       </CardContent>
     </>
   );

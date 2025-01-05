@@ -112,6 +112,11 @@ export default async function Page() {
             ))}
           </TableBody>
         </Table>
+        {payments.length === 0 ? (
+          <p className="text-center text-muted-foreground">No payment yet</p>
+        ) : (
+          ""
+        )}
       </CardContent>
     </>
   );

@@ -58,21 +58,23 @@ enum UserRole {
 }
 
 model User {
-  id         String     @id @default(uuid())
-  username   String
-  email      String     @unique
-  password   String
-  role       UserRole   @default(tenant)
-  image      String?
-  properties Property[]
-  address    String?
-  gender     String?
-  phoneNo    String?
-  occupation String?
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  Rent      Rent[]
+  id            String     @id @default(uuid())
+  username      String
+  email         String     @unique
+  password      String
+  role          UserRole   @default(tenant)
+  image         String?
+  properties    Property[]
+  address       String?
+  gender        String?
+  phoneNo       String?
+  occupation    String?
+  completed     Boolean    @default(false)
+  accounts      Account[]
+  emailVerified DateTime?
+  createdAt     DateTime   @default(now())
+  updateAt      DateTime   @updatedAt
+  Rent          Rent[]
 }
 
 model Rent {
@@ -86,4 +88,43 @@ model Rent {
   userId     String
   user       User      @relation(fields: [userId], references: [id])
   createdAt  DateTime  @default(now())
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model verificationToken {
+  id     String   @id @default(cuid())
+  email  String
+  token  String   @unique
+  expire DateTime
+
+  @@unique([email, token])
+}
+
+model passwordResetToken {
+  id     String   @id @default(cuid())
+  email  String
+  token  String   @unique
+  expire DateTime
+
+  @@unique([email, token])
 }

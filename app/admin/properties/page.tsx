@@ -44,7 +44,6 @@ export default async function Page() {
               <TableHead>#</TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead>Type</TableHead>
               <TableHead>Area (sqft)</TableHead>
               <TableHead>Rooms</TableHead>
               <TableHead>City</TableHead>
@@ -64,7 +63,7 @@ export default async function Page() {
                     className="w-10 h-10 rounded-sm object-cover"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className="flex flex-col  truncate">
                   <a
                     href={`/properties/${data.slug}`}
                     className="hover:underline hover:text-blue-500"
@@ -72,8 +71,10 @@ export default async function Page() {
                   >
                     {data.propertyTitle}
                   </a>
+                  <span className="text-xs text-muted-foreground capitalize">
+                    {data.type}
+                  </span>
                 </TableCell>
-                <TableCell>{data.type}</TableCell>
                 <TableCell>{data.area}</TableCell>
                 <TableCell>{data.rooms}</TableCell>
                 <TableCell>{data.city}</TableCell>
@@ -84,6 +85,11 @@ export default async function Page() {
             ))}
           </TableBody>
         </Table>
+        {properties.length === 0 ? (
+          <p className="text-center text-muted-foreground">No property found</p>
+        ) : (
+          ""
+        )}
       </CardContent>
     </>
   );

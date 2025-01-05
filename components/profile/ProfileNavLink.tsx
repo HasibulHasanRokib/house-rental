@@ -13,10 +13,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 
-const navItems = [
-  { icon: User, label: "Profile", href: "/profile" },
-  { icon: Edit, label: "Edit profile", href: "/profile/edit-profile" },
-];
+const navItems = [{ icon: User, label: "Profile", href: "/profile" }];
 const ownerNavItems = [
   { icon: PieChart, label: "Overview", href: "/profile/overview" },
   { icon: Home, label: "My properties", href: "/profile/my-properties" },

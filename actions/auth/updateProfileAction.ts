@@ -7,7 +7,6 @@ import db from "@/lib/db";
 export async function updateProfileAction(values: TEditProfileSchema) {
   try {
     const validation = editProfileSchema.safeParse(values);
-    console.log(validation.data);
 
     if (!validation.success)
       return { error: "Invalid values! Please check your inputs!" };
@@ -28,6 +27,7 @@ export async function updateProfileAction(values: TEditProfileSchema) {
         phoneNo: phone,
         gender,
         image,
+        completed: true,
       },
     });
     return { success: "Update Successful" };

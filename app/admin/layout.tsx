@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import AdminSideBar from "@/components/admin/AdminSidebar";
 import { Card } from "@/components/ui/card";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +19,7 @@ export default async function Layout({
   const session = await auth();
 
   if (!session || session.user.role !== "admin") {
-    return notFound();
+    return redirect("/auth/login");
   }
 
   return (

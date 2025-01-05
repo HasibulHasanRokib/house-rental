@@ -330,23 +330,6 @@ async function Page() {
         </Card>
       </CardContent>
     </>
-    // <div className="p-6 space-y-8">
-    //   <div className="border-b py-3 space-y-2">
-    //     <h2 className="font-semibold text-xl">Overview</h2>
-    //     <p className="text-sm text-muted-foreground">
-    //       This is how you will see you all activity on the site.
-    //     </p>
-    //   </div>
-
-    //   <Card>
-    //     <CardHeader>
-    //       <CardTitle>My tenants list</CardTitle>
-    //     </CardHeader>
-    //     <CardContent>
-
-    //     </CardContent>
-    //   </Card>
-    // </div>
   );
 }
 

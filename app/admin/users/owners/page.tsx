@@ -78,8 +78,8 @@ export default async function Page() {
               <TableHead>Occupation</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Phone no.</TableHead>
-              <TableHead>Total property</TableHead>
-              <TableHead>Booked property</TableHead>
+              <TableHead className="truncate">Total property</TableHead>
+              <TableHead className="truncate">Booked property</TableHead>
               <TableHead>Join at</TableHead>
             </TableRow>
           </TableHeader>
@@ -87,19 +87,28 @@ export default async function Page() {
             {owners.map((data, index) => (
               <TableRow key={data.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{data.username}</TableCell>
+                <TableCell className="truncate">{data.username}</TableCell>
                 <TableCell>{data.email}</TableCell>
                 <TableCell>{data.gender}</TableCell>
                 <TableCell>{data.occupation}</TableCell>
-                <TableCell>{data.address}</TableCell>
+                <TableCell className="truncate">{data.address}</TableCell>
                 <TableCell>{data.phoneNo}</TableCell>
                 <TableCell>{data._count.properties}</TableCell>
                 <TableCell>{data.properties.length}</TableCell>
-                <TableCell>{data.createdAt.toDateString()}</TableCell>
+                <TableCell className="truncate">
+                  {data.createdAt.toDateString()}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        {owners.length === 0 ? (
+          <p className="text-center text-muted-foreground">
+            No owners data found!
+          </p>
+        ) : (
+          ""
+        )}
       </CardContent>
     </>
   );

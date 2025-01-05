@@ -1,9 +1,12 @@
 "use server";
 
+import VerifiedEmail from "@/emails/VerifiedEmail";
+import { generateVerificationToken } from "@/lib/auth/token";
 import { getUserByEmail } from "@/lib/auth/user";
 import { registerSchema, TRegisterSchema } from "@/lib/auth/validation";
 import db from "@/lib/db";
-
+import { sentEmailWithNodemailer } from "@/lib/sendEmail";
+import { render } from "@react-email/components";
 import bcrypt from "bcryptjs";
 
 export async function registerAction(values: TRegisterSchema) {
@@ -25,7 +28,7 @@ export async function registerAction(values: TRegisterSchema) {
 
     const fullName = firstName + lastName;
 
-    await db.user.create({
+    const newUser = await db.user.create({
       data: {
         username: fullName,
         email,
@@ -33,8 +36,23 @@ export async function registerAction(values: TRegisterSchema) {
         role: userRole,
       },
     });
+    const verificationToken = await generateVerificationToken(email);
 
-    return { success: "Registration successful." };
+    const emailHtml = await render(
+      VerifiedEmail({
+        name: newUser.username,
+        token: verificationToken.token,
+      })
+    );
+    const emailData = {
+      email,
+      subject: "Verification email account.",
+      html: emailHtml,
+    };
+
+    await sentEmailWithNodemailer(emailData);
+
+    return { success: "Confirmation email sent!" };
   } catch (error) {
     return { error: "Something went wrong." };
   }
