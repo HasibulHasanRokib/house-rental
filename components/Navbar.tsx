@@ -20,7 +20,7 @@ export default async function Navbar() {
         <div>
           <Link href={"/"}>
             <p className="font-bold text-lg sm:text-xl text-gray-700">
-              Home<span className="text-primary">Rental</span>
+              House<span className="text-primary">Rental</span>
             </p>
           </Link>
         </div>

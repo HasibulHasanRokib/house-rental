@@ -1,3 +1,5 @@
+import Chart from "@/components/admin/Chart";
+import PieChartDummy from "@/components/admin/PieChart";
 import PagePath from "@/components/PagePath";
 import {
   Card,
@@ -66,6 +68,25 @@ export default async function Page() {
     },
   });
 
+  const weeklySales = await db.rent.groupBy({
+    by: ["createdAt"],
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: thirtyDaysAgo, // Ensures we only consider recent data
+      },
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const salesByDay = Array(7).fill(0);
+  weeklySales.forEach(({ createdAt, _sum: { amount } }) => {
+    const dayIndex = new Date(createdAt).getDay(); // Get the day of the week (0 = Sunday, 6 = Saturday)
+    salesByDay[dayIndex] += Number(amount || 0);
+  });
+
   return (
     <>
       <CardHeader>
@@ -74,7 +95,7 @@ export default async function Page() {
           <PagePath items={items} />
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3">
         <div className="grid grid-cols-3 gap-2">
           <Card>
             <CardContent className="p-6">
@@ -181,6 +202,10 @@ export default async function Page() {
               </div>
             </CardContent>
           </Card>
+        </div>
+        <div className="grid grid-cols-2">
+          <Chart salesByDay={salesByDay} />
+          <PieChartDummy />
         </div>
       </CardContent>
     </>

@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import StatusDropdown from "@/components/admin/StatusDropdown";
 
 const items = [
   { name: "Admin", href: "/admin" },
@@ -48,7 +49,7 @@ export default async function Page() {
               <TableHead>Rooms</TableHead>
               <TableHead>City</TableHead>
               <TableHead>Price</TableHead>
-              <TableHead>Add at</TableHead>
+              <TableHead>Created at</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -79,8 +80,10 @@ export default async function Page() {
                 <TableCell>{data.rooms}</TableCell>
                 <TableCell>{data.city}</TableCell>
                 <TableCell>{data.price}</TableCell>
-                <TableCell>{data.createdAt.toDateString()}</TableCell>
-                <TableCell>{data.status}</TableCell>
+                <TableCell>{data.createdAt.toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <StatusDropdown id={data.id} propertyStatus={data.status} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

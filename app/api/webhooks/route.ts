@@ -53,47 +53,32 @@ export async function POST(req: NextRequest) {
         property: true,
       },
     });
+    const ownerInfo = await db.user.findFirst({
+      where: {
+        id: payment?.property?.userId,
+      },
+    });
 
+    //For tenant
     const emailHtml = await render(
       PaymentConfirmationEmail({
         paymentId,
-        paymentDate: updatedPayment.createdAt.toLocaleDateString(),
-        rentalPeriodFrom: updatedPayment.startDate?.toLocaleString()!,
-        rentalPeriodTo: updatedPayment.endDate?.toLocaleString()!,
+        paymentDate: updatedPayment.createdAt.toLocaleString(),
+        rentalPeriodFrom: updatedPayment.startDate?.toLocaleDateString()!,
+        rentalPeriodTo: updatedPayment.endDate?.toLocaleDateString()!,
         amount: updatedPayment.amount,
         property: payment!.property!,
         user: payment!.user!,
+        owner: ownerInfo!,
       })
     );
     const emailData = {
       email: event.data.object.customer_details?.email!,
-      subject: "Verification email account.",
+      subject: "Payment Confirmation Email",
       html: emailHtml,
     };
 
     await sentEmailWithNodemailer(emailData);
-
-    //For tenant
-    // const { data, error } = await resend.emails.send({
-    //   from: "Acme <onboarding@resend.dev>",
-    //   to: [event.data.object.customer_details?.email!],
-    //   subject: "Payment confirmed!",
-    //   react: PaymentConfirmationEmail({
-    // paymentId,
-    // paymentDate: updatedPayment.createdAt.toLocaleDateString(),
-    // rentalPeriodFrom: updatedPayment.startDate?.toLocaleString()!,
-    // rentalPeriodTo: updatedPayment.endDate?.toLocaleString()!,
-    // amount: updatedPayment.amount,
-    // property: payment!.property!,
-    // user: payment!.user!,
-    //   }),
-    // });
-
-    // if (error) {
-    //   return console.error({ error });
-    // }
-
-    // console.log({ data });
   }
 
   return NextResponse.json({ received: true }, { status: 200 });

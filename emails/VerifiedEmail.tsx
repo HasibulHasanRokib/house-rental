@@ -35,15 +35,14 @@ function VerifiedEmail({ name, token }: { name: string; token: string }) {
                 </Heading>
               </Section>
               <Section>
-                <Text className="font-bold text-center ">
-                  Please{" "}
+                <Text className="font-bold text-center text-lg ">
+                  To verify your account.
                   <Link
                     href={`${baseUrl}/auth/active-account?token=${token}`}
                     className="cursor-pointer underline text-lg px-1"
                   >
-                    Click here
-                  </Link>{" "}
-                  to verify your account
+                    Click here!
+                  </Link>
                 </Text>
               </Section>
 

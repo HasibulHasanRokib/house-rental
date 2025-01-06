@@ -19,6 +19,7 @@ const PaymentConfirmationEmail = ({
   user,
   rentalPeriodFrom,
   rentalPeriodTo,
+  owner,
 }: {
   paymentId: string;
   paymentDate: string;
@@ -27,6 +28,7 @@ const PaymentConfirmationEmail = ({
   amount: number;
   property: Property;
   user: User;
+  owner: User;
 }) => {
   const baseUrl =
     process.env.NODE_ENV === "development"
@@ -38,7 +40,7 @@ const PaymentConfirmationEmail = ({
         <Body className="bg-gray-100 p-4">
           <Container className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
             <Section>
-              <Heading className="text-2xl font-bold text-center text-green-600 mb-2">
+              <Heading className="text-3xl font-bold text-center text-green-600 mb-2">
                 Thank You!
               </Heading>
               <Text className="text-center text-gray-600">
@@ -54,30 +56,25 @@ const PaymentConfirmationEmail = ({
                 </Heading>
                 <Container className="grid grid-cols-2 gap-4">
                   <Text className="text-sm font-medium text-gray-500">
-                    Payment ID:
+                    Payment ID: {paymentId}
                   </Text>
-                  <Text className="text-sm">{paymentId}</Text>
-                  <Text className="text-sm font-medium text-gray-500">
-                    Payment amount:
-                  </Text>
-                  <Text className="text-sm">{amount}</Text>
-                  <Text className="text-sm font-medium text-gray-500">
-                    Property ID:
-                  </Text>
-                  <Text className="text-sm">{property?.id}</Text>
-                  <Text className="text-sm font-medium text-gray-500">
-                    Payment Date:
-                  </Text>
-                  <Text className="text-sm">{paymentDate}</Text>
 
                   <Text className="text-sm font-medium text-gray-500">
-                    Rental Period From:
+                    Payment amount: BDT {amount}
                   </Text>
-                  <Text className="text-sm">{rentalPeriodFrom}</Text>
                   <Text className="text-sm font-medium text-gray-500">
-                    Rental Period To:
+                    Property ID: {property?.id}
                   </Text>
-                  <Text className="text-sm">{rentalPeriodTo}</Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Payment Date: {paymentDate}
+                  </Text>
+
+                  <Text className="text-sm font-medium text-gray-500">
+                    Rental Period From: {rentalPeriodFrom}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Rental Period To: {rentalPeriodTo}
+                  </Text>
                 </Container>
               </Section>
 
@@ -86,15 +83,20 @@ const PaymentConfirmationEmail = ({
                 <Heading className="text-xl font-semibold mb-4">
                   User Information
                 </Heading>
-                <Text>
-                  <span className="font-medium">ID:</span> {user?.username}
-                </Text>
-                <Text>
-                  <span className="font-medium">Name:</span> {user?.username}
-                </Text>
-                <Text>
-                  <span className="font-medium">Email:</span> {user?.email}
-                </Text>
+                <Container>
+                  <Text className="text-sm font-medium text-gray-500">
+                    User ID: {user?.id}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Name: {user?.username}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Email: {user?.email}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Phone number: {user?.phoneNo}
+                  </Text>
+                </Container>
               </Section>
 
               {/* Property Details */}
@@ -102,22 +104,29 @@ const PaymentConfirmationEmail = ({
                 <Heading className="text-xl font-semibold mb-4">
                   Property Details
                 </Heading>
-                <Text>
-                  <span className="font-medium">Name:</span>{" "}
-                  {property?.propertyTitle}
-                </Text>
-                <Text>
-                  <span className="font-medium">Address:</span>{" "}
-                  {property?.address}
-                </Text>
-                <Text>
-                  <span className="font-medium">Owner ID:</span>{" "}
-                  {property?.userId}
-                </Text>
-                <Text>
-                  <span className="font-medium">Property ID:</span>{" "}
-                  {property?.id}
-                </Text>
+                <Container>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Property ID:{property?.id}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Title:{property?.propertyTitle}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Address: {property?.address}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Owner ID: {property?.userId}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Owner name: {owner?.username}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Owner email: {owner?.email}
+                  </Text>
+                  <Text className="text-sm font-medium text-gray-500">
+                    Owner phone number: {owner?.phoneNo}
+                  </Text>
+                </Container>
               </Section>
             </Section>
             <Text className="font-medium text-center">
