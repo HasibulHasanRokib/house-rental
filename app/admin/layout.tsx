@@ -25,7 +25,9 @@ export default async function Layout({
   return (
     <div className="flex p-4 gap-2">
       <AdminSideBar />
-      <Card className="flex-1 min-h-svh min-w-max space-y-8">{children}</Card>
+      <Card className="flex-1 md:min-h-svh md:min-w-max space-y-8 print:border-none print:shadow-none">
+        {children}
+      </Card>
     </div>
   );
 }

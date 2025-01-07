@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import Image from "next/image";
 import { Bath, BedDouble, MapPin, Square } from "lucide-react";
 import { Property } from "@prisma/client";
 import { formatMoney } from "@/lib/utils";
@@ -13,12 +12,10 @@ export default function RelatedPropertyCard({
   return (
     <Card className="w-full max-w-sm overflow-hidden">
       <div className="relative">
-        <Image
+        <img
           src={property.imagesUrl[0]}
           alt="Modern house with glass walls"
-          width={400}
-          height={250}
-          className="w-full object-cover max-h-[250px] hover:scale-105 transition-transform duration-300"
+          className="w-full h-40 object-cover  hover:scale-105 transition-transform duration-300"
         />
       </div>
       <CardHeader>

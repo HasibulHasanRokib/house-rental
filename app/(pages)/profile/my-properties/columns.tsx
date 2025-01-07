@@ -33,17 +33,16 @@ import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<Property>[] = [
   {
-    header: "Property",
+    header: "Image",
     cell: ({ row }) => {
       const property = row.original;
 
       return (
-        <Image
+        <img
           src={property.imagesUrl[0]}
           alt="image"
-          width={80}
           height={80}
-          className="rounded-sm object-cover"
+          className="rounded-sm w-20 h-16 object-cover"
         />
       );
     },
@@ -63,11 +62,23 @@ export const columns: ColumnDef<Property>[] = [
       );
     },
   },
-
+  {
+    accessorKey: "area",
+    header: "Area(sqrt)",
+  },
   {
     accessorKey: "rooms",
     header: "Rooms",
   },
+  {
+    accessorKey: "bedrooms",
+    header: "Bed",
+  },
+  {
+    accessorKey: "bathrooms",
+    header: "Bath",
+  },
+
   {
     accessorKey: "price",
     header: "Price",

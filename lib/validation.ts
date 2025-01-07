@@ -32,7 +32,7 @@ export const AddingPropertySchema = z.object({
   area: z
     .number()
     .min(100, "The number must have at least 3 digits")
-    .max(1000, "The number must have at most 5 digits"),
+    .max(10000, "The number must have at most 5 digits"),
   rooms: z
     .number()
     .min(1, "The number must have at least 1 digit")

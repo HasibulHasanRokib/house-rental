@@ -44,13 +44,13 @@ const Chart = ({ salesByDay }: ChartProps) => {
     },
   } satisfies ChartConfig;
   return (
-    <Card className="max-w-xl">
+    <Card>
       <CardHeader>
         <CardTitle>Overview</CardTitle>
         <CardDescription>Total transition (Saturday - Friday)</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="max-h-[400px]">
+        <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis

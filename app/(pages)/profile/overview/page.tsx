@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 
 import { Metadata } from "next";
+import PrintButton from "@/components/PrintButton";
 
 export const metadata: Metadata = {
   title: "Overview Property",
@@ -127,14 +128,14 @@ async function Page() {
 
   return (
     <>
-      <CardHeader>
+      <CardHeader className="print:hidden">
         <CardTitle className="text-2xl">Overview</CardTitle>
         <CardDescription>
           This is how you will see you all activity on the site.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 print:hidden">
           <Card>
             <CardContent className="p-6">
               <div className="flex flex-col gap-2">
@@ -241,39 +242,32 @@ async function Page() {
             </CardContent>
           </Card>
         </div>
-        <Card>
+        <Card className="print:border-none print:shadow-none">
           <CardHeader>
-            <CardTitle>My tenants list</CardTitle>
+            <CardTitle>Tenants & Payments </CardTitle>
             <CardDescription>Here same information of tenant</CardDescription>
           </CardHeader>
           <CardContent>
             <Table className="min-w-full">
-              <TableCaption>All tenants list</TableCaption>
+              <TableCaption>
+                {" "}
+                {tenants.length === 0 ? "No actions yet!" : "My tenants list"}
+              </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="hidden md:table-cell">#</TableHead>
+                  <TableHead>#</TableHead>
                   <TableHead>Tenant</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Phone no.
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Property
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Start Date
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    End Date
-                  </TableHead>
+                  <TableHead>Phone no.</TableHead>
+                  <TableHead>Property</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead>End Date</TableHead>
                   <TableHead>Paid amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {tenants.map((tenant, index) => (
                   <TableRow key={tenant.id}>
-                    <TableCell className="hidden md:table-cell">
-                      {index + 1}
-                    </TableCell>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>
                       <div className="flex flex-col space-y-1">
                         <span className="capitalize">
@@ -284,16 +278,12 @@ async function Page() {
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {tenant.user.phoneNo}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {tenant.property?.propertyTitle}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell>{tenant.user.phoneNo}</TableCell>
+                    <TableCell>{tenant.property?.propertyTitle}</TableCell>
+                    <TableCell>
                       {tenant?.startDate?.toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell>
                       {tenant?.endDate?.toLocaleDateString()}
                     </TableCell>
                     <TableCell>{formatMoney(tenant.amount)}</TableCell>
@@ -312,6 +302,9 @@ async function Page() {
               </TableFooter>
             </Table>
           </CardContent>
+          <CardFooter>
+            <PrintButton />
+          </CardFooter>
         </Card>
       </CardContent>
     </>

@@ -17,13 +17,14 @@ import { formatMoney } from "@/lib/utils";
 import Confetti from "react-dom-confetti";
 import Image from "next/image";
 import MaxWidthWrapper from "@/components/MaxWithWrapper";
+import PrintButton from "@/components/PrintButton";
 
 const ThankYou = () => {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get("paymentId") || "";
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
-  useEffect(() => setShowConfetti(true), []);
+  useEffect(() => setShowConfetti(true));
 
   const { data } = useQuery({
     queryKey: ["get-payment-status"],
@@ -200,6 +201,7 @@ const ThankYou = () => {
                         {endDate?.toLocaleDateString()}
                       </p>
                     </CardContent>
+                    <PrintButton />
                   </Card>
                 </div>
               </div>

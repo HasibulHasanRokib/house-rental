@@ -17,7 +17,7 @@ export default async function AdminSideBar() {
   const session = await auth();
 
   return (
-    <Card className="max-w-[250px] flex flex-col">
+    <Card className="max-w-[250px] flex flex-col print:hidden">
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar>

@@ -132,30 +132,6 @@ const Page = async ({ params: { slug } }: PageProps) => {
             </div>
             <div className="flex flex-col space-y-3 bg-white p-4">
               <div className="space-y-2">
-                <h5 className="font-semibold text-xl">Description</h5>
-                <p className="text-sm text-justify text-muted-foreground">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Veniam, nobis ipsam suscipit ipsum, nisi optio atque autem ea
-                  quidem est illum odio provident iste voluptas neque ad nulla,
-                  perspiciatis earum magni fugit laborum magnam. Aliquid
-                  deserunt deleniti tempore magnam asperiores facilis animi
-                  voluptates, ipsa officiis ratione repellendus possimus hic aut
-                  omnis in enim eaque sint dicta. Aspernatur laboriosam soluta
-                  doloremque iure omnis maiores magnam fugiat debitis accusamus,
-                  aperiam doloribus ut natus quibusdam quaerat aliquid
-                  reprehenderit. Laborum iusto possimus soluta consequuntur, et,
-                  quis voluptatem quaerat ad rem quod nobis ex aut? At dolores
-                  vel, nobis numquam accusamus corporis quo recusandae fugiat
-                  ullam labore, perspiciatis veniam veritatis provident?
-                  Necessitatibus in explicabo quia repellendus. Blanditiis, eum.
-                  Et, perspiciatis. Sed exercitationem totam fugiat molestiae.
-                  At temporibus consectetur voluptatem provident dignissimos
-                  laborum velit ipsa, rerum dolor, obcaecati expedita eius,
-                  nulla perspiciatis eveniet commodi ea deserunt dolore cum eos
-                  quam libero alias non labore. Placeat, nulla!
-                </p>
-              </div>
-              <div className="space-y-2">
                 <h5 className="font-semibold text-xl">Condition</h5>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-4">
                   <span className="flex items-center space-x-2">
@@ -219,6 +195,12 @@ const Page = async ({ params: { slug } }: PageProps) => {
                     </span>
                   )}
                 </div>
+              </div>
+              <div className="space-y-2">
+                <h5 className="font-semibold text-xl">Description</h5>
+                <p className="text-sm text-justify text-muted-foreground">
+                  {property.details}
+                </p>
               </div>
             </div>
           </div>

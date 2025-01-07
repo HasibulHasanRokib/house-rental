@@ -1,7 +1,9 @@
 import PagePath from "@/components/PagePath";
 import {
+  Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import PrintButton from "@/components/PrintButton";
 
 const items = [
   { name: "Admin", href: "/admin" },
@@ -55,44 +58,53 @@ export default async function Page() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Table className="min-w-full">
-          <TableCaption>Tenants list</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Gender</TableHead>
-              <TableHead>Occupation</TableHead>
-              <TableHead>Address</TableHead>
-              <TableHead>Phone no.</TableHead>
-              <TableHead>Booked property</TableHead>
-              <TableHead>Join at</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {tenants.map((data, index) => (
-              <TableRow key={data.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{data.username}</TableCell>
-                <TableCell>{data.email}</TableCell>
-                <TableCell>{data.gender}</TableCell>
-                <TableCell>{data.occupation}</TableCell>
-                <TableCell>{data.address}</TableCell>
-                <TableCell>{data.phoneNo}</TableCell>
-                <TableCell>{data._count.Rent}</TableCell>
-                <TableCell>{data.createdAt.toDateString()}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {tenants.length === 0 ? (
-          <p className="text-center text-muted-foreground">
-            No tenants data found!
-          </p>
-        ) : (
-          ""
-        )}
+        <Card className="print:border-none print:shadow-none">
+          <CardContent>
+            <Table className="min-w-full">
+              <TableCaption>
+                {" "}
+                {tenants.length === 0 ? (
+                  <p className="text-center text-muted-foreground">
+                    No tenants data found!
+                  </p>
+                ) : (
+                  "Tenants list"
+                )}
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>#</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Gender</TableHead>
+                  <TableHead>Occupation</TableHead>
+                  <TableHead>Address</TableHead>
+                  <TableHead>Phone no.</TableHead>
+                  <TableHead>Booked property</TableHead>
+                  <TableHead>Join at</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tenants.map((data, index) => (
+                  <TableRow key={data.id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{data.username}</TableCell>
+                    <TableCell>{data.email}</TableCell>
+                    <TableCell>{data.gender}</TableCell>
+                    <TableCell>{data.occupation}</TableCell>
+                    <TableCell>{data.address}</TableCell>
+                    <TableCell>{data.phoneNo}</TableCell>
+                    <TableCell>{data._count.Rent}</TableCell>
+                    <TableCell>{data.createdAt.toDateString()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+          <CardFooter>
+            <PrintButton />
+          </CardFooter>
+        </Card>
       </CardContent>
     </>
   );

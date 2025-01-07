@@ -203,7 +203,7 @@ export default async function Page() {
             </CardContent>
           </Card>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 space-x-4">
           <Chart salesByDay={salesByDay} />
           <PieChartDummy />
         </div>

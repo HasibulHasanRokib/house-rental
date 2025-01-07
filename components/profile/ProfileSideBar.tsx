@@ -18,7 +18,7 @@ export default async function ProfileSideBar() {
   const isOwner = session?.user.role === "owner";
 
   return (
-    <Card className="max-w-xs flex flex-col">
+    <Card className="max-w-xs flex flex-col print:hidden">
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 export default function ImageSection({ images }: { images: string[] }) {
@@ -20,15 +19,13 @@ export default function ImageSection({ images }: { images: string[] }) {
       </div>
 
       <div className="grid grid-cols-4 lg:grid-cols-6 gap-2">
-        {images.map((img) => (
-          <Image
-            src={img}
+        {images.map((image) => (
+          <img
+            src={image}
             alt="Thumbnail"
-            key={img}
-            width={150}
-            height={150}
-            className="rounded-md h-full w-full object-cover border cursor-pointer hover:ring-2 hover:ring-primary"
-            onClick={() => handleImage(img)}
+            key={image}
+            className="rounded-md w-28 h-28 object-cover border cursor-pointer hover:ring-2 hover:ring-primary"
+            onClick={() => handleImage(image)}
           />
         ))}
       </div>
