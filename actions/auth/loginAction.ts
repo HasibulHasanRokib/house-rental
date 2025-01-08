@@ -46,7 +46,7 @@ export async function loginAction(values: TLoginSchema) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: userExist.role === "admin" ? "/admin" : "/",
     });
 
     return { success: "Log in successful." };

@@ -11,7 +11,7 @@ const PrintButton = () => {
       onClick={() => window.print()}
     >
       <Printer className="mr-2 h-4 w-4" />
-      Print
+      Print Details
     </Button>
   );
 };
