@@ -32,12 +32,13 @@ import { useUploadThing } from "@/lib/uploadthing";
 
 import { useRouter } from "next/navigation";
 import { Property } from "@prisma/client";
-import { UpdatePropertyAction } from "@/actions/property/updatePropertyAction";
+import {
+  deleteImage,
+  UpdatePropertyAction,
+} from "@/actions/property/updatePropertyAction";
 import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
 import LoadingAnimate from "../LoadingAnimate";
-
-type FileWithPreview = File & { preview: string };
 export function UpdatePropertyForm({
   defaultValues,
 }: {
@@ -45,7 +46,7 @@ export function UpdatePropertyForm({
 }) {
   const [success, setSuccess] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  const [files, setFiles] = useState<string[]>(defaultValues.imagesUrl);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -58,18 +59,23 @@ export function UpdatePropertyForm({
   const { startUpload, isUploading } = useUploadThing("propertyImages", {
     onClientUploadComplete: (data) => {
       console.log("Upload complete:", data);
+      setFiles((prev) => [...prev, ...data.map((file) => file.url)]);
     },
     onUploadProgress: (progress) => {
       setUploadProgress(progress);
     },
   });
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = acceptedFiles.map((file) =>
-      Object.assign(file, { preview: URL.createObjectURL(file) })
-    );
-    setFiles((prev) => [...prev, ...newFiles]);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles?.length) {
+        startUpload(acceptedFiles).catch((err) => {
+          console.error("Upload Error:", err);
+        });
+      }
+    },
+    [startUpload]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -82,6 +88,7 @@ export function UpdatePropertyForm({
       id: defaultValues.id,
       slug: defaultValues.slug,
       userId: defaultValues.userId,
+      imagesUrl: files,
     };
     startTransition(async () => {
       await UpdatePropertyAction(newData).then((data) => {
@@ -97,8 +104,13 @@ export function UpdatePropertyForm({
     });
   };
 
-  const removeFile = (name: string) => {
-    setFiles((files) => files.filter((file) => file.name !== name));
+  const removeFile = async (image: string) => {
+    const res = await deleteImage(image);
+    if (res.success) {
+      const newFiles = files.filter((file) => file !== image);
+      setFiles(newFiles);
+      alert("Successful");
+    }
   };
 
   return (
@@ -343,16 +355,16 @@ export function UpdatePropertyForm({
               </FormItem>
             )}
           />
-          <ul className="flex gap-2">
-            {defaultValues.imagesUrl &&
-              defaultValues.imagesUrl.map((file) => (
+          <ul className="flex flex-wrap gap-2">
+            {files &&
+              files.map((file) => (
                 <li key={file} className="relative">
                   <Image
                     src={file}
                     alt="image"
                     width={150}
                     height={150}
-                    className=" object-cover rounded-md h-[150px]  w-[250px] ring-2 ring-primary"
+                    className=" object-cover rounded-md h-[150px]  w-[150px] ring-2 ring-primary"
                   />
                   <div className="absolute top-0 right-0 p-2">
                     <button

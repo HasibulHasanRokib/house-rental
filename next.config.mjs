@@ -6,7 +6,7 @@ const nextConfig = {
         hostname: "storage.googleapis.com",
       },
       {
-        hostname: "utfs.io",
+        hostname: "8hd8excs1e.ufs.sh",
       },
     ],
   },

@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
+import { UTApi } from "uploadthing/server";
 import { setSlug } from "@/lib/utils";
 import { AddingPropertySchema, TAddingPropertySchema } from "@/lib/validation";
 import { Property } from "@prisma/client";
@@ -92,5 +93,17 @@ export async function UpdatePropertyAction(values: Property) {
     return { success: "Adding property successful." };
   } catch (error) {
     return { error: "Something went wrong!" };
+  }
+}
+
+export async function deleteImage(url: string) {
+  try {
+    console.log(url);
+    const utapi = new UTApi();
+    await utapi.deleteFiles(url);
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { success: false };
   }
 }
