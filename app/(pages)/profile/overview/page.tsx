@@ -25,6 +25,7 @@ import {
 
 import { Metadata } from "next";
 import PrintButton from "@/components/PrintButton";
+import UserAvatar from "@/components/UserAvatar";
 
 export const metadata: Metadata = {
   title: "Overview Property",
@@ -267,7 +268,12 @@ async function Page() {
               <TableBody>
                 {tenants.map((tenant, index) => (
                   <TableRow key={tenant.id}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      <UserAvatar
+                        name={tenant.user.username}
+                        image={tenant.user.image}
+                      />
+                    </TableCell>
                     <TableCell>
                       <div className="flex flex-col space-y-1">
                         <span className="capitalize">

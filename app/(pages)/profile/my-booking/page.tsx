@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { Metadata } from "next";
+import UserAvatar from "@/components/UserAvatar";
 
 export const metadata: Metadata = {
   title: "My Booking Property",
@@ -71,7 +72,12 @@ async function Page() {
           <TableBody>
             {bookedList.map((data, index) => (
               <TableRow key={data.id}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>
+                  <UserAvatar
+                    image={data.property?.User?.image}
+                    name={data.property?.User?.username}
+                  />
+                </TableCell>
                 <TableCell className="truncate">
                   <div className="flex flex-col space-y-1">
                     <span className="capitalize">
