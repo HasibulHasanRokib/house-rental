@@ -25,7 +25,6 @@ import Image from "next/image";
 import { Button, buttonVariants } from "@/components/ui/button";
 
 import defaultImage from "@/public/images/noavatar.jpg";
-import Map from "@/public/images/map.png";
 import { auth } from "@/auth";
 import Link from "next/link";
 import ImageSection from "@/components/property/ImageSection";

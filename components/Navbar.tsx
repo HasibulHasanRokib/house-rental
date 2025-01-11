@@ -8,10 +8,19 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AlignJustify } from "lucide-react";
 import MaxWidthWrapper from "./MaxWithWrapper";
 import UserAvatar from "./UserAvatar";
+import db from "@/lib/db";
 
 export default async function Navbar() {
   const session = await auth();
-  const isAdmin = session?.user?.role === "admin";
+  const user = await db.user.findFirst({
+    where: {
+      id: session?.user.id,
+    },
+    select: {
+      username: true,
+      image: true,
+    },
+  });
 
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all print:hidden">
@@ -39,7 +48,7 @@ export default async function Navbar() {
               </li>
               <li>
                 <Link href={"/profile"}>
-                  <UserAvatar name={session?.user?.name} />
+                  <UserAvatar name={user?.username} image={user?.image} />
                 </Link>
               </li>
             </div>

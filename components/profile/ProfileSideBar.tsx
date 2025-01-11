@@ -12,17 +12,26 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import db from "@/lib/db";
 
 export default async function ProfileSideBar() {
   const session = await auth();
   const isOwner = session?.user.role === "owner";
+  const user = await db.user.findFirst({
+    where: {
+      id: session?.user.id,
+    },
+    select: {
+      image: true,
+    },
+  });
 
   return (
     <Card className="max-w-xs flex flex-col print:hidden">
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            {user?.image && <AvatarImage src={user?.image} />}
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>

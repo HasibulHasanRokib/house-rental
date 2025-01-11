@@ -16,15 +16,6 @@ export default async function Page() {
 
   const user = await db.user.findUnique({
     where: { id: session?.user.id },
-    select: {
-      address: true,
-      username: true,
-      occupation: true,
-      phoneNo: true,
-      gender: true,
-      id: true,
-      completed: true,
-    },
   });
 
   return (
@@ -41,7 +32,7 @@ export default async function Page() {
         ) : (
           <ErrorMessage message="Complete profile required" />
         )}
-        <EditProfileForm user={user} />
+        {user && <EditProfileForm user={user} />}
       </CardContent>
     </>
   );

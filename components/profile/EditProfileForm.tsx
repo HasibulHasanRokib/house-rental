@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { updateProfileAction } from "@/actions/auth/updateProfileAction";
 import { Button } from "@/components/ui/button";
@@ -19,21 +20,16 @@ import ErrorMessage from "../ErrorMessage";
 import SuccessMessage from "../SuccessMessage";
 import LoadingAnimate from "../LoadingAnimate";
 import { useRouter } from "next/navigation";
+import { UploadButton } from "@/lib/uploadthing";
+import { User } from "@prisma/client";
+import { useToast } from "@/hooks/use-toast";
 
-interface EditFormProps {
-  user: {
-    address: string | null;
-    username: string;
-    occupation: string | null;
-    phoneNo: string | null;
-    gender: string | null;
-    id: string;
-  } | null;
-}
-export default function EditProfileForm({ user }: EditFormProps) {
+export default function EditProfileForm({ user }: { user: User }) {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+  const [newAvatar, setNewAvatar] = useState<string | null>(user.image);
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<TEditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
@@ -64,6 +60,40 @@ export default function EditProfileForm({ user }: EditFormProps) {
 
   return (
     <div>
+      <div className="flex  items-center space-x-2 my-5">
+        {newAvatar && (
+          <img
+            src={newAvatar}
+            alt="Avatar"
+            className="h-16 w-16 rounded-full object-cover"
+          />
+        )}
+        <UploadButton
+          className="h-8 text-sm 
+          ut-button:bg-white 
+          ut-button:ut-uploading:bg-gray-700
+           ut-button:ut-uploading:text-white
+          ut-button:ut-readying:bg-gray-700
+          ut-button:ring-slate-700
+          ut-button:text-gray-800  
+          ut-button:border 
+          ut-button:border-slate-300
+          ut-allowed-content:hidden"
+          endpoint="profileImage"
+          onClientUploadComplete={(res) => {
+            const newImage = res[0].url;
+            setNewAvatar(newImage);
+            form.setValue("image", newImage);
+          }}
+          onUploadError={(error: Error) => {
+            toast({
+              title: error.message,
+              description: "Uploading failed!",
+            });
+          }}
+        />
+      </div>
+
       <Form {...form}>
         <form className="space-y-4 " onSubmit={form.handleSubmit(submit)}>
           <FormField
