@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { UploadButton } from "@/lib/uploadthing";
 import { User } from "@prisma/client";
 import { useToast } from "@/hooks/use-toast";
+import UserAvatar from "../UserAvatar";
 
 export default function EditProfileForm({ user }: { user: User }) {
   const [error, setError] = useState<string | undefined>();
@@ -61,19 +62,11 @@ export default function EditProfileForm({ user }: { user: User }) {
   return (
     <div>
       <div className="flex  items-center space-x-2 my-5">
-        {newAvatar && (
-          <img
-            src={newAvatar}
-            alt="Avatar"
-            className="h-16 w-16 rounded-full object-cover"
-          />
-        )}
+        <UserAvatar image={newAvatar} name={user.username} />
         <UploadButton
           className="h-8 text-sm 
           ut-button:bg-white 
-          ut-button:ut-uploading:bg-gray-700
            ut-button:ut-uploading:text-white
-          ut-button:ut-readying:bg-gray-700
           ut-button:ring-slate-700
           ut-button:text-gray-800  
           ut-button:border 

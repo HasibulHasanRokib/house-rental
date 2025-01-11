@@ -10,7 +10,9 @@ const UserAvatar = ({ name, image }: UserAvatarProps) => {
   return (
     <Avatar>
       <AvatarImage src={image ?? undefined} alt="avatar" />
-      <AvatarFallback>{name?.toUpperCase().slice(0)}</AvatarFallback>
+      <AvatarFallback className="bg-primary/10">
+        {name?.toUpperCase().slice(0, 1)}
+      </AvatarFallback>
     </Avatar>
   );
 };

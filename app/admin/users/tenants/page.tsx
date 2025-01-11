@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PrintButton from "@/components/PrintButton";
+import UserAvatar from "@/components/UserAvatar";
 
 const items = [
   { name: "Admin", href: "/admin" },
@@ -38,6 +39,7 @@ export default async function Page() {
       address: true,
       phoneNo: true,
       createdAt: true,
+      image: true,
       _count: {
         select: {
           Rent: true,
@@ -87,7 +89,10 @@ export default async function Page() {
               <TableBody>
                 {tenants.map((data, index) => (
                   <TableRow key={data.id}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {" "}
+                      <UserAvatar name={data.username} image={data.image} />
+                    </TableCell>
                     <TableCell>{data.username}</TableCell>
                     <TableCell>{data.email}</TableCell>
                     <TableCell>{data.gender}</TableCell>

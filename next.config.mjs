@@ -8,6 +8,9 @@ const nextConfig = {
       {
         hostname: "8hd8excs1e.ufs.sh",
       },
+      {
+        hostname: "utfs.io",
+      },
     ],
   },
 };

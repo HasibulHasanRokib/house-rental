@@ -23,6 +23,7 @@ export default async function ProfileSideBar() {
     },
     select: {
       image: true,
+      username: true,
     },
   });
 
@@ -32,10 +33,12 @@ export default async function ProfileSideBar() {
         <div className="flex items-center space-x-4">
           <Avatar>
             {user?.image && <AvatarImage src={user?.image} />}
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>
+              {user?.username.slice(0, 1).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle>{session?.user.name}</CardTitle>
+            <CardTitle className="capitalize">{session?.user.name}</CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
               As an <span className="capitalize">{session?.user.role}</span>
             </CardDescription>
